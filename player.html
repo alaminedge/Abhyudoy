@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title id="pageTitle">Lecture — Abhyudoy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+  :root {
+    --bg: #090d13; --surface: #111620; --surface2: #161c28; --border: rgba(255,255,255,0.07);
+    --teal: #00e5c3; --teal-dim: rgba(0,229,195,0.15); --white: #ffffff; --gray: #8a95a8; --gray-light: #c5cdd9; --red: #ff4757;
+  }
+  html, body { width: 100%; height: 100%; background: var(--bg); font-family: 'DM Sans', sans-serif; color: var(--white); overflow: hidden; }
+  .shell { display: flex; flex-direction: column; height: 100vh; max-width: 1400px; margin: 0 auto; padding: 16px 20px 12px; gap: 12px; }
+  
+  /* TOP BAR */
+  .topbar { display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+  .brand { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--white); letter-spacing: -0.02em; display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .brand-dot { width: 8px; height: 8px; background: var(--teal); border-radius: 50%; box-shadow: 0 0 10px var(--teal); animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+  .back-btn { color: var(--gray); text-decoration: none; font-size: 0.78rem; font-weight: 500; transition: color .2s; }
+  .back-btn:hover { color: var(--teal); }
+
+  /* BODY */
+  .body { display: flex; gap: 14px; flex: 1; min-height: 0; }
+
+  /* SIDEBAR */
+  .sidebar { width: 300px; flex-shrink: 0; background: var(--surface); border-radius: 14px; border: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+  .sidebar-head { padding: 16px 18px 12px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+  .sidebar-head h2 { font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700; margin-bottom: 2px; }
+  .sidebar-head p { font-size: 0.7rem; color: var(--gray); }
+  .track-list { flex: 1; overflow-y: auto; padding: 8px; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+  .track-list::-webkit-scrollbar { width: 4px; }
+  .track-list::-webkit-scrollbar-track { background: transparent; }
+  .track-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .track-item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 10px; cursor: pointer; transition: background 0.2s; border: 1px solid transparent; margin-bottom: 3px; }
+  .track-item:hover { background: var(--surface2); }
+  .track-item.active { background: var(--teal-dim); border-color: rgba(0,229,195,0.2); }
+  .track-num { font-size: 0.68rem; font-weight: 600; color: var(--gray); width: 16px; text-align: center; flex-shrink: 0; }
+  .track-item.active .track-num { color: var(--teal); }
+  .track-thumb { width: 48px; height: 28px; border-radius: 4px; background: #1a2030; flex-shrink: 0; object-fit: cover; }
+  .track-info { flex: 1; min-width: 0; }
+  .track-title { font-size: 0.74rem; font-weight: 600; color: var(--gray-light); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3; }
+  .track-item.active .track-title { color: var(--white); }
+  .track-sub { font-size: 0.64rem; color: var(--gray); margin-top: 1px; }
+  .track-playing { display: none; gap: 2px; align-items: flex-end; height: 12px; flex-shrink: 0; }
+  .track-item.active .track-playing { display: flex; }
+  .bar { width: 2px; background: var(--teal); border-radius: 1px; animation: eq 0.9s ease-in-out infinite; }
+  .bar:nth-child(1) { height: 5px; animation-delay: 0s; }
+  .bar:nth-child(2) { height: 9px; animation-delay: 0.2s; }
+  .bar:nth-child(3) { height: 6px; animation-delay: 0.4s; }
+  @keyframes eq { 0%,100%{transform:scaleY(0.5);} 50%{transform:scaleY(1.4);} }
+
+  /* MAIN */
+  .main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+
+  /* PLAYER */
+  .player-wrap { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: 14px; overflow: hidden; border: 1px solid var(--border); flex-shrink: 0; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+  .player-wrap:fullscreen { width: 100% !important; height: 100% !important; border-radius: 0 !important; border: none !important; aspect-ratio: unset !important; }
+  #yt-player { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+  .thumb-cover { position: absolute; inset: 0; z-index: 50; background: #000; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: opacity 0.35s; }
+  .thumb-cover.gone { opacity: 0; pointer-events: none; }
+  .thumb-bg { position: absolute; inset: 0; object-fit: cover; width: 100%; height: 100%; opacity: 0.4; filter: blur(3px) scale(1.05); }
+  .thumb-play { position: relative; z-index: 2; width: 68px; height: 68px; border-radius: 50%; background: var(--teal); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 40px rgba(0,229,195,0.5); transition: transform 0.2s; }
+  .thumb-cover:hover .thumb-play { transform: scale(1.08); }
+  .thumb-play i { font-size: 1.7rem; color: #000; margin-left: 4px; }
+  .spinner { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 36px; height: 36px; border: 3px solid rgba(255,255,255,0.06); border-top-color: var(--teal); border-radius: 50%; animation: spin .7s linear infinite; z-index: 8; display: none; }
+  @keyframes spin { to { transform: translate(-50%,-50%) rotate(360deg); } }
+  .ui-layer { position: absolute; inset: 0; z-index: 10; display: flex; flex-direction: column; pointer-events: none; opacity: 0; transition: opacity 0.2s; background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.1) 35%, transparent 60%); }
+  .player-wrap:hover .ui-layer, .player-wrap.show-ui .ui-layer { opacity: 1; }
+  .gesture { position: absolute; inset: 0; z-index: 20; pointer-events: auto; cursor: pointer; }
+  .center-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0.85); width: 58px; height: 58px; border-radius: 50%; background: rgba(0,0,0,0.7); border: 1.5px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; opacity: 0; transition: all 0.2s; pointer-events: none; z-index: 40; backdrop-filter: blur(6px); }
+  .center-btn.show { opacity: 1; transform: translate(-50%,-50%) scale(1); pointer-events: auto; }
+  .center-btn i { font-size: 1.4rem; color: #fff; }
+  .skip-flash { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0.9); background: rgba(0,0,0,0.78); border: 1px solid var(--teal); padding: 8px 16px; border-radius: 28px; display: flex; align-items: center; gap: 6px; opacity: 0; pointer-events: none; z-index: 45; backdrop-filter: blur(6px); transition: all 0.15s; }
+  .skip-flash.show { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+  .skip-flash i { color: var(--teal); font-size: 1rem; }
+  .skip-flash span { font-size: 0.85rem; font-weight: 600; color: #fff; }
+
+  /* CONTROLS */
+  .ctrl-bar { margin-top: auto; padding: 0 18px 14px; pointer-events: none; opacity: 0; transition: opacity 0.2s; position: relative; z-index: 30; }
+  .ctrl-bar.show { opacity: 1; pointer-events: auto; }
+  .prog-wrap { width: 100%; height: 16px; display: flex; align-items: center; margin-bottom: 8px; cursor: pointer; }
+  .prog-track { width: 100%; height: 3px; background: rgba(255,255,255,0.15); border-radius: 2px; position: relative; transition: height 0.15s; }
+  .prog-wrap:hover .prog-track { height: 4px; }
+  .prog-fill { height: 100%; width: 0%; background: var(--teal); border-radius: 2px; position: relative; box-shadow: 0 0 8px rgba(0,229,195,0.4); }
+  .prog-fill::after { content: ''; position: absolute; right: -5px; top: 50%; transform: translateY(-50%) scale(0); width: 11px; height: 11px; background: var(--teal); border-radius: 50%; box-shadow: 0 0 0 3px rgba(0,229,195,0.2); transition: transform 0.15s; }
+  .prog-wrap:hover .prog-fill::after, .prog-wrap.dragging .prog-fill::after { transform: translateY(-50%) scale(1); }
+  .ctrl-row { display: flex; align-items: center; justify-content: space-between; height: 30px; gap: 4px; }
+  .ctrl-left, .ctrl-right { display: flex; align-items: center; gap: 4px; }
+  .ibtn { background: transparent; border: none; color: rgba(255,255,255,0.85); width: 30px; height: 30px; border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s; font-size: 0.82rem; }
+  .ibtn:hover { background: rgba(255,255,255,0.1); color: var(--teal); }
+  .time-disp { font-size: 0.72rem; font-weight: 500; color: rgba(255,255,255,0.85); min-width: 88px; font-variant-numeric: tabular-nums; padding: 0 4px; }
+  .vol-group { display: flex; align-items: center; gap: 2px; }
+  .vol-slider { width: 60px; height: 2px; accent-color: var(--teal); cursor: pointer; }
+  .tbtn { background: rgba(255,255,255,0.08); border: none; color: #fff; font-size: 0.68rem; font-weight: 700; padding: 3px 8px; border-radius: 4px; cursor: pointer; min-width: 38px; text-align: center; }
+  .tbtn:hover { background: var(--teal); color: #000; }
+
+  /* LECTURE INFO */
+  .lecture-info { background: var(--surface); border-radius: 12px; padding: 14px 18px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-shrink: 0; }
+  .lec-text h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 2px; }
+  .lec-text p { font-size: 0.74rem; color: var(--gray); }
+  .pdf-links { display: flex; gap: 6px; flex-wrap: wrap; }
+  .slides-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--teal); color: #000; text-decoration: none; font-size: 0.76rem; font-weight: 700; padding: 7px 14px; border-radius: 6px; transition: all 0.2s; white-space: nowrap; box-shadow: 0 3px 12px rgba(0,229,195,0.25); }
+  .slides-btn:hover { transform: translateY(-1px); box-shadow: 0 5px 16px rgba(0,229,195,0.35); }
+  .block-layer { position: absolute; inset: 0; z-index: 60; pointer-events: none; }
+
+  /* RESPONSIVE */
+  @media (max-width: 860px) {
+    .shell { padding: 10px 12px 8px; gap: 8px; }
+    .body { flex-direction: column; }
+    .sidebar { width: 100%; height: 180px; }
+    .vol-slider { width: 45px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <div class="topbar">
+    <a href="/dashboard.html" class="brand"><div class="brand-dot"></div>Abhyudoy</a>
+    <a href="/course.html" class="back-btn" id="backLink">← Back to Course</a>
+  </div>
+
+  <div class="body">
+    <div class="sidebar">
+      <div class="sidebar-head">
+        <h2>Course Lectures</h2>
+        <p id="sidebarCount">Loading...</p>
+      </div>
+      <div class="track-list" id="trackList"></div>
+    </div>
+
+    <div class="main">
+      <div class="player-wrap" id="playerWrap">
+        <div id="yt-player"></div>
+        <div class="spinner" id="spinner"></div>
+        <div class="thumb-cover" id="thumbCover">
+          <img src="" id="thumbBg" class="thumb-bg" alt="">
+          <div class="thumb-play"><i class="fas fa-play"></i></div>
+        </div>
+        <div class="ui-layer" id="uiLayer">
+          <div class="gesture" id="gesture"></div>
+          <div class="center-btn" id="centerBtn">
+            <i class="fas fa-play" id="bigPlay"></i>
+            <i class="fas fa-pause" id="bigPause" style="display:none"></i>
+          </div>
+          <div class="skip-flash" id="skipFlash">
+            <i class="fas fa-forward" id="skipIcon"></i>
+            <span id="skipText">+10s</span>
+          </div>
+          <div class="ctrl-bar" id="ctrlBar">
+            <div class="prog-wrap" id="progWrap">
+              <div class="prog-track" id="progTrack">
+                <div class="prog-fill" id="progFill"></div>
+              </div>
+            </div>
+            <div class="ctrl-row">
+              <div class="ctrl-left">
+                <button class="ibtn" id="playBtn"><i class="fas fa-play" id="playIco"></i><i class="fas fa-pause" id="pauseIco" style="display:none"></i></button>
+                <button class="ibtn" id="rewBtn"><i class="fas fa-rotate-left"></i></button>
+                <button class="ibtn" id="fwdBtn"><i class="fas fa-rotate-right"></i></button>
+                <span class="time-disp" id="timeDisp">00:00 / 00:00</span>
+              </div>
+              <div class="ctrl-right">
+                <div class="vol-group">
+                  <button class="ibtn" id="muteBtn"><i class="fas fa-volume-high" id="volHi"></i><i class="fas fa-volume-xmark" id="volMute" style="display:none"></i></button>
+                  <input type="range" class="vol-slider" id="volSlider" min="0" max="100" value="100">
+                </div>
+                <button class="tbtn" id="speedBtn">1x</button>
+                <button class="ibtn" id="fsBtn"><i class="fas fa-expand"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="block-layer"></div>
+      </div>
+
+      <div class="lecture-info">
+        <div class="lec-text">
+          <h3 id="lecTitle">Loading...</h3>
+          <p id="lecMeta"></p>
+        </div>
+        <div class="pdf-links" id="pdfLinks"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const token=localStorage.getItem('abhyudoy_token');
+const user=JSON.parse(localStorage.getItem('abhyudoy_user')||'null');
+if(!token||!user)window.location.href='/index.html';
+
+const lectureId=new URLSearchParams(location.search).get('lecture');
+const courseId=new URLSearchParams(location.search).get('course');
+if(!lectureId||!courseId)window.location.href='/dashboard.html';
+document.getElementById('backLink').href=`/course.html?id=${courseId}`;
+
+let player, isDragging=false, hideTimer, cbTimer, allLectures=[], curIdx=0;
+const speeds=[0.5,0.75,1,1.25,1.5,1.75,2];let speedIdx=2;
+
+function fmt(s){if(!s||s<0)return'00:00';const m=Math.floor(s/60),sec=Math.floor(s%60);return`${m<10?'0'+m:m}:${sec<10?'0'+sec:sec}`}
+
+async function init(){
+  try{
+    const res=await fetch(`/api/user/lecture/${lectureId}`,{headers:{Authorization:'Bearer '+token}});
+    if(!res.ok){window.location.href='/dashboard.html';return}
+    const data=await res.json();
+    allLectures=data.allLectures;
+    curIdx=allLectures.findIndex(l=>l.id==parseInt(lectureId));
+    if(curIdx===-1)curIdx=0;
+
+    document.getElementById('lecTitle').textContent=data.lecture.title;
+    document.getElementById('lecMeta').textContent=data.lecture.description||'';
+    document.getElementById('sidebarCount').textContent=`${allLectures.length} Lectures`;
+    document.getElementById('pageTitle').textContent=data.lecture.title+' — Abhyudoy';
+
+    // PDF links
+    const pdfLinks=document.getElementById('pdfLinks');
+    if(data.pdfs.length){
+      pdfLinks.innerHTML=data.pdfs.map(p=>`<a href="${p.pdf_url}" target="_blank" rel="noopener" class="slides-btn">📎 ${p.title}</a>`).join('');
+    }
+
+    // Build sidebar
+    const trackList=document.getElementById('trackList');
+    allLectures.forEach((lec,i)=>{
+      const div=document.createElement('div');
+      div.className='track-item'+(i===curIdx?' active':'');
+      div.innerHTML=`
+        <span class="track-num">${String(i+1).padStart(2,'0')}</span>
+        <img class="track-thumb" src="https://img.youtube.com/vi/${lec.yt_video_id}/mqdefault.jpg" alt="" draggable="false">
+        <div class="track-info">
+          <div class="track-title">${lec.title}</div>
+          <div class="track-sub">${lec.chapter_title||''}</div>
+        </div>
+        <div class="track-playing"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>`;
+      div.addEventListener('click',()=>loadLecture(i));
+      trackList.appendChild(div);
+    });
+
+    // Load YouTube player
+    loadYouTubeAPI(allLectures[curIdx].yt_video_id);
+  }catch(e){console.error(e)}
+}
+
+function loadLecture(idx){
+  if(idx<0||idx>=allLectures.length)return;
+  const lec=allLectures[idx];curIdx=idx;
+  document.getElementById('lecTitle').textContent=lec.title;
+  document.getElementById('lecMeta').textContent=lec.description||'';
+  document.getElementById('thumbBg').src=`https://img.youtube.com/vi/${lec.yt_video_id}/maxresdefault.jpg`;
+  document.getElementById('thumbCover').classList.remove('gone');
+  document.querySelectorAll('.track-item').forEach((el,i)=>el.classList.toggle('active',i===idx));
+  if(player&&player.cueVideoById)player.cueVideoById(lec.yt_video_id);
+  // Update URL without reload
+  history.replaceState({},'',`/player.html?lecture=${lec.id}&course=${courseId}`);
+  // Reload PDFs
+  fetch(`/api/user/lecture/${lec.id}`,{headers:{Authorization:'Bearer '+token}}).then(r=>r.json()).then(d=>{
+    document.getElementById('pdfLinks').innerHTML=d.pdfs.map(p=>`<a href="${p.pdf_url}" target="_blank" class="slides-btn">📎 ${p.title}</a>`).join('');
+  });
+}
+
+function loadYouTubeAPI(videoId){
+  const tag=document.createElement('script');tag.src='https://www.youtube.com/iframe_api';document.head.appendChild(tag);
+  window.onYouTubeIframeAPIReady=function(){
+    player=new YT.Player('yt-player',{
+      height:'100%',width:'100%',videoId:videoId,
+      playerVars:{autoplay:0,controls:0,rel:0,modestbranding:1,iv_load_policy:3,fs:0,disablekb:1,playsinline:1,showinfo:0,origin:window.location.origin,cc_load_policy:0},
+      events:{
+        onReady:()=>{
+          document.getElementById('thumbBg').src=`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+          player.setVolume(100);requestAnimationFrame(tickProgress);
+        },
+        onStateChange:(e)=>{
+          const S=YT.PlayerState;
+          if(e.data===S.PLAYING){document.getElementById('thumbCover').classList.add('gone');setIcons(true);document.getElementById('spinner').style.display='none';showUI();}
+          else if(e.data===S.PAUSED){setIcons(false);showUI();document.getElementById('centerBtn').classList.add('show');}
+          else if(e.data===S.BUFFERING){document.getElementById('spinner').style.display='block';}
+        }
+      }
+    });
+  };
+}
+
+function tickProgress(){
+  if(player&&player.getCurrentTime&&!isDragging){
+    const cur=player.getCurrentTime()||0,dur=player.getDuration()||1;
+    document.getElementById('progFill').style.width=`${(cur/dur)*100}%`;
+    document.getElementById('timeDisp').textContent=`${fmt(cur)} / ${fmt(dur)}`;
+  }requestAnimationFrame(tickProgress);
+}
+
+function setIcons(playing){
+  document.getElementById('playIco').style.display=playing?'none':'block';
+  document.getElementById('pauseIco').style.display=playing?'block':'none';
+  document.getElementById('bigPlay').style.display=playing?'none':'block';
+  document.getElementById('bigPause').style.display=playing?'block':'none';
+}
+
+function showUI(){
+  document.getElementById('playerWrap').classList.add('show-ui');
+  document.getElementById('ctrlBar').classList.add('show');
+  clearTimeout(hideTimer);clearTimeout(cbTimer);
+  if(!isDragging)hideTimer=setTimeout(()=>{if(player?.getPlayerState()===YT.PlayerState.PLAYING){document.getElementById('playerWrap').classList.remove('show-ui');document.getElementById('ctrlBar').classList.remove('show');document.getElementById('centerBtn').classList.remove('show');}},4000);
+}
+
+function togglePlay(){if(!player)return;player.getPlayerState()===YT.PlayerState.PLAYING?player.pauseVideo():player.playVideo();}
+function skip(s){if(!player)return;player.seekTo(player.getCurrentTime()+s,true);document.getElementById('skipIcon').className=s<0?'fas fa-rotate-left':'fas fa-rotate-right';document.getElementById('skipText').textContent=s<0?`${s}s`:`+${s}s`;document.getElementById('skipFlash').classList.add('show');clearTimeout(window._skipT);window._skipT=setTimeout(()=>document.getElementById('skipFlash').classList.remove('show'),650);}
+
+// Event listeners (abbreviated for length - same as original player code)
+document.getElementById('playerWrap').addEventListener('mousemove',()=>{showUI();if(player?.getPlayerState()===YT.PlayerState.PAUSED)document.getElementById('centerBtn').classList.add('show');});
+document.getElementById('playerWrap').addEventListener('mouseleave',()=>{document.getElementById('centerBtn').classList.remove('show');if(!isDragging)document.getElementById('playerWrap').classList.remove('show-ui');});
+document.getElementById('gesture').addEventListener('click',(e)=>{if(e.target.closest('.ctrl-bar'))return;togglePlay();showUI();document.getElementById('centerBtn').classList.add('show');clearTimeout(cbTimer);cbTimer=setTimeout(()=>{if(player?.getPlayerState()===YT.PlayerState.PLAYING)document.getElementById('centerBtn').classList.remove('show');},4000);});
+document.getElementById('centerBtn').addEventListener('click',(e)=>{e.stopPropagation();togglePlay();});
+document.getElementById('playBtn').addEventListener('click',(e)=>{e.stopPropagation();togglePlay();});
+document.getElementById('rewBtn').addEventListener('click',(e)=>{e.stopPropagation();skip(-10);});
+document.getElementById('fwdBtn').addEventListener('click',(e)=>{e.stopPropagation();skip(10);});
+document.getElementById('volSlider').addEventListener('input',(e)=>{if(!player)return;const v=+e.target.value;player.setVolume(v);document.getElementById('volHi').style.display=v===0?'none':'block';document.getElementById('volMute').style.display=v===0?'block':'none';});
+document.getElementById('muteBtn').addEventListener('click',(e)=>{e.stopPropagation();if(!player)return;if(player.isMuted()){player.unMute();document.getElementById('volSlider').value=player.getVolume();document.getElementById('volHi').style.display='block';document.getElementById('volMute').style.display='none';}else{player.mute();document.getElementById('volSlider').value=0;document.getElementById('volHi').style.display='none';document.getElementById('volMute').style.display='block';}});
+document.getElementById('speedBtn').addEventListener('click',(e)=>{e.stopPropagation();speedIdx=(speedIdx+1)%speeds.length;player?.setPlaybackRate(speeds[speedIdx]);document.getElementById('speedBtn').textContent=speeds[speedIdx]+'x';});
+document.getElementById('fsBtn').addEventListener('click',(e)=>{e.stopPropagation();if(!document.fullscreenElement){document.getElementById('playerWrap').requestFullscreen().catch(()=>{});document.getElementById('fsBtn').querySelector('i').className='fas fa-compress';}else{document.exitFullscreen();document.getElementById('fsBtn').querySelector('i').className='fas fa-expand';}});
+document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement)document.getElementById('fsBtn').querySelector('i').className='fas fa-expand';});
+function seekTo(clientX){const rect=document.getElementById('progTrack').getBoundingClientRect();const pct=Math.max(0,Math.min(1,(clientX-rect.left)/rect.width));if(player)player.seekTo(pct*player.getDuration(),true);}
+document.getElementById('progWrap').addEventListener('mousedown',(e)=>{isDragging=true;document.getElementById('progWrap').classList.add('dragging');seekTo(e.clientX);});
+document.addEventListener('mousemove',(e)=>{if(isDragging)seekTo(e.clientX);});
+document.addEventListener('mouseup',()=>{if(isDragging){isDragging=false;document.getElementById('progWrap').classList.remove('dragging');}});
+document.getElementById('progTrack').addEventListener('click',(e)=>seekTo(e.clientX));
+document.getElementById('progWrap').addEventListener('touchstart',()=>{isDragging=true;document.getElementById('progWrap').classList.add('dragging');},{passive:true});
+document.getElementById('progWrap').addEventListener('touchmove',(e)=>{if(isDragging){e.preventDefault();seekTo(e.touches[0].clientX);}},{passive:false});
+document.getElementById('progWrap').addEventListener('touchend',()=>{isDragging=false;document.getElementById('progWrap').classList.remove('dragging');});
+let lastTap=0;
+document.getElementById('gesture').addEventListener('touchend',(e)=>{e.preventDefault();const now=Date.now(),gap=now-lastTap;if(gap<280&&gap>0){const x=e.changedTouches[0].clientX,w=window.innerWidth;if(x<w*0.3)skip(-10);else if(x>w*0.7)skip(10);else togglePlay();}else{showUI();document.getElementById('centerBtn').classList.add('show');clearTimeout(cbTimer);cbTimer=setTimeout(()=>{if(player?.getPlayerState()===YT.PlayerState.PLAYING)document.getElementById('centerBtn').classList.remove('show');},4000);}lastTap=now;});
+document.getElementById('thumbCover').addEventListener('click',()=>{document.getElementById('thumbCover').classList.add('gone');player?.playVideo();});
+document.addEventListener('keydown',(e)=>{if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;switch(e.code){case'Space':e.preventDefault();togglePlay();break;case'ArrowLeft':e.preventDefault();skip(-10);break;case'ArrowRight':e.preventDefault();skip(10);break;case'ArrowUp':e.preventDefault();if(player){const v=Math.min(player.getVolume()+5,100);player.setVolume(v);document.getElementById('volSlider').value=v;}break;case'ArrowDown':e.preventDefault();if(player){const v=Math.max(player.getVolume()-5,0);player.setVolume(v);document.getElementById('volSlider').value=v;}break;case'KeyF':document.getElementById('fsBtn').click();break;case'KeyM':document.getElementById('muteBtn').click();break;}});
+document.addEventListener('contextmenu',(e)=>{if(e.target.closest('.player-wrap'))e.preventDefault();});
+document.addEventListener('dragstart',(e)=>{if(e.target.closest('.player-wrap'))e.preventDefault();});
+document.getElementById('playerWrap').addEventListener('selectstart',(e)=>e.preventDefault());
+
+init();
+</script>
+</body>
+</html>
