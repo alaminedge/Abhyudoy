@@ -9,15 +9,13 @@
 :root{
   --bg:#090d13;--surface:#111620;--surface2:#161c28;--border:rgba(255,255,255,0.06);
   --teal:#00e5c3;--teal-dim:rgba(0,229,195,0.08);--white:#fff;--gray:#8a95a8;
-  --red:#ff4757;--red-dim:rgba(255,71,87,0.08);--green:#2ed573;--green-dim:rgba(46,213,115,0.08);
-  --orange:#f59e0b;--orange-dim:rgba(245,158,11,0.08);--radius:10px;--radius-lg:14px;
-  --transition:0.2s ease;--sw:250px;
+  --red:#ff4757;--red-dim:rgba(255,71,87,0.08);--green:#2ed573;--orange:#f59e0b;
+  --radius:10px;--radius-lg:14px;--sw:250px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);display:flex;min-height:100vh}
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08)}
 
-/* SIDEBAR */
 .sidebar{width:var(--sw);background:#0a0e14;border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50;overflow-y:auto}
 .sidebar-top{padding:22px 18px;border-bottom:1px solid var(--border)}
 .sidebar-logo{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:var(--teal);text-decoration:none;letter-spacing:-.02em}
@@ -25,53 +23,40 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);di
 .sidebar-badge{font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);margin-top:4px;font-family:'DM Mono',monospace}
 .nav-section{padding:6px 0}
 .nav-label{font-size:.58rem;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,0.2);font-weight:700;padding:10px 18px 4px;font-family:'DM Mono',monospace}
-.nav-item{display:flex;align-items:center;gap:10px;padding:9px 18px;font-size:.78rem;font-weight:500;color:rgba(255,255,255,0.4);cursor:pointer;border:none;background:transparent;width:100%;text-align:left;transition:all var(--transition);border-left:2px solid transparent;font-family:'DM Sans',sans-serif}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 18px;font-size:.78rem;font-weight:500;color:rgba(255,255,255,0.4);cursor:pointer;border:none;background:transparent;width:100%;text-align:left;transition:all .2s;border-left:2px solid transparent;font-family:'DM Sans',sans-serif}
 .nav-item:hover{color:var(--white);background:rgba(255,255,255,0.02)}
 .nav-item.active{color:var(--teal);background:var(--teal-dim);border-left-color:var(--teal)}
 .sidebar-footer{margin-top:auto;padding:14px 18px;border-top:1px solid var(--border)}
 .sidebar-footer .email{font-size:.7rem;color:var(--gray);margin-bottom:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.btn-logout{width:100%;padding:8px;background:transparent;border:1px solid rgba(255,255,255,0.1);color:var(--gray);border-radius:6px;font-size:.7rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;text-transform:uppercase;letter-spacing:.06em;transition:all var(--transition)}
+.btn-logout{width:100%;padding:8px;background:transparent;border:1px solid rgba(255,255,255,0.1);color:var(--gray);border-radius:6px;font-size:.7rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;text-transform:uppercase;letter-spacing:.06em}
 .btn-logout:hover{border-color:var(--red);color:var(--red)}
 
-/* MAIN */
 .main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;min-height:100vh}
 .topbar{height:56px;padding:0 24px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40}
 .topbar-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem}
-.menu-btn{display:none;background:none;border:none;color:var(--white);font-size:1.3rem;cursor:pointer;padding:6px}
-.btn-view-site{padding:6px 14px;border:1px solid var(--border);color:var(--gray);border-radius:20px;font-size:.7rem;text-decoration:none;transition:all var(--transition)}
+.menu-btn{display:none;background:none;border:none;color:var(--white);font-size:1.3rem;cursor:pointer}
+.btn-view-site{padding:6px 14px;border:1px solid var(--border);color:var(--gray);border-radius:20px;font-size:.7rem;text-decoration:none}
 .btn-view-site:hover{border-color:var(--teal);color:var(--teal)}
 .content{padding:24px;flex:1}
 .view{display:none}
 .view.active{display:block}
 
-/* STATS */
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:28px}
-.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 16px}
-.stat-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);font-weight:700;margin-bottom:6px;font-family:'DM Mono',monospace}
-.stat-val{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:var(--teal)}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:28px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 14px}
+.stat-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);font-weight:700;margin-bottom:4px;font-family:'DM Mono',monospace}
+.stat-val{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:var(--teal)}
 
-/* SECTION HEAD */
 .section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
 .section-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700}
 
-/* BUTTONS */
-.btn{font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:600;padding:8px 16px;border-radius:6px;border:none;cursor:pointer;transition:all var(--transition);display:inline-flex;align-items:center;gap:5px;letter-spacing:.03em;text-transform:uppercase}
-.btn-teal{background:var(--teal);color:#000}
-.btn-teal:hover{opacity:.85}
-.btn-ghost{background:transparent;color:var(--gray);border:1px solid var(--border)}
-.btn-ghost:hover{border-color:var(--teal);color:var(--teal)}
-.btn-red{background:var(--red-dim);color:var(--red);border:1px solid rgba(255,71,87,.15)}
-.btn-red:hover{background:var(--red);color:#fff}
-.btn-green{background:var(--green-dim);color:var(--green);border:1px solid rgba(46,213,115,.15)}
-.btn-green:hover{background:var(--green);color:#fff}
-.btn-orange{background:var(--orange-dim);color:var(--orange);border:1px solid rgba(245,158,11,.15)}
-.btn-orange:hover{background:var(--orange);color:#fff}
-.btn-sm{padding:4px 10px;font-size:.66rem}
+.btn{font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:600;padding:8px 16px;border-radius:6px;border:none;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:5px;letter-spacing:.03em;text-transform:uppercase}
+.btn-teal{background:var(--teal);color:#000}.btn-teal:hover{opacity:.85}
+.btn-ghost{background:transparent;color:var(--gray);border:1px solid var(--border)}.btn-ghost:hover{border-color:var(--teal);color:var(--teal)}
+.btn-red{background:var(--red-dim);color:var(--red);border:1px solid rgba(255,71,87,.15)}.btn-red:hover{background:var(--red);color:#fff}
+.btn-green{background:rgba(46,213,115,0.08);color:var(--green);border:1px solid rgba(46,213,115,.15)}.btn-green:hover{background:var(--green);color:#fff}
 .btn-xs{padding:3px 8px;font-size:.62rem;border-radius:4px}
 
-/* CARD & TABLE */
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:18px}
-.card-body{padding:18px}
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse}
 th{padding:10px 12px;text-align:left;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);font-weight:700;background:var(--surface2);border-bottom:2px solid var(--border);white-space:nowrap;font-family:'DM Mono',monospace}
@@ -79,77 +64,59 @@ td{padding:9px 12px;font-size:.78rem;border-bottom:1px solid var(--border);verti
 tr:hover td{background:rgba(255,255,255,0.01)}
 .badge{font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border-radius:12px;display:inline-block;font-family:'DM Mono',monospace}
 .badge-teal{background:var(--teal-dim);color:var(--teal)}
-.badge-green{background:var(--green-dim);color:var(--green)}
 .badge-red{background:var(--red-dim);color:var(--red)}
-.badge-orange{background:var(--orange-dim);color:var(--orange)}
-.badge-gray{background:rgba(255,255,255,0.04);color:var(--gray)}
+.badge-green{background:rgba(46,213,115,0.08);color:var(--green)}
 
-/* FORMS */
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
 .form-group{margin-bottom:14px}
 .form-label{display:block;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);margin-bottom:5px;font-family:'DM Mono',monospace}
-.form-input,.form-select,.form-textarea{width:100%;padding:10px 13px;background:var(--surface2);border:1.5px solid var(--border);border-radius:6px;font-family:'DM Sans',sans-serif;font-size:.84rem;color:var(--white);outline:none;transition:border-color var(--transition)}
+.form-input,.form-select,.form-textarea{width:100%;padding:10px 13px;background:var(--surface2);border:1.5px solid var(--border);border-radius:6px;font-family:'DM Sans',sans-serif;font-size:.84rem;color:var(--white);outline:none;transition:border-color .2s}
 .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--teal)}
-.form-select{appearance:none;cursor:pointer}
-.form-textarea{resize:vertical;min-height:80px}
-.form-hint{font-size:.64rem;color:var(--gray);margin-top:3px}
-.toggle-row{display:flex;align-items:center;gap:8px;font-size:.8rem;cursor:pointer}
+.form-select{cursor:pointer}
+.form-textarea{resize:vertical;min-height:70px}
+.toggle-row{display:flex;align-items:center;gap:8px;font-size:.8rem;cursor:pointer;margin-top:6px}
 input[type=checkbox]{accent-color:var(--teal)}
 
-/* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:none;place-items:center;padding:20px;backdrop-filter:blur(3px)}
 .modal-overlay.open{display:grid}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);max-width:600px;width:100%;max-height:85vh;overflow-y:auto;animation:modalIn .2s ease}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);max-width:560px;width:100%;max-height:85vh;overflow-y:auto;animation:modalIn .2s ease}
 @keyframes modalIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
 .modal-head{padding:20px 22px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .modal-head h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700}
-.modal-close{background:none;border:none;color:var(--gray);cursor:pointer;font-size:1.2rem;transition:color var(--transition)}
-.modal-close:hover{color:var(--red)}
+.modal-close{background:none;border:none;color:var(--gray);cursor:pointer;font-size:1.2rem}.modal-close:hover{color:var(--red)}
 .modal-body{padding:20px 22px}
 .modal-footer{padding:14px 22px;border-top:1px solid var(--border);display:flex;gap:10px}
 .alert{padding:10px 13px;border-radius:6px;font-size:.76rem;margin-bottom:12px;display:none}
 .alert.show{display:block}
 .alert-error{background:var(--red-dim);border:1px solid rgba(255,71,87,.2);color:var(--red)}
-.alert-success{background:var(--green-dim);border:1px solid rgba(46,213,115,.2);color:var(--green)}
-
-.empty{text-align:center;padding:40px;color:var(--gray);font-size:.82rem}
+.alert-success{background:rgba(46,213,115,0.08);border:1px solid rgba(46,213,115,.2);color:var(--green)}
+.empty{text-align:center;padding:40px;color:var(--gray)}
+.tree-item{padding:6px 12px;border-left:2px solid var(--border);margin-left:16px;font-size:.76rem;color:var(--gray)}
+.tree-item strong{color:var(--white)}
 
 @media(max-width:860px){
   .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}
   .main{margin-left:0}.menu-btn{display:block}
-  .form-row,.form-row-3{grid-template-columns:1fr}
-  .content{padding:16px}
+  .form-row{grid-template-columns:1fr}.content{padding:16px}
 }
 </style>
 </head>
 <body>
 
 <aside class="sidebar" id="sidebar">
-  <div class="sidebar-top">
-    <a href="/admin.html" class="sidebar-logo">Abhy<span>udoy</span></a>
-    <div class="sidebar-badge">Admin Panel</div>
-  </div>
-  <div class="nav-section">
-    <div class="nav-label">Dashboard</div>
-    <button class="nav-item active" onclick="showView('dashboard')">📊 Overview</button>
-  </div>
-  <div class="nav-section">
-    <div class="nav-label">Content</div>
+  <div class="sidebar-top"><a href="/admin.html" class="sidebar-logo">Abhy<span>udoy</span></a><div class="sidebar-badge">Admin Panel</div></div>
+  <div class="nav-section"><div class="nav-label">Manage</div>
+    <button class="nav-item active" onclick="showView('dashboard')">📊 Dashboard</button>
     <button class="nav-item" onclick="showView('courses')">📚 Courses</button>
-    <button class="nav-item" onclick="showView('chapters')">📖 Chapters</button>
+    <button class="nav-item" onclick="showView('subjects')">📖 Subjects</button>
+    <button class="nav-item" onclick="showView('papers')">📄 Papers</button>
+    <button class="nav-item" onclick="showView('chapters')">📑 Chapters</button>
     <button class="nav-item" onclick="showView('lectures')">🎬 Lectures</button>
     <button class="nav-item" onclick="showView('resources')">📎 Resources</button>
-  </div>
-  <div class="nav-section">
-    <div class="nav-label">Users</div>
     <button class="nav-item" onclick="showView('users')">👥 Users</button>
     <button class="nav-item" onclick="showView('memberships')">⭐ Memberships</button>
   </div>
-  <div class="sidebar-footer">
-    <div class="email" id="adminEmail"></div>
-    <button class="btn-logout" onclick="logout()">Sign Out</button>
-  </div>
+  <div class="sidebar-footer"><div class="email" id="adminEmail"></div><button class="btn-logout" onclick="logout()">Sign Out</button></div>
 </aside>
 
 <main class="main">
@@ -160,114 +127,14 @@ input[type=checkbox]{accent-color:var(--teal)}
     </div>
     <a href="/dashboard.html" target="_blank" class="btn-view-site">View Site →</a>
   </div>
-  <div class="content">
-    <!-- Dashboard -->
-    <div class="view active" id="view-dashboard">
-      <div class="stats-grid" id="dashStats"></div>
-    </div>
-    <!-- Courses -->
-    <div class="view" id="view-courses">
-      <div class="section-head"><h2 class="section-title">All Courses</h2><button class="btn btn-teal" onclick="openCourseModal()">+ New Course</button></div>
-      <div class="card"><div class="table-wrap"><table><thead><tr><th>Title</th><th>Subject</th><th>Paper</th><th>Status</th><th>Actions</th></tr></thead><tbody id="coursesTbody"></tbody></table></div></div>
-    </div>
-    <!-- Chapters -->
-    <div class="view" id="view-chapters">
-      <div class="section-head"><h2 class="section-title">Chapters</h2><div style="display:flex;gap:8px;align-items:center"><select class="form-select" id="chapterCourseFilter" onchange="loadChapters()" style="width:200px"><option value="">— Select Course —</option></select><button class="btn btn-teal" onclick="openChapterModal()">+ New Chapter</button></div></div>
-      <div class="card"><div class="table-wrap"><table><thead><tr><th>Title</th><th>Course</th><th>Order</th><th>Actions</th></tr></thead><tbody id="chaptersTbody"></tbody></table></div></div>
-    </div>
-    <!-- Lectures -->
-    <div class="view" id="view-lectures">
-      <div class="section-head"><h2 class="section-title">Lectures</h2><div style="display:flex;gap:8px;align-items:center"><select class="form-select" id="lectureCourseFilter" onchange="loadChaptersForLecture()" style="width:200px"><option value="">— Select Course —</option></select><select class="form-select" id="lectureChapterFilter" onchange="loadLectures()" style="width:200px"><option value="">— Select Chapter —</option></select><button class="btn btn-teal" onclick="openLectureModal()">+ New Lecture</button></div></div>
-      <div class="card"><div class="table-wrap"><table><thead><tr><th>Title</th><th>Chapter</th><th>YT ID</th><th>PDFs</th><th>Actions</th></tr></thead><tbody id="lecturesTbody"></tbody></table></div></div>
-    </div>
-    <!-- Resources -->
-    <div class="view" id="view-resources">
-      <div class="section-head"><h2 class="section-title">Course Resources</h2><div style="display:flex;gap:8px;align-items:center"><select class="form-select" id="resourceCourseFilter" onchange="loadResources()" style="width:200px"><option value="">— Select Course —</option></select><button class="btn btn-teal" onclick="openResourceModal()">+ New Resource</button></div></div>
-      <div class="card"><div class="table-wrap"><table><thead><tr><th>Title</th><th>Course</th><th>PDF Link</th><th>Actions</th></tr></thead><tbody id="resourcesTbody"></tbody></table></div></div>
-    </div>
-    <!-- Users -->
-    <div class="view" id="view-users">
-      <div class="section-head"><h2 class="section-title">All Users</h2></div>
-      <div class="card"><div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Approved</th><th>Blocked</th><th>Actions</th></tr></thead><tbody id="usersTbody"></tbody></table></div></div>
-    </div>
-    <!-- Memberships -->
-    <div class="view" id="view-memberships">
-      <div class="section-head"><h2 class="section-title">Memberships</h2><button class="btn btn-teal" onclick="openMembershipModal()">+ Grant Membership</button></div>
-      <div class="card"><div class="table-wrap"><table><thead><tr><th>User</th><th>Course</th><th>Expires</th><th>Status</th><th>Actions</th></tr></thead><tbody id="membershipsTbody"></tbody></table></div></div>
-    </div>
-  </div>
+  <div class="content" id="contentArea"></div>
 </main>
 
-<!-- COURSE MODAL -->
-<div class="modal-overlay" id="courseModal" onclick="if(event.target===this)closeCourseModal()">
-  <div class="modal"><div class="modal-head"><h3 id="courseModalTitle">New Course</h3><button class="modal-close" onclick="closeCourseModal()">✕</button></div>
-  <div class="modal-body">
-    <div class="alert" id="courseAlert"></div><input type="hidden" id="editCourseId">
-    <div class="form-row"><div class="form-group"><label class="form-label">Course Title *</label><input class="form-input" id="cTitle"></div><div class="form-group"><label class="form-label">Subject Name *</label><input class="form-input" id="cSubject" placeholder="e.g. Physics, Chemistry..."></div></div>
-    <div class="form-row"><div class="form-group"><label class="form-label">Paper Type</label><select class="form-select" id="cPaper"><option value="">None (Full Course)</option><option value="1st">1st Paper</option><option value="2nd">2nd Paper</option></select></div><div class="form-group"><label class="form-label">Status</label><select class="form-select" id="cActive"><option value="1">Active</option><option value="0">Inactive</option></select></div></div>
-    <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="cDesc"></textarea></div>
-    <div class="form-group"><label class="form-label">Thumbnail URL</label><input class="form-input" id="cThumb" placeholder="https://..."></div>
-  </div>
-  <div class="modal-footer"><button class="btn btn-teal" onclick="saveCourse()">Save Course</button><button class="btn btn-ghost" onclick="closeCourseModal()">Cancel</button></div></div>
-</div>
-
-<!-- CHAPTER MODAL -->
-<div class="modal-overlay" id="chapterModal" onclick="if(event.target===this)closeChapterModal()">
-  <div class="modal" style="max-width:460px"><div class="modal-head"><h3 id="chapterModalTitle">New Chapter</h3><button class="modal-close" onclick="closeChapterModal()">✕</button></div>
-  <div class="modal-body">
-    <div class="alert" id="chapterAlert"></div><input type="hidden" id="editChapterId">
-    <div class="form-group"><label class="form-label">Course *</label><select class="form-select" id="chCourse"></select></div>
-    <div class="form-group"><label class="form-label">Chapter Title *</label><input class="form-input" id="chTitle"></div>
-    <div class="form-group"><label class="form-label">Sort Order</label><input class="form-input" type="number" id="chOrder" value="0"></div>
-  </div>
-  <div class="modal-footer"><button class="btn btn-teal" onclick="saveChapter()">Save Chapter</button><button class="btn btn-ghost" onclick="closeChapterModal()">Cancel</button></div></div>
-</div>
-
-<!-- LECTURE MODAL -->
-<div class="modal-overlay" id="lectureModal" onclick="if(event.target===this)closeLectureModal()">
-  <div class="modal"><div class="modal-head"><h3 id="lectureModalTitle">New Lecture</h3><button class="modal-close" onclick="closeLectureModal()">✕</button></div>
-  <div class="modal-body">
-    <div class="alert" id="lectureAlert"></div><input type="hidden" id="editLectureId">
-    <div class="form-row"><div class="form-group"><label class="form-label">Course *</label><select class="form-select" id="lecCourse" onchange="loadChapterSelect()"></select></div><div class="form-group"><label class="form-label">Chapter *</label><select class="form-select" id="lecChapter"></select></div></div>
-    <div class="form-row"><div class="form-group"><label class="form-label">Lecture Title *</label><input class="form-input" id="lecTitle"></div><div class="form-group"><label class="form-label">Sort Order</label><input class="form-input" type="number" id="lecOrder" value="0"></div></div>
-    <div class="form-group"><label class="form-label">YouTube Video ID *</label><input class="form-input" id="lecYtId" placeholder="e.g. dQw4w9WgXcQ"><div class="form-hint">Paste only the video ID from YouTube URL</div></div>
-    <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="lecDesc"></textarea></div>
-    <!-- PDFs for this lecture -->
-    <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
-      <label class="form-label">Lecture PDFs</label>
-      <div id="lecturePdfsList" style="margin-bottom:8px"></div>
-      <div style="display:flex;gap:8px">
-        <input class="form-input" id="pdfTitle" placeholder="PDF Title" style="flex:2">
-        <input class="form-input" id="pdfUrl" placeholder="PDF URL" style="flex:3">
-        <button class="btn btn-ghost btn-sm" onclick="addPdfToLecture()" style="flex-shrink:0">+ Add</button>
-      </div>
-    </div>
-  </div>
-  <div class="modal-footer"><button class="btn btn-teal" onclick="saveLecture()">Save Lecture</button><button class="btn btn-ghost" onclick="closeLectureModal()">Cancel</button></div></div>
-</div>
-
-<!-- RESOURCE MODAL -->
-<div class="modal-overlay" id="resourceModal" onclick="if(event.target===this)closeResourceModal()">
-  <div class="modal" style="max-width:460px"><div class="modal-head"><h3>New Resource</h3><button class="modal-close" onclick="closeResourceModal()">✕</button></div>
-  <div class="modal-body">
-    <div class="alert" id="resourceAlert"></div>
-    <div class="form-group"><label class="form-label">Course *</label><select class="form-select" id="resCourse"></select></div>
-    <div class="form-group"><label class="form-label">Title *</label><input class="form-input" id="resTitle"></div>
-    <div class="form-group"><label class="form-label">PDF URL *</label><input class="form-input" id="resUrl"></div>
-  </div>
-  <div class="modal-footer"><button class="btn btn-teal" onclick="saveResource()">Save Resource</button><button class="btn btn-ghost" onclick="closeResourceModal()">Cancel</button></div></div>
-</div>
-
-<!-- MEMBERSHIP MODAL -->
-<div class="modal-overlay" id="membershipModal" onclick="if(event.target===this)closeMembershipModal()">
-  <div class="modal" style="max-width:460px"><div class="modal-head"><h3>Grant Membership</h3><button class="modal-close" onclick="closeMembershipModal()">✕</button></div>
-  <div class="modal-body">
-    <div class="alert" id="membershipAlert"></div>
-    <div class="form-group"><label class="form-label">User *</label><select class="form-select" id="memUser"></select></div>
-    <div class="form-group"><label class="form-label">Course *</label><select class="form-select" id="memCourse"></select></div>
-    <div class="form-group"><label class="form-label">Duration (Days) *</label><input class="form-input" type="number" id="memDays" value="30" min="1"></div>
-  </div>
-  <div class="modal-footer"><button class="btn btn-teal" onclick="grantMembership()">Grant Membership</button><button class="btn btn-ghost" onclick="closeMembershipModal()">Cancel</button></div></div>
+<!-- MODALS -->
+<div class="modal-overlay" id="genModal" onclick="if(event.target===this)closeGenModal()">
+  <div class="modal"><div class="modal-head"><h3 id="genModalTitle">Modal</h3><button class="modal-close" onclick="closeGenModal()">✕</button></div>
+  <div class="modal-body" id="genModalBody"></div>
+  <div class="modal-footer" id="genModalFooter"></div></div>
 </div>
 
 <script>
@@ -276,7 +143,7 @@ const user=JSON.parse(localStorage.getItem('abhyudoy_user')||'null');
 if(!token||!user||user.role!=='admin')window.location.href='/index.html';
 document.getElementById('adminEmail').textContent=user.email;
 
-let allCourses=[],allUsers=[];
+let allCourses=[],allSubjects=[],allPapers=[],allChapters=[],allUsers=[];
 
 async function api(method,path,body){
   const opts={method,headers:{'Content-Type':'application/json',Authorization:'Bearer '+token}};
@@ -286,150 +153,332 @@ async function api(method,path,body){
   return{ok:res.ok,data};
 }
 
-const viewTitles={dashboard:'Dashboard',courses:'Courses',chapters:'Chapters',lectures:'Lectures',resources:'Resources',users:'Users',memberships:'Memberships'};
+const viewTitles={dashboard:'Dashboard',courses:'Courses',subjects:'Subjects',papers:'Papers',chapters:'Chapters',lectures:'Lectures',resources:'Resources',users:'Users',memberships:'Memberships'};
+
 function showView(id){
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
-  document.getElementById('view-'+id).classList.add('active');
   document.querySelectorAll('.nav-item').forEach(b=>{if(b.textContent.toLowerCase().includes(id.slice(0,5)))b.classList.add('active')});
   document.getElementById('topbarTitle').textContent=viewTitles[id]||id;
   document.getElementById('sidebar').classList.remove('open');
-  if(id==='dashboard')loadDashboard();
-  if(id==='courses')loadCourses();
-  if(id==='chapters'){loadCourseFilter();loadChapters();}
-  if(id==='lectures'){loadLectureCourseFilter();}
-  if(id==='resources'){loadResourceCourseFilter();loadResources();}
-  if(id==='users')loadUsers();
-  if(id==='memberships')loadMemberships();
+  loadView(id);
 }
 
-async function loadDashboard(){
-  const[cR,uR,mR]=await Promise.all([api('GET','/admin/courses'),api('GET','/admin/users'),api('GET','/admin/memberships')]);
-  const courses=cR.ok?cR.data:[];allCourses=courses;
-  const users=uR.ok?uR.data:[];allUsers=users;
-  const memberships=mR.ok?mR.data:[];
-  document.getElementById('dashStats').innerHTML=[
-    ['Total Courses',courses.length],['Active Courses',courses.filter(c=>c.is_active).length],
-    ['Total Users',users.length],['Approved Users',users.filter(u=>u.is_approved).length],
-    ['Pending Approval',users.filter(u=>!u.is_approved).length],['Active Memberships',memberships.filter(m=>m.is_active).length]
-  ].map(([l,v])=>`<div class="stat-card"><div class="stat-label">${l}</div><div class="stat-val">${v}</div></div>`).join('');
-}
-
-// COURSES
-async function loadCourses(){
-  const{ok,data}=await api('GET','/admin/courses');allCourses=ok?data:[];
-  document.getElementById('coursesTbody').innerHTML=allCourses.length?allCourses.map(c=>`<tr><td style="font-weight:600">${esc(c.title)}</td><td>${esc(c.subject_name)}</td><td>${c.paper_type||'—'}</td><td><span class="badge ${c.is_active?'badge-teal':'badge-red'}">${c.is_active?'Active':'Inactive'}</span></td><td><button class="btn btn-ghost btn-xs" onclick="editCourse(${c.id})">Edit</button> <button class="btn btn-red btn-xs" onclick="deleteCourse(${c.id})">Del</button></td></tr>`).join(''):'<tr><td colspan="5" class="empty">No courses</td></tr>';
-}
-
-function openCourseModal(){document.getElementById('courseModalTitle').textContent='New Course';document.getElementById('editCourseId').value='';document.getElementById('cTitle').value='';document.getElementById('cSubject').value='';document.getElementById('cPaper').value='';document.getElementById('cDesc').value='';document.getElementById('cThumb').value='';document.getElementById('cActive').value='1';document.getElementById('courseAlert').className='alert';document.getElementById('courseModal').classList.add('open')}
-function editCourse(id){const c=allCourses.find(x=>x.id===id);if(!c)return;document.getElementById('courseModalTitle').textContent='Edit Course';document.getElementById('editCourseId').value=c.id;document.getElementById('cTitle').value=c.title;document.getElementById('cSubject').value=c.subject_name;document.getElementById('cPaper').value=c.paper_type||'';document.getElementById('cDesc').value=c.description||'';document.getElementById('cThumb').value=c.thumbnail||'';document.getElementById('cActive').value=c.is_active?'1':'0';document.getElementById('courseAlert').className='alert';document.getElementById('courseModal').classList.add('open')}
-function closeCourseModal(){document.getElementById('courseModal').classList.remove('open')}
-async function saveCourse(){
-  const id=document.getElementById('editCourseId').value;
-  const payload={title:document.getElementById('cTitle').value.trim(),subject_name:document.getElementById('cSubject').value.trim(),paper_type:document.getElementById('cPaper').value||null,description:document.getElementById('cDesc').value.trim(),thumbnail:document.getElementById('cThumb').value.trim(),is_active:parseInt(document.getElementById('cActive').value)};
-  if(!payload.title||!payload.subject_name){showAlert('courseAlert','Title and subject required','error');return}
-  const{ok,data}=await api(id?'PUT':'POST',id?`/admin/courses/${id}`:'/admin/courses',payload);
-  if(!ok){showAlert('courseAlert',data.error,'error');return}
-  closeCourseModal();loadCourses();loadDashboard();
-}
-async function deleteCourse(id){if(!confirm('Delete this course and ALL its content?'))return;await api('DELETE',`/admin/courses/${id}`);loadCourses();loadDashboard()}
-
-// CHAPTERS
-async function loadCourseFilter(){
-  const sel=document.getElementById('chapterCourseFilter');sel.innerHTML='<option value="">— Select Course —</option>'+allCourses.map(c=>`<option value="${c.id}">${esc(c.title)}</option>`).join('');
-}
-async function loadChapters(){
-  const courseId=document.getElementById('chapterCourseFilter').value;
-  if(!courseId){document.getElementById('chaptersTbody').innerHTML='<tr><td colspan="4" class="empty">Select a course</td></tr>';return}
-  const{ok,data}=await api('GET',`/admin/chapters/course/${courseId}`);
-  document.getElementById('chaptersTbody').innerHTML=data.length?data.map(ch=>`<tr><td style="font-weight:600">${esc(ch.title)}</td><td>${allCourses.find(c=>c.id===ch.course_id)?.title||'—'}</td><td>${ch.sort_order}</td><td><button class="btn btn-ghost btn-xs" onclick="editChapter(${ch.id})">Edit</button> <button class="btn btn-red btn-xs" onclick="deleteChapter(${ch.id})">Del</button></td></tr>`).join(''):'<tr><td colspan="4" class="empty">No chapters</td></tr>';
-}
-function openChapterModal(){document.getElementById('chapterModalTitle').textContent='New Chapter';document.getElementById('editChapterId').value='';document.getElementById('chTitle').value='';document.getElementById('chOrder').value='0';document.getElementById('chapterAlert').className='alert';loadChapterCourseSelect();document.getElementById('chapterModal').classList.add('open')}
-function loadChapterCourseSelect(){const sel=document.getElementById('chCourse');sel.innerHTML=allCourses.map(c=>`<option value="${c.id}">${esc(c.title)}</option>`).join('');const courseFilter=document.getElementById('chapterCourseFilter').value;if(courseFilter)sel.value=courseFilter}
-async function saveChapter(){
-  const id=document.getElementById('editChapterId').value;
-  const payload={course_id:parseInt(document.getElementById('chCourse').value),title:document.getElementById('chTitle').value.trim(),sort_order:parseInt(document.getElementById('chOrder').value)||0};
-  if(!payload.title){showAlert('chapterAlert','Title required','error');return}
-  const{ok,data}=await api(id?'PUT':'POST',id?`/admin/chapters/${id}`:'/admin/chapters',payload);
-  if(!ok){showAlert('chapterAlert',data.error,'error');return}
-  closeChapterModal();loadChapters();
-}
-function closeChapterModal(){document.getElementById('chapterModal').classList.remove('open')}
-async function deleteChapter(id){if(!confirm('Delete this chapter and all its lectures?'))return;await api('DELETE',`/admin/chapters/${id}`);loadChapters()}
-
-// LECTURES
-async function loadLectureCourseFilter(){const sel=document.getElementById('lectureCourseFilter');sel.innerHTML='<option value="">— Select Course —</option>'+allCourses.map(c=>`<option value="${c.id}">${esc(c.title)}</option>`).join('')}
-async function loadChaptersForLecture(){const courseId=document.getElementById('lectureCourseFilter').value;const sel=document.getElementById('lectureChapterFilter');if(!courseId){sel.innerHTML='<option value="">— Select Chapter —</option>';return}const{ok,data}=await api('GET',`/admin/chapters/course/${courseId}`);sel.innerHTML='<option value="">— All Chapters —</option>'+data.map(ch=>`<option value="${ch.id}">${esc(ch.title)}</option>`).join('');loadLectures()}
-async function loadLectures(){const chId=document.getElementById('lectureChapterFilter').value;let url='/admin/lectures';if(chId)url=`/admin/lectures/chapter/${chId}`;const{ok,data}=await api('GET',url.startsWith('/admin')?url.replace('/admin',''):url);if(!ok)return;document.getElementById('lecturesTbody').innerHTML=data.length?data.map(l=>`<tr><td style="font-weight:600">${esc(l.title)}</td><td>${l.chapter_title||'—'}</td><td style="font-family:'DM Mono',monospace;font-size:.7rem">${l.yt_video_id}</td><td>${l.pdf_count||0} PDFs</td><td><button class="btn btn-ghost btn-xs" onclick="editLecture(${l.id})">Edit</button> <button class="btn btn-red btn-xs" onclick="deleteLecture(${l.id})">Del</button></td></tr>`).join(''):'<tr><td colspan="5" class="empty">No lectures</td></tr>';}
-function openLectureModal(){document.getElementById('lectureModalTitle').textContent='New Lecture';document.getElementById('editLectureId').value='';document.getElementById('lecTitle').value='';document.getElementById('lecYtId').value='';document.getElementById('lecOrder').value='0';document.getElementById('lecDesc').value='';document.getElementById('pdfTitle').value='';document.getElementById('pdfUrl').value='';document.getElementById('lecturePdfsList').innerHTML='';document.getElementById('lectureAlert').className='alert';loadLectureCourseSelect();document.getElementById('lectureModal').classList.add('open');window._tempPdfs=[]}
-function loadLectureCourseSelect(){const sel=document.getElementById('lecCourse');sel.innerHTML=allCourses.map(c=>`<option value="${c.id}">${esc(c.title)}</option>`).join('');loadChapterSelect()}
-async function loadChapterSelect(){const courseId=document.getElementById('lecCourse').value;const sel=document.getElementById('lecChapter');sel.innerHTML='<option value="">— Select —</option>';if(courseId){const{ok,data}=await api('GET',`/admin/chapters/course/${courseId}`);sel.innerHTML+=data.map(ch=>`<option value="${ch.id}">${esc(ch.title)}</option>`).join('')}}
-function addPdfToLecture(){const title=document.getElementById('pdfTitle').value.trim();const url=document.getElementById('pdfUrl').value.trim();if(!title||!url)return;window._tempPdfs=window._tempPdfs||[];window._tempPdfs.push({title,url});document.getElementById('lecturePdfsList').innerHTML=window._tempPdfs.map((p,i)=>`<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:.74rem">📎 ${esc(p.title)} <button class="btn btn-red btn-xs" onclick="removeTempPdf(${i})">✕</button></div>`).join('');document.getElementById('pdfTitle').value='';document.getElementById('pdfUrl').value=''}
-function removeTempPdf(i){window._tempPdfs.splice(i,1);addPdfToLecture()}
-async function saveLecture(){
-  const id=document.getElementById('editLectureId').value;
-  const payload={chapter_id:parseInt(document.getElementById('lecChapter').value),title:document.getElementById('lecTitle').value.trim(),yt_video_id:document.getElementById('lecYtId').value.trim(),sort_order:parseInt(document.getElementById('lecOrder').value)||0,description:document.getElementById('lecDesc').value.trim()};
-  if(!payload.chapter_id||!payload.title||!payload.yt_video_id){showAlert('lectureAlert','Chapter, title and YT ID required','error');return}
-  const{ok,data}=await api(id?'PUT':'POST',id?`/admin/lectures/${id}`:'/admin/lectures',payload);
-  if(!ok){showAlert('lectureAlert',data.error,'error');return}
-  const lecId=id||data.id;
-  // Save temp PDFs
-  if(window._tempPdfs&&window._tempPdfs.length){
-    for(const p of window._tempPdfs){await api('POST','/admin/lecture-pdfs',{lecture_id:lecId,title:p.title,pdf_url:p.url})}
+async function loadView(id){
+  const area=document.getElementById('contentArea');
+  switch(id){
+    case 'dashboard': await loadDashboard(); break;
+    case 'courses': await loadCoursesView(); break;
+    case 'subjects': await loadSubjectsView(); break;
+    case 'papers': await loadPapersView(); break;
+    case 'chapters': await loadChaptersView(); break;
+    case 'lectures': await loadLecturesView(); break;
+    case 'resources': await loadResourcesView(); break;
+    case 'users': await loadUsersView(); break;
+    case 'memberships': await loadMembershipsView(); break;
   }
-  closeLectureModal();loadLectures();
 }
-function closeLectureModal(){document.getElementById('lectureModal').classList.remove('open')}
-async function deleteLecture(id){if(!confirm('Delete this lecture?'))return;await api('DELETE',`/admin/lectures/${id}`);loadLectures()}
 
-// RESOURCES
-async function loadResourceCourseFilter(){const sel=document.getElementById('resourceCourseFilter');sel.innerHTML='<option value="">— Select Course —</option>'+allCourses.map(c=>`<option value="${c.id}">${esc(c.title)}</option>`).join('')}
-async function loadResources(){const courseId=document.getElementById('resourceCourseFilter').value;if(!courseId){document.getElementById('resourcesTbody').innerHTML='<tr><td colspan="3" class="empty">Select a course</td></tr>';return}const{ok,data}=await api('GET',`/admin/resources/course/${courseId}`);document.getElementById('resourcesTbody').innerHTML=data.length?data.map(r=>`<tr><td style="font-weight:600">${esc(r.title)}</td><td>${allCourses.find(c=>c.id===r.course_id)?.title||'—'}</td><td style="font-size:.7rem;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><a href="${r.pdf_url}" target="_blank" style="color:var(--teal)">${r.pdf_url}</a></td><td><button class="btn btn-red btn-xs" onclick="deleteResource(${r.id})">Del</button></td></tr>`).join(''):'<tr><td colspan="3" class="empty">No resources</td></tr>'}
-function openResourceModal(){document.getElementById('resTitle').value='';document.getElementById('resUrl').value='';document.getElementById('resourceAlert').className='alert';loadResourceSelect();document.getElementById('resourceModal').classList.add('open')}
-function loadResourceSelect(){const sel=document.getElementById('resCourse');sel.innerHTML=allCourses.map(c=>`<option value="${c.id}">${esc(c.title)}</option>`).join('');const filter=document.getElementById('resourceCourseFilter').value;if(filter)sel.value=filter}
-async function saveResource(){const payload={course_id:parseInt(document.getElementById('resCourse').value),title:document.getElementById('resTitle').value.trim(),pdf_url:document.getElementById('resUrl').value.trim()};if(!payload.course_id||!payload.title||!payload.pdf_url){showAlert('resourceAlert','All fields required','error');return}const{ok,data}=await api('POST','/admin/resources',payload);if(!ok){showAlert('resourceAlert',data.error,'error');return}closeResourceModal();loadResources()}
-function closeResourceModal(){document.getElementById('resourceModal').classList.remove('open')}
-async function deleteResource(id){await api('DELETE',`/admin/resources/${id}`);loadResources()}
-
-// USERS
-async function loadUsers(){
-  const{ok,data}=await api('GET','/admin/users');allUsers=ok?data:[];
-  document.getElementById('usersTbody').innerHTML=allUsers.length?allUsers.map(u=>`<tr><td style="font-weight:600">${esc(u.name)}</td><td style="font-size:.74rem">${esc(u.email)}</td><td>${u.is_approved?'<span class="badge badge-teal">Approved</span>':'<span class="badge badge-red">Pending</span>'}</td><td>${u.is_blocked?'<span class="badge badge-red">Blocked</span>':'<span class="badge badge-green">Active</span>'}</td><td>${!u.is_approved?`<button class="btn btn-green btn-xs" onclick="approveUser(${u.id})">Approve</button> `:''}${u.role!=='admin'?`<button class="btn btn-orange btn-xs" onclick="toggleBlock(${u.id},${u.is_blocked})">${u.is_blocked?'Unblock':'Block'}</button> <button class="btn btn-red btn-xs" onclick="deleteUser(${u.id})">Del</button>`:''}</td></tr>`).join(''):'<tr><td colspan="5" class="empty">No users</td></tr>';
+// ═══ DASHBOARD ═══
+async function loadDashboard(){
+  await refreshAllData();
+  const area=document.getElementById('contentArea');
+  area.innerHTML=`<div class="stats-grid">
+    <div class="stat-card"><div class="stat-label">Courses</div><div class="stat-val">${allCourses.length}</div></div>
+    <div class="stat-card"><div class="stat-label">Subjects</div><div class="stat-val">${allSubjects.length}</div></div>
+    <div class="stat-card"><div class="stat-label">Papers</div><div class="stat-val">${allPapers.length}</div></div>
+    <div class="stat-card"><div class="stat-label">Chapters</div><div class="stat-val">${allChapters.length}</div></div>
+    <div class="stat-card"><div class="stat-label">Users</div><div class="stat-val">${allUsers.length}</div></div>
+    <div class="stat-card"><div class="stat-label">Approved</div><div class="stat-val">${allUsers.filter(u=>u.is_approved).length}</div></div>
+  </div>`;
 }
-async function approveUser(id){await api('PUT',`/admin/users/${id}/approve`);loadUsers();loadDashboard()}
-async function toggleBlock(id,current){await api('PUT',`/admin/users/${id}/block`,{is_blocked:!current});loadUsers()}
-async function deleteUser(id){if(!confirm('Delete this user?'))return;await api('DELETE',`/admin/users/${id}`);loadUsers();loadDashboard()}
 
-// MEMBERSHIPS
-async function loadMemberships(){
+async function refreshAllData(){
+  const[cR,sR,pR,chR,uR]=await Promise.all([
+    api('GET','/admin/courses'),
+    api('GET','/admin/all-subjects'),
+    api('GET','/admin/all-papers'),
+    api('GET','/admin/all-chapters'),
+    api('GET','/admin/users')
+  ]);
+  allCourses=cR.ok?cR.data:[];allSubjects=sR.ok?sR.data:[];allPapers=pR.ok?pR.data:[];
+  allChapters=chR.ok?chR.data:[];allUsers=uR.ok?uR.data:[];
+}
+
+// ═══ COURSES ═══
+async function loadCoursesView(){
+  await refreshAllData();
+  document.getElementById('contentArea').innerHTML=`
+    <div class="section-head"><h2 class="section-title">All Courses</h2><button class="btn btn-teal" onclick="openCourseModal()">+ New Course</button></div>
+    <div class="card"><div class="table-wrap"><table><thead><tr><th>Title</th><th>Subjects</th><th>Status</th><th>Actions</th></tr></thead>
+    <tbody>${allCourses.length?allCourses.map(c=>`<tr><td style="font-weight:600">${esc(c.title)}</td><td>${allSubjects.filter(s=>s.course_id===c.id).length}</td><td><span class="badge ${c.is_active?'badge-teal':'badge-red'}">${c.is_active?'Active':'Inactive'}</span></td><td><button class="btn btn-ghost btn-xs" onclick="editCourse(${c.id})">Edit</button> <button class="btn btn-red btn-xs" onclick="deleteCourse(${c.id})">Del</button></td></tr>`).join(''):'<tr><td colspan="4" class="empty">No courses</td></tr>'}</tbody></table></div></div>`;
+}
+
+function openCourseModal(id=null){
+  const c=id?allCourses.find(x=>x.id===id):null;
+  document.getElementById('genModalTitle').textContent=c?'Edit Course':'New Course';
+  document.getElementById('genModalBody').innerHTML=`
+    <div class="alert" id="modalAlert"></div><input type="hidden" id="editId" value="${c?.id||''}">
+    <div class="form-group"><label class="form-label">Course Title *</label><input class="form-input" id="fTitle" value="${esc(c?.title||'')}"></div>
+    <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="fDesc">${esc(c?.description||'')}</textarea></div>
+    <div class="form-group"><label class="form-label">Thumbnail URL</label><input class="form-input" id="fThumb" value="${esc(c?.thumbnail||'')}"></div>
+    <div class="form-group"><label class="toggle-row"><input type="checkbox" id="fActive" ${c&&!c.is_active?'':'checked'}> Active</label></div>`;
+  document.getElementById('genModalFooter').innerHTML=`
+    <button class="btn btn-teal" onclick="saveCourse()">Save Course</button>
+    <button class="btn btn-ghost" onclick="closeGenModal()">Cancel</button>`;
+  document.getElementById('genModal').classList.add('open');
+}
+
+async function saveCourse(){
+  const id=document.getElementById('editId').value;
+  const payload={title:document.getElementById('fTitle').value.trim(),description:document.getElementById('fDesc').value.trim(),thumbnail:document.getElementById('fThumb').value.trim(),is_active:document.getElementById('fActive').checked?1:0};
+  if(!payload.title){showModalAlert('Title required','error');return}
+  const{ok,data}=await api(id?'PUT':'POST',id?`/admin/courses/${id}`:'/admin/courses',payload);
+  if(!ok){showModalAlert(data.error,'error');return}
+  closeGenModal();loadView('courses');
+}
+function editCourse(id){openCourseModal(id)}
+async function deleteCourse(id){if(!confirm('Delete this course and ALL content?'))return;await api('DELETE',`/admin/courses/${id}`);loadView('courses')}
+
+// ═══ SUBJECTS ═══
+async function loadSubjectsView(){
+  await refreshAllData();
+  const courseOpts=allCourses.map(c=>`<option value="${c.id}">${esc(c.title)}</option>`).join('');
+  document.getElementById('contentArea').innerHTML=`
+    <div class="section-head"><h2 class="section-title">Subjects</h2>
+      <div style="display:flex;gap:8px">
+        <select class="form-select" id="subjCourseFilter" onchange="renderSubjectsTable()" style="width:200px"><option value="">— All Courses —</option>${courseOpts}</select>
+        <button class="btn btn-teal" onclick="openSubjectModal()">+ New Subject</button>
+      </div></div>
+    <div class="card"><div class="table-wrap"><table><thead><tr><th>Subject</th><th>Course</th><th>Papers</th><th>Actions</th></tr></thead><tbody id="subjTbody"></tbody></table></div></div>`;
+  renderSubjectsTable();
+}
+
+function renderSubjectsTable(){
+  const courseId=document.getElementById('subjCourseFilter')?.value;
+  const subs=courseId?allSubjects.filter(s=>s.course_id===parseInt(courseId)):allSubjects;
+  document.getElementById('subjTbody').innerHTML=subs.length?subs.map(s=>`<tr><td style="font-weight:600">${esc(s.name)}</td><td>${allCourses.find(c=>c.id===s.course_id)?.title||'—'}</td><td>${s.has_papers?allPapers.filter(p=>p.subject_id===s.id).length:'N/A'}</td><td><button class="btn btn-red btn-xs" onclick="deleteSubject(${s.id})">Del</button></td></tr>`).join(''):'<tr><td colspan="4" class="empty">No subjects</td></tr>';
+}
+
+function openSubjectModal(){
+  document.getElementById('genModalTitle').textContent='New Subject';
+  document.getElementById('genModalBody').innerHTML=`
+    <div class="alert" id="modalAlert"></div>
+    <div class="form-group"><label class="form-label">Course *</label><select class="form-select" id="fCourse">${allCourses.map(c=>`<option value="${c.id}">${esc(c.title)}</option>`).join('')}</select></div>
+    <div class="form-group"><label class="form-label">Subject Name *</label><input class="form-input" id="fName" placeholder="e.g. Physics"></div>
+    <div class="form-group"><label class="toggle-row"><input type="checkbox" id="fHasPapers" checked> Has Papers (1st/2nd Paper)</label></div>`;
+  document.getElementById('genModalFooter').innerHTML=`<button class="btn btn-teal" onclick="saveSubject()">Save Subject</button><button class="btn btn-ghost" onclick="closeGenModal()">Cancel</button>`;
+  document.getElementById('genModal').classList.add('open');
+}
+
+async function saveSubject(){
+  const payload={course_id:parseInt(document.getElementById('fCourse').value),name:document.getElementById('fName').value.trim(),has_papers:document.getElementById('fHasPapers').checked?1:0};
+  if(!payload.name){showModalAlert('Name required','error');return}
+  const{ok,data}=await api('POST','/admin/subjects',payload);
+  if(!ok){showModalAlert(data.error,'error');return}
+  closeGenModal();loadView('subjects');
+}
+async function deleteSubject(id){if(!confirm('Delete subject and all content?'))return;await api('DELETE',`/admin/subjects/${id}`);loadView('subjects')}
+
+// ═══ PAPERS ═══
+async function loadPapersView(){
+  await refreshAllData();
+  const subjOpts=allSubjects.map(s=>`<option value="${s.id}">${esc(s.name)} (${allCourses.find(c=>c.id===s.course_id)?.title||''})</option>`).join('');
+  document.getElementById('contentArea').innerHTML=`
+    <div class="section-head"><h2 class="section-title">Papers</h2>
+      <div style="display:flex;gap:8px">
+        <select class="form-select" id="paperSubjectFilter" onchange="renderPapersTable()" style="width:250px"><option value="">— All Subjects —</option>${subjOpts}</select>
+        <button class="btn btn-teal" onclick="openPaperModal()">+ New Paper</button>
+      </div></div>
+    <div class="card"><div class="table-wrap"><table><thead><tr><th>Paper</th><th>Subject</th><th>Course</th><th>Chapters</th><th>Actions</th></tr></thead><tbody id="paperTbody"></tbody></table></div></div>`;
+  renderPapersTable();
+}
+function renderPapersTable(){
+  const subjId=document.getElementById('paperSubjectFilter')?.value;
+  const papers=subjId?allPapers.filter(p=>p.subject_id===parseInt(subjId)):allPapers;
+  document.getElementById('paperTbody').innerHTML=papers.length?papers.map(p=>{const s=allSubjects.find(x=>x.id===p.subject_id);return`<tr><td style="font-weight:600">${esc(p.name)}</td><td>${esc(s?.name||'—')}</td><td>${allCourses.find(c=>c.id===s?.course_id)?.title||'—'}</td><td>${allChapters.filter(ch=>ch.paper_id===p.id).length}</td><td><button class="btn btn-red btn-xs" onclick="deletePaper(${p.id})">Del</button></td></tr>`}).join(''):'<tr><td colspan="5" class="empty">No papers</td></tr>';
+}
+function openPaperModal(){
+  document.getElementById('genModalTitle').textContent='New Paper';
+  document.getElementById('genModalBody').innerHTML=`
+    <div class="alert" id="modalAlert"></div>
+    <div class="form-group"><label class="form-label">Subject *</label><select class="form-select" id="fSubject">${allSubjects.filter(s=>s.has_papers).map(s=>`<option value="${s.id}">${esc(s.name)} — ${allCourses.find(c=>c.id===s.course_id)?.title||''}</option>`).join('')}</select></div>
+    <div class="form-group"><label class="form-label">Paper Name *</label><input class="form-input" id="fName" placeholder="1st Paper / 2nd Paper"></div>`;
+  document.getElementById('genModalFooter').innerHTML=`<button class="btn btn-teal" onclick="savePaper()">Save Paper</button><button class="btn btn-ghost" onclick="closeGenModal()">Cancel</button>`;
+  document.getElementById('genModal').classList.add('open');
+}
+async function savePaper(){
+  const payload={subject_id:parseInt(document.getElementById('fSubject').value),name:document.getElementById('fName').value.trim()};
+  if(!payload.name){showModalAlert('Name required','error');return}
+  const{ok}=await api('POST','/admin/papers',payload);
+  if(!ok){showModalAlert('Error','error');return}
+  closeGenModal();loadView('papers');
+}
+async function deletePaper(id){if(!confirm('Delete paper and all chapters?'))return;await api('DELETE',`/admin/papers/${id}`);loadView('papers')}
+
+// ═══ CHAPTERS ═══
+async function loadChaptersView(){
+  await refreshAllData();
+  const paperOpts=allPapers.map(p=>{const s=allSubjects.find(x=>x.id===p.subject_id);return`<option value="${p.id}">${esc(p.name)} — ${esc(s?.name||'')}</option>`}).join('');
+  document.getElementById('contentArea').innerHTML=`
+    <div class="section-head"><h2 class="section-title">Chapters</h2>
+      <div style="display:flex;gap:8px">
+        <select class="form-select" id="chPaperFilter" onchange="renderChaptersTable()" style="width:250px"><option value="">— All Papers —</option>${paperOpts}</select>
+        <button class="btn btn-teal" onclick="openChapterModal()">+ New Chapter</button>
+      </div></div>
+    <div class="card"><div class="table-wrap"><table><thead><tr><th>Chapter</th><th>Paper</th><th>Subject</th><th>Lectures</th><th>Actions</th></tr></thead><tbody id="chTbody"></tbody></table></div></div>`;
+  renderChaptersTable();
+}
+function renderChaptersTable(){
+  const paperId=document.getElementById('chPaperFilter')?.value;
+  const chapters=paperId?allChapters.filter(ch=>ch.paper_id===parseInt(paperId)):allChapters;
+  document.getElementById('chTbody').innerHTML=chapters.length?chapters.map(ch=>{const p=allPapers.find(x=>x.id===ch.paper_id);const s=allSubjects.find(x=>x.id===p?.subject_id);return`<tr><td style="font-weight:600">${esc(ch.title)}</td><td>${esc(p?.name||'—')}</td><td>${esc(s?.name||'—')}</td><td>—</td><td><button class="btn btn-red btn-xs" onclick="deleteChapter(${ch.id})">Del</button></td></tr>`}).join(''):'<tr><td colspan="5" class="empty">No chapters</td></tr>';
+}
+function openChapterModal(){
+  document.getElementById('genModalTitle').textContent='New Chapter';
+  document.getElementById('genModalBody').innerHTML=`
+    <div class="alert" id="modalAlert"></div>
+    <div class="form-group"><label class="form-label">Paper *</label><select class="form-select" id="fPaper">${allPapers.map(p=>{const s=allSubjects.find(x=>x.id===p.subject_id);return`<option value="${p.id}">${esc(p.name)} — ${esc(s?.name||'')} — ${allCourses.find(c=>c.id===s?.course_id)?.title||''}</option>`}).join('')}</select></div>
+    <div class="form-group"><label class="form-label">Chapter Title *</label><input class="form-input" id="fTitle"></div>`;
+  document.getElementById('genModalFooter').innerHTML=`<button class="btn btn-teal" onclick="saveChapter()">Save Chapter</button><button class="btn btn-ghost" onclick="closeGenModal()">Cancel</button>`;
+  document.getElementById('genModal').classList.add('open');
+}
+async function saveChapter(){
+  const payload={paper_id:parseInt(document.getElementById('fPaper').value),title:document.getElementById('fTitle').value.trim()};
+  if(!payload.title){showModalAlert('Title required','error');return}
+  const{ok}=await api('POST','/admin/chapters',payload);
+  if(!ok){showModalAlert('Error','error');return}
+  closeGenModal();loadView('chapters');
+}
+async function deleteChapter(id){if(!confirm('Delete this chapter?'))return;await api('DELETE',`/admin/chapters/${id}`);loadView('chapters')}
+
+// ═══ LECTURES ═══
+async function loadLecturesView(){
+  await refreshAllData();
+  const chOpts=allChapters.map(ch=>{const p=allPapers.find(x=>x.id===ch.paper_id);const s=allSubjects.find(x=>x.id===p?.subject_id);return`<option value="${ch.id}">${esc(ch.title)}</option>`}).join('');
+  document.getElementById('contentArea').innerHTML=`
+    <div class="section-head"><h2 class="section-title">Lectures</h2>
+      <div style="display:flex;gap:8px">
+        <select class="form-select" id="lecChapterFilter" onchange="renderLecturesTable()" style="width:250px"><option value="">— All Chapters —</option>${chOpts}</select>
+        <button class="btn btn-teal" onclick="openLectureModal()">+ New Lecture</button>
+      </div></div>
+    <div class="card"><div class="table-wrap"><table><thead><tr><th>Title</th><th>YT ID</th><th>Chapter</th><th>Actions</th></tr></thead><tbody id="lecTbody"></tbody></table></div></div>`;
+  renderLecturesTable();
+}
+async function renderLecturesTable(){
+  const chId=document.getElementById('lecChapterFilter')?.value;
+  let url='/admin/all-lectures';
+  if(chId)url=`/admin/lectures/chapter/${chId}`;
+  const{ok,data}=await api('GET',url);
+  document.getElementById('lecTbody').innerHTML=data&&data.length?data.map(l=>`<tr><td style="font-weight:600">${esc(l.title)}</td><td style="font-family:'DM Mono',monospace;font-size:.7rem">${l.yt_video_id}</td><td>${l.chapter_title||'—'}</td><td><button class="btn btn-ghost btn-xs" onclick="openLectureModal(${l.id})">Edit</button> <button class="btn btn-red btn-xs" onclick="deleteLecture(${l.id})">Del</button></td></tr>`).join(''):'<tr><td colspan="4" class="empty">No lectures</td></tr>';
+}
+function openLectureModal(id=null){
+  document.getElementById('genModalTitle').textContent=id?'Edit Lecture':'New Lecture';
+  document.getElementById('genModalBody').innerHTML=`
+    <div class="alert" id="modalAlert"></div><input type="hidden" id="editLecId" value="${id||''}">
+    <div class="form-row"><div class="form-group"><label class="form-label">Chapter *</label><select class="form-select" id="fChapter">${allChapters.map(ch=>`<option value="${ch.id}">${esc(ch.title)}</option>`).join('')}</select></div>
+    <div class="form-group"><label class="form-label">Sort Order</label><input class="form-input" type="number" id="fOrder" value="0"></div></div>
+    <div class="form-group"><label class="form-label">Title *</label><input class="form-input" id="fTitle"></div>
+    <div class="form-group"><label class="form-label">YouTube Video ID *</label><input class="form-input" id="fYtId" placeholder="e.g. dQw4w9WgXcQ"></div>
+    <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="fDesc"></textarea></div>
+    <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:8px">
+      <label class="form-label">PDFs</label><div id="pdfList"></div>
+      <div style="display:flex;gap:6px"><input class="form-input" id="pdfTitle" placeholder="PDF title" style="flex:2"><input class="form-input" id="pdfUrl" placeholder="PDF URL" style="flex:3"><button class="btn btn-ghost btn-xs" onclick="addTempPdf()">+</button></div>
+    </div>`;
+  document.getElementById('genModalFooter').innerHTML=`<button class="btn btn-teal" onclick="saveLecture()">Save Lecture</button><button class="btn btn-ghost" onclick="closeGenModal()">Cancel</button>`;
+  document.getElementById('genModal').classList.add('open');
+  window._tempPdfs=[];
+  if(id){/* Fetch and populate */ console.log('Edit lecture:',id)}
+}
+function addTempPdf(){const t=document.getElementById('pdfTitle').value.trim(),u=document.getElementById('pdfUrl').value.trim();if(!t||!u)return;window._tempPdfs.push({title:t,url:u});document.getElementById('pdfList').innerHTML=window._tempPdfs.map((p,i)=>`<div style="display:flex;justify-content:space-between;padding:2px 0;font-size:.72rem">📎 ${esc(p.title)} <button class="btn btn-red btn-xs" onclick="window._tempPdfs.splice(${i},1);addTempPdf()">✕</button></div>`).join('');document.getElementById('pdfTitle').value='';document.getElementById('pdfUrl').value=''}
+async function saveLecture(){
+  const id=document.getElementById('editLecId').value;
+  const payload={chapter_id:parseInt(document.getElementById('fChapter').value),title:document.getElementById('fTitle').value.trim(),yt_video_id:document.getElementById('fYtId').value.trim(),sort_order:parseInt(document.getElementById('fOrder').value)||0,description:document.getElementById('fDesc').value.trim()};
+  if(!payload.chapter_id||!payload.title||!payload.yt_video_id){showModalAlert('Chapter, title, and YT ID required','error');return}
+  const{ok,data}=await api(id?'PUT':'POST',id?`/admin/lectures/${id}`:'/admin/lectures',payload);
+  if(!ok){showModalAlert(data.error,'error');return}
+  const lecId=id||data.id;
+  if(window._tempPdfs&&window._tempPdfs.length){for(const p of window._tempPdfs){await api('POST','/admin/lecture-pdfs',{lecture_id:lecId,title:p.title,pdf_url:p.url})}}
+  closeGenModal();loadView('lectures');
+}
+async function deleteLecture(id){if(!confirm('Delete?'))return;await api('DELETE',`/admin/lectures/${id}`);loadView('lectures')}
+
+// ═══ RESOURCES ═══
+async function loadResourcesView(){
+  await refreshAllData();
+  document.getElementById('contentArea').innerHTML=`
+    <div class="section-head"><h2 class="section-title">Course Resources</h2>
+      <div style="display:flex;gap:8px">
+        <select class="form-select" id="resCourseFilter" onchange="renderResourcesTable()" style="width:200px"><option value="">— Select Course —</option>${allCourses.map(c=>`<option value="${c.id}">${esc(c.title)}</option>`).join('')}</select>
+        <button class="btn btn-teal" onclick="openResourceModal()">+ New</button>
+      </div></div>
+    <div class="card"><div class="table-wrap"><table><thead><tr><th>Title</th><th>Course</th><th>Link</th><th>Actions</th></tr></thead><tbody id="resTbody"></tbody></table></div></div>`;
+  renderResourcesTable();
+}
+async function renderResourcesTable(){
+  const cId=document.getElementById('resCourseFilter')?.value;
+  if(!cId){document.getElementById('resTbody').innerHTML='<tr><td colspan="4" class="empty">Select a course</td></tr>';return}
+  const{ok,data}=await api('GET',`/admin/resources/course/${cId}`);
+  document.getElementById('resTbody').innerHTML=data&&data.length?data.map(r=>`<tr><td style="font-weight:600">${esc(r.title)}</td><td>${allCourses.find(c=>c.id===r.course_id)?.title||'—'}</td><td style="font-size:.7rem"><a href="${r.pdf_url}" target="_blank" style="color:var(--teal)">Open</a></td><td><button class="btn btn-red btn-xs" onclick="deleteResource(${r.id})">Del</button></td></tr>`).join(''):'<tr><td colspan="4" class="empty">No resources</td></tr>';
+}
+function openResourceModal(){
+  document.getElementById('genModalTitle').textContent='New Resource';
+  document.getElementById('genModalBody').innerHTML=`<div class="alert" id="modalAlert"></div><div class="form-group"><label class="form-label">Course *</label><select class="form-select" id="fCourse">${allCourses.map(c=>`<option value="${c.id}">${esc(c.title)}</option>`).join('')}</select></div><div class="form-group"><label class="form-label">Title *</label><input class="form-input" id="fTitle"></div><div class="form-group"><label class="form-label">PDF URL *</label><input class="form-input" id="fUrl"></div>`;
+  document.getElementById('genModalFooter').innerHTML=`<button class="btn btn-teal" onclick="saveResource()">Save</button><button class="btn btn-ghost" onclick="closeGenModal()">Cancel</button>`;
+  document.getElementById('genModal').classList.add('open');
+}
+async function saveResource(){
+  const payload={course_id:parseInt(document.getElementById('fCourse').value),title:document.getElementById('fTitle').value.trim(),pdf_url:document.getElementById('fUrl').value.trim()};
+  if(!payload.course_id||!payload.title||!payload.pdf_url){showModalAlert('All fields required','error');return}
+  await api('POST','/admin/resources',payload);closeGenModal();loadView('resources');
+}
+async function deleteResource(id){await api('DELETE',`/admin/resources/${id}`);loadView('resources')}
+
+// ═══ USERS ═══
+async function loadUsersView(){
+  await refreshAllData();
+  document.getElementById('contentArea').innerHTML=`
+    <div class="section-head"><h2 class="section-title">Users</h2></div>
+    <div class="card"><div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Status</th><th>Actions</th></tr></thead>
+    <tbody>${allUsers.map(u=>`<tr><td style="font-weight:600">${esc(u.name)}</td><td style="font-size:.74rem">${esc(u.email)}</td><td>${u.is_approved?'<span class="badge badge-teal">Approved</span> ':'<span class="badge badge-red">Pending</span> '}${u.is_blocked?'<span class="badge badge-red">Blocked</span>':''}</td>
+      <td>${!u.is_approved?`<button class="btn btn-green btn-xs" onclick="approveUser(${u.id})">Approve</button> `:''}${u.role!=='admin'?`<button class="btn btn-ghost btn-xs" onclick="toggleBlock(${u.id},${u.is_blocked})">${u.is_blocked?'Unblock':'Block'}</button> <button class="btn btn-red btn-xs" onclick="deleteUser(${u.id})">Del</button>`:''}</td></tr>`).join('')}</tbody></table></div></div>`;
+}
+async function approveUser(id){await api('PUT',`/admin/users/${id}/approve`);loadView('users')}
+async function toggleBlock(id,cur){await api('PUT',`/admin/users/${id}/block`,{is_blocked:!cur});loadView('users')}
+async function deleteUser(id){if(!confirm('Delete user?'))return;await api('DELETE',`/admin/users/${id}`);loadView('users')}
+
+// ═══ MEMBERSHIPS ═══
+async function loadMembershipsView(){
   const{ok,data}=await api('GET','/admin/memberships');
-  document.getElementById('membershipsTbody').innerHTML=data.length?data.map(m=>`<tr><td style="font-weight:600">${esc(m.user_name)}</td><td>${esc(m.course_title)}</td><td style="font-family:'DM Mono',monospace;font-size:.7rem">${new Date(m.expires_at).toLocaleDateString()}</td><td><span class="badge ${m.is_active?'badge-teal':'badge-red'}">${m.is_active?'Active':'Cancelled'}</span></td><td>${m.is_active?`<button class="btn btn-orange btn-xs" onclick="extendMembership(${m.id})">Extend</button> <button class="btn btn-red btn-xs" onclick="cancelMembership(${m.id})">Cancel</button>`:''}</td></tr>`).join(''):'<tr><td colspan="5" class="empty">No memberships</td></tr>';
+  document.getElementById('contentArea').innerHTML=`
+    <div class="section-head"><h2 class="section-title">Memberships</h2><button class="btn btn-teal" onclick="openMembershipModal()">+ Grant</button></div>
+    <div class="card"><div class="table-wrap"><table><thead><tr><th>User</th><th>Course</th><th>Expires</th><th>Status</th><th>Actions</th></tr></thead>
+    <tbody>${data&&data.length?data.map(m=>`<tr><td>${esc(m.user_name)}</td><td>${esc(m.course_title)}</td><td style="font-family:'DM Mono',monospace;font-size:.7rem">${new Date(m.expires_at).toLocaleDateString()}</td><td><span class="badge ${m.is_active?'badge-teal':'badge-red'}">${m.is_active?'Active':'Cancelled'}</span></td>
+      <td>${m.is_active?`<button class="btn btn-ghost btn-xs" onclick="extendMembership(${m.id})">Extend</button> <button class="btn btn-red btn-xs" onclick="cancelMembership(${m.id})">Cancel</button>`:''}</td></tr>`).join(''):'<tr><td colspan="5" class="empty">No memberships</td></tr>'}</tbody></table></div></div>`;
 }
-function openMembershipModal(){document.getElementById('membershipAlert').className='alert';loadMembershipSelects();document.getElementById('membershipModal').classList.add('open')}
-function loadMembershipSelects(){
-  document.getElementById('memUser').innerHTML=allUsers.filter(u=>u.is_approved&&!u.is_blocked).map(u=>`<option value="${u.id}">${esc(u.name)} (${esc(u.email)})</option>`).join('');
-  document.getElementById('memCourse').innerHTML=allCourses.filter(c=>c.is_active).map(c=>`<option value="${c.id}">${esc(c.title)}</option>`).join('');
+function openMembershipModal(){
+  document.getElementById('genModalTitle').textContent='Grant Membership';
+  document.getElementById('genModalBody').innerHTML=`<div class="alert" id="modalAlert"></div>
+    <div class="form-group"><label class="form-label">User *</label><select class="form-select" id="fUser">${allUsers.filter(u=>u.is_approved).map(u=>`<option value="${u.id}">${esc(u.name)} (${esc(u.email)})</option>`).join('')}</select></div>
+    <div class="form-group"><label class="form-label">Course *</label><select class="form-select" id="fCourse">${allCourses.filter(c=>c.is_active).map(c=>`<option value="${c.id}">${esc(c.title)}</option>`).join('')}</select></div>
+    <div class="form-group"><label class="form-label">Days *</label><input class="form-input" type="number" id="fDays" value="30" min="1"></div>`;
+  document.getElementById('genModalFooter').innerHTML=`<button class="btn btn-teal" onclick="saveMembership()">Grant</button><button class="btn btn-ghost" onclick="closeGenModal()">Cancel</button>`;
+  document.getElementById('genModal').classList.add('open');
 }
-async function grantMembership(){
-  const payload={user_id:parseInt(document.getElementById('memUser').value),course_id:parseInt(document.getElementById('memCourse').value),days:parseInt(document.getElementById('memDays').value)};
-  if(!payload.user_id||!payload.course_id||!payload.days){showAlert('membershipAlert','All fields required','error');return}
-  const{ok,data}=await api('POST','/admin/memberships',payload);
-  if(!ok){showAlert('membershipAlert',data.error,'error');return}
-  closeMembershipModal();loadMemberships();loadDashboard();
+async function saveMembership(){
+  const payload={user_id:parseInt(document.getElementById('fUser').value),course_id:parseInt(document.getElementById('fCourse').value),days:parseInt(document.getElementById('fDays').value)};
+  if(!payload.user_id||!payload.course_id||!payload.days){showModalAlert('All fields required','error');return}
+  await api('POST','/admin/memberships',payload);closeGenModal();loadView('memberships');
 }
-function closeMembershipModal(){document.getElementById('membershipModal').classList.remove('open')}
-async function extendMembership(id){const days=prompt('Extend by how many days?','30');if(!days)return;await api('PUT',`/admin/memberships/${id}/extend`,{days:parseInt(days)});loadMemberships()}
-async function cancelMembership(id){if(!confirm('Cancel this membership?'))return;await api('PUT',`/admin/memberships/${id}/cancel`);loadMemberships()}
+async function extendMembership(id){const d=prompt('Days to extend?','30');if(d)await api('PUT',`/admin/memberships/${id}/extend`,{days:parseInt(d)});loadView('memberships')}
+async function cancelMembership(id){if(confirm('Cancel?')){await api('PUT',`/admin/memberships/${id}/cancel`);loadView('memberships')}}
 
-function showAlert(id,msg,type){const el=document.getElementById(id);el.className=`alert alert-${type} show`;el.textContent=msg}
+// ═══ HELPERS ═══
+function closeGenModal(){document.getElementById('genModal').classList.remove('open')}
+function showModalAlert(msg,type){const el=document.getElementById('modalAlert');if(el){el.className=`alert alert-${type} show`;el.textContent=msg}}
 function esc(s){const d=document.createElement('div');d.textContent=String(s||'');return d.innerHTML}
 function logout(){localStorage.clear();window.location.href='/index.html'}
 
-// EDIT functions for chapters/lectures (abbreviated)
-async function editChapter(id){/* fetch and populate modal */ console.log('Edit chapter:',id)}
-async function editLecture(id){/* fetch and populate modal */ console.log('Edit lecture:',id)}
-
-loadDashboard();
+loadView('dashboard');
 </script>
 </body>
 </html>
