@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Course — Abhyudoy</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#090d13;--surface:#111620;--surface2:#161c28;--border:rgba(255,255,255,0.07);--teal:#00e5c3;--teal-dim:rgba(0,229,195,0.08);--white:#fff;--gray:#8a95a8;--red:#ff4757;--radius:12px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);min-height:100vh}
+nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.nav-logo{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;color:var(--teal);text-decoration:none}
+.nav-logo span{color:var(--white)}
+.btn-back{padding:7px 16px;background:transparent;border:1.5px solid var(--border);color:var(--gray);border-radius:20px;cursor:pointer;font-size:.74rem;font-weight:600;font-family:'DM Sans',sans-serif;text-decoration:none;transition:all .2s}
+.btn-back:hover{border-color:var(--teal);color:var(--teal)}
+.container{max-width:900px;margin:0 auto;padding:28px 24px}
+.course-header{margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.course-subject{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:6px}
+.course-title{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:700;margin-bottom:4px}
+.course-meta{font-size:.78rem;color:var(--gray)}
+.chapter-section{margin-bottom:24px}
+.chapter-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.chapter-num{width:28px;height:28px;background:var(--teal-dim);color:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0}
+.lecture-list{display:flex;flex-direction:column;gap:4px;padding-left:12px}
+.lecture-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:8px;cursor:pointer;transition:all .15s;border:1px solid transparent}
+.lecture-item:hover{background:var(--surface);border-color:var(--border)}
+.lecture-icon{width:20px;height:20px;color:var(--teal);flex-shrink:0;display:flex;align-items:center}
+.lecture-info{flex:1;min-width:0}
+.lecture-title{font-size:.82rem;font-weight:500;color:var(--gray);line-height:1.3}
+.lecture-item:hover .lecture-title{color:var(--white)}
+.lecture-pdf{font-size:.64rem;color:var(--teal);margin-left:auto;flex-shrink:0;display:flex;align-items:center;gap:4px}
+.resources-section{margin-top:28px;padding-top:20px;border-top:1px solid var(--border)}
+.resources-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:12px}
+.resource-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:6px;text-decoration:none;color:var(--gray);transition:all .15s;font-size:.82rem}
+.resource-item:hover{border-color:var(--teal);color:var(--white)}
+.empty-state{text-align:center;padding:60px 20px;color:var(--gray)}
+.loading{text-align:center;padding:60px}
+.spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--teal);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="/dashboard.html" class="nav-logo">Abhy<span>udoy</span></a>
+  <a href="/dashboard.html" class="btn-back">← My Courses</a>
+</nav>
+<div class="container" id="content">
+  <div class="loading"><div class="spinner"></div><p>Loading course...</p></div>
+</div>
+<script>
+const token=localStorage.getItem('abhyudoy_token');
+const user=JSON.parse(localStorage.getItem('abhyudoy_user')||'null');
+if(!token||!user){window.location.href='/index.html'}
+const courseId=new URLSearchParams(location.search).get('id');
+if(!courseId)window.location.href='/dashboard.html';
+
+async function loadCourse(){
+  try{
+    const res=await fetch(`/api/user/course/${courseId}`,{headers:{Authorization:'Bearer '+token}});
+    if(!res.ok){window.location.href='/dashboard.html';return}
+    const data=await res.json();
+    document.title=data.course.title+' — Abhyudoy';
+    document.getElementById('content').innerHTML=`
+      <div class="course-header">
+        <div class="course-subject">${esc(data.course.subject_name)}</div>
+        <h1 class="course-title">${esc(data.course.title)}</h1>
+        <p class="course-meta">${data.course.paper_type?data.course.paper_type+' Paper · ':''}${data.chapters.length} Chapters · Expires: ${new Date(data.membership.expires_at).toLocaleDateString()}</p>
+      </div>
+      ${data.chapters.map((ch,i)=>`
+        <div class="chapter-section">
+          <div class="chapter-title"><span class="chapter-num">${String(i+1).padStart(2,'0')}</span>${esc(ch.title)}</div>
+          <div class="lecture-list">
+            ${ch.lectures.map(lec=>`
+              <div class="lecture-item" onclick="window.location.href='/player.html?lecture=${lec.id}&course=${courseId}'">
+                <div class="lecture-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+                <div class="lecture-info"><div class="lecture-title">${esc(lec.title)}</div></div>
+                ${lec.pdfs?.length?`<span class="lecture-pdf">📎 ${lec.pdfs.length} PDF</span>`:''}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('')}
+      ${data.resources.length?`
+        <div class="resources-section">
+          <h2 class="resources-title">📚 Course Resources</h2>
+          ${data.resources.map(r=>`<a href="${esc(r.pdf_url)}" target="_blank" rel="noopener" class="resource-item">📄 ${esc(r.title)}</a>`).join('')}
+        </div>
+      `:''}
+    `;
+  }catch(e){document.getElementById('content').innerHTML='<div class="empty-state"><h3>Error</h3><p>Failed to load course</p></div>'}
+}
+
+function esc(s){const d=document.createElement('div');d.textContent=String(s||'');return d.innerHTML}
+loadCourse();
+</script>
+</body>
+</html>
