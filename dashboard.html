@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Courses — Abhyudoy</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#090d13;--surface:#111620;--surface2:#161c28;--border:rgba(255,255,255,0.07);--teal:#00e5c3;--teal-dim:rgba(0,229,195,0.1);--white:#fff;--gray:#8a95a8;--red:#ff4757;--orange:#f59e0b;--radius:14px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);min-height:100vh}
+nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.nav-logo{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;color:var(--teal);text-decoration:none;letter-spacing:-.02em}
+.nav-logo span{color:var(--white)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.user-name{font-size:.82rem;font-weight:500;color:var(--gray)}
+.btn-signout{padding:7px 16px;background:transparent;border:1.5px solid var(--border);color:var(--gray);border-radius:20px;cursor:pointer;font-size:.74rem;font-weight:600;transition:all .2s;font-family:'DM Sans',sans-serif}
+.btn-signout:hover{border-color:var(--red);color:var(--red)}
+.container{max-width:1100px;margin:0 auto;padding:32px 24px}
+.page-header{margin-bottom:32px}
+.page-header h1{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:700;margin-bottom:6px}
+.page-header p{color:var(--gray);font-size:.85rem}
+.course-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px}
+.course-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:all .3s;position:relative}
+.course-card:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,0,0,.4);border-color:rgba(0,229,195,.2)}
+.course-card-header{padding:24px 20px 16px;border-bottom:1px solid var(--border)}
+.course-subject{font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:8px}
+.course-title{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:700;line-height:1.3;margin-bottom:6px}
+.course-paper{font-size:.72rem;color:var(--gray)}
+.course-card-body{padding:16px 20px}
+.course-meta{display:flex;align-items:center;gap:8px;font-size:.72rem;color:var(--gray);margin-bottom:4px}
+.expiry-badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:.66rem;font-weight:600}
+.expiry-active{background:rgba(0,229,195,.1);color:var(--teal)}
+.expiry-warning{background:rgba(245,158,11,.1);color:var(--orange)}
+.expiry-expired{background:rgba(255,71,87,.1);color:var(--red)}
+.empty-state{text-align:center;padding:80px 20px;color:var(--gray)}
+.empty-state h3{font-family:'Syne',sans-serif;font-size:1.3rem;margin-bottom:8px;color:var(--white)}
+.loading{text-align:center;padding:60px;color:var(--gray)}
+.spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--teal);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="/dashboard.html" class="nav-logo">Abhy<span>udoy</span></a>
+  <div class="nav-right">
+    <span class="user-name" id="userName"></span>
+    <button class="btn-signout" onclick="logout()">Sign Out</button>
+  </div>
+</nav>
+<div class="container">
+  <div class="page-header">
+    <h1>My Courses</h1>
+    <p>Your enrolled courses with active memberships</p>
+  </div>
+  <div id="content">
+    <div class="loading"><div class="spinner"></div><p>Loading courses...</p></div>
+  </div>
+</div>
+<script>
+const token=localStorage.getItem('abhyudoy_token');
+const user=JSON.parse(localStorage.getItem('abhyudoy_user')||'null');
+if(!token||!user){window.location.href='/index.html'}
+
+document.getElementById('userName').textContent=user.name;
+
+async function loadCourses(){
+  try{
+    const res=await fetch('/api/user/my-courses',{headers:{Authorization:'Bearer '+token}});
+    const courses=await res.json();
+    const content=document.getElementById('content');
+    if(!courses.length){
+      content.innerHTML='<div class="empty-state"><h3>No Active Courses</h3><p>You don\'t have any active course memberships. Contact admin for access.</p></div>';
+      return;
+    }
+    content.innerHTML=`<div class="course-grid">${courses.map(c=>{
+      const expDate=new Date(c.expires_at);
+      const now=new Date();
+      const daysLeft=Math.ceil((expDate-now)/(1000*60*60*24));
+      let expClass='expiry-active';
+      if(daysLeft<0)expClass='expiry-expired';
+      else if(daysLeft<=7)expClass='expiry-warning';
+      const expText=daysLeft<0?'Expired':daysLeft<=7?`${daysLeft} days left`:`Expires: ${expDate.toLocaleDateString()}`;
+      return`<div class="course-card" onclick="window.location.href='/course.html?id=${c.id}'">
+        <div class="course-card-header">
+          <div class="course-subject">${esc(c.subject_name)}</div>
+          <div class="course-title">${esc(c.title)}</div>
+          <div class="course-paper">${c.paper_type?c.paper_type+' Paper':'Full Course'}</div>
+        </div>
+        <div class="course-card-body">
+          <div class="course-meta">📚 ${esc(c.subject_name)} ${c.paper_type?'· '+c.paper_type+' Paper':''}</div>
+          <span class="expiry-badge ${expClass}">${expText}</span>
+        </div>
+      </div>`}).join('')}</div>`;
+  }catch(e){document.getElementById('content').innerHTML='<div class="empty-state"><h3>Error</h3><p>Failed to load courses</p></div>'}
+}
+
+function esc(s){const d=document.createElement('div');d.textContent=String(s||'');return d.innerHTML}
+function logout(){localStorage.clear();window.location.href='/index.html'}
+loadCourses();
+</script>
+</body>
+</html>
