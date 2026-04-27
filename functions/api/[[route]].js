@@ -1,4 +1,6 @@
-// Abhyudoy EdTech API — Course → Subjects → Papers → Chapters → Lectures
+// functions/api/[[route]].js
+// Abhyudoy EdTech Platform — Complete API
+// Structure: Course → Subjects → Papers → Chapters → Lectures
 
 async function sha256(text) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
@@ -48,8 +50,127 @@ function err(msg, status = 400) {
   return json({ error: msg }, status);
 }
 
-// ═══ AUTH ═══
+async function ensureTables(db) {
+  // Users
+  await db.prepare(`CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL,
+    role TEXT DEFAULT 'user',
+    is_blocked INTEGER DEFAULT 0,
+    is_approved INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`).run();
+
+  // Device registrations
+  await db.prepare(`CREATE TABLE IF NOT EXISTS device_registrations (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    device_fingerprint TEXT NOT NULL,
+    user_id INTEGER,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`).run();
+
+  // Courses
+  await db.prepare(`CREATE TABLE IF NOT EXISTS courses (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    description TEXT,
+    thumbnail TEXT,
+    is_active INTEGER DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`).run();
+
+  // Subjects (under course)
+  await db.prepare(`CREATE TABLE IF NOT EXISTS subjects (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    course_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    has_papers INTEGER DEFAULT 1,
+    sort_order INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
+  )`).run();
+
+  // Papers (under subject)
+  await db.prepare(`CREATE TABLE IF NOT EXISTS papers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    subject_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    sort_order INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
+  )`).run();
+
+  // Chapters (under paper)
+  await db.prepare(`CREATE TABLE IF NOT EXISTS chapters (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    paper_id INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    sort_order INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (paper_id) REFERENCES papers(id) ON DELETE CASCADE
+  )`).run();
+
+  // Lectures (under chapter)
+  await db.prepare(`CREATE TABLE IF NOT EXISTS lectures (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    chapter_id INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    yt_video_id TEXT NOT NULL,
+    sort_order INTEGER DEFAULT 0,
+    description TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (chapter_id) REFERENCES chapters(id) ON DELETE CASCADE
+  )`).run();
+
+  // Lecture PDFs
+  await db.prepare(`CREATE TABLE IF NOT EXISTS lecture_pdfs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    lecture_id INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    pdf_url TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (lecture_id) REFERENCES lectures(id) ON DELETE CASCADE
+  )`).run();
+
+  // Course Resources
+  await db.prepare(`CREATE TABLE IF NOT EXISTS resources (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    course_id INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    pdf_url TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
+  )`).run();
+
+  // Memberships
+  await db.prepare(`CREATE TABLE IF NOT EXISTS memberships (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    course_id INTEGER NOT NULL,
+    expires_at DATETIME NOT NULL,
+    is_active INTEGER DEFAULT 1,
+    granted_by INTEGER,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(user_id, course_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
+  )`).run();
+
+  // Default admin (password: 123admin)
+  const adminHash = await sha256('123admin');
+  await db.prepare(`INSERT OR IGNORE INTO users (name, email, password, role, is_approved)
+    VALUES ('Admin', 'cnct.nx@gmail.com', ?, 'admin', 1)`).bind(adminHash).run();
+}
+
+// =============================================
+// AUTH ROUTES
+// =============================================
 async function handleAuth(method, path, body, db) {
+  // POST /api/auth/signup
   if (method === 'POST' && path === '/signup') {
     const { name, email, password, device_fingerprint } = body;
     if (!name || !email || !password) return err('All fields required');
@@ -71,6 +192,7 @@ async function handleAuth(method, path, body, db) {
     }
   }
 
+  // POST /api/auth/login
   if (method === 'POST' && path === '/login') {
     const { email, password } = body;
     if (!email || !password) return err('Email and password required');
@@ -84,14 +206,16 @@ async function handleAuth(method, path, body, db) {
     return json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role } });
   }
 
-  return err('Not found', 404);
+  return err('Auth route not found', 404);
 }
 
-// ═══ USER ROUTES ═══
+// =============================================
+// USER ROUTES
+// =============================================
 async function handleUser(method, path, body, db, user) {
   if (!user) return err('Unauthorized', 401);
 
-  // My Courses
+  // GET /api/user/my-courses
   if (method === 'GET' && path === '/my-courses') {
     const courses = await db.prepare(`
       SELECT c.*, m.expires_at FROM memberships m
@@ -102,7 +226,7 @@ async function handleUser(method, path, body, db, user) {
     return json(courses.results);
   }
 
-  // Course Detail - with subjects, papers, chapters, lectures
+  // GET /api/user/course/:id
   if (method === 'GET' && path.match(/^\/course\/\d+$/)) {
     const courseId = parseInt(path.split('/')[2]);
     
@@ -112,38 +236,15 @@ async function handleUser(method, path, body, db, user) {
     const course = await db.prepare('SELECT * FROM courses WHERE id = ?').bind(courseId).first();
     if (!course) return err('Course not found', 404);
 
-    // Get subjects
+    // Get all subjects
     const subjects = await db.prepare('SELECT * FROM subjects WHERE course_id = ? ORDER BY sort_order ASC').bind(courseId).all();
     
-    // For each subject, get papers (or create a virtual "no paper" entry)
+    // For each subject, get papers → chapters → lectures
     for (const subj of subjects.results) {
-      if (subj.has_papers) {
-        subj.papers = (await db.prepare('SELECT * FROM papers WHERE subject_id = ? ORDER BY sort_order ASC').bind(subj.id).all()).results;
-        // For each paper, get chapters
-        for (const paper of subj.papers) {
-          paper.chapters = (await db.prepare('SELECT * FROM chapters WHERE paper_id = ? ORDER BY sort_order ASC').bind(paper.id).all()).results;
-          // For each chapter, get lectures
-          for (const ch of paper.chapters) {
-            ch.lectures = (await db.prepare('SELECT * FROM lectures WHERE chapter_id = ? ORDER BY sort_order ASC').bind(ch.id).all()).results;
-            for (const lec of ch.lectures) {
-              lec.pdfs = (await db.prepare('SELECT * FROM lecture_pdfs WHERE lecture_id = ?').bind(lec.id).all()).results;
-            }
-          }
-        }
-      } else {
-        // No papers - create single virtual paper
-        subj.papers = [{
-          id: null,
-          name: null,
-          virtual: true,
-          chapters: (await db.prepare('SELECT * FROM chapters WHERE paper_id IN (SELECT id FROM papers WHERE subject_id = ?) ORDER BY sort_order ASC').bind(subj.id).all()).results
-        }];
-        // If no papers table entry, get chapters directly from a default paper
-        const defaultPaper = await db.prepare('SELECT id FROM papers WHERE subject_id = ? LIMIT 1').bind(subj.id).first();
-        if (defaultPaper) {
-          subj.papers[0].chapters = (await db.prepare('SELECT * FROM chapters WHERE paper_id = ? ORDER BY sort_order ASC').bind(defaultPaper.id).all()).results;
-        }
-        for (const ch of subj.papers[0].chapters) {
+      subj.papers = (await db.prepare('SELECT * FROM papers WHERE subject_id = ? ORDER BY sort_order ASC').bind(subj.id).all()).results;
+      for (const paper of subj.papers) {
+        paper.chapters = (await db.prepare('SELECT * FROM chapters WHERE paper_id = ? ORDER BY sort_order ASC').bind(paper.id).all()).results;
+        for (const ch of paper.chapters) {
           ch.lectures = (await db.prepare('SELECT * FROM lectures WHERE chapter_id = ? ORDER BY sort_order ASC').bind(ch.id).all()).results;
           for (const lec of ch.lectures) {
             lec.pdfs = (await db.prepare('SELECT * FROM lecture_pdfs WHERE lecture_id = ?').bind(lec.id).all()).results;
@@ -153,15 +254,14 @@ async function handleUser(method, path, body, db, user) {
     }
 
     const resources = await db.prepare('SELECT * FROM resources WHERE course_id = ? ORDER BY created_at DESC').bind(courseId).all();
-
     return json({ course, subjects: subjects.results, resources: resources.results, membership: { expires_at: membership?.expires_at } });
   }
 
-  // Get single lecture (for player)
+  // GET /api/user/lecture/:id
   if (method === 'GET' && path.match(/^\/lecture\/\d+$/)) {
     const lectureId = parseInt(path.split('/')[2]);
     const lecture = await db.prepare(`
-      SELECT l.*, ch.title as chapter_title, p.subject_id, s.course_id
+      SELECT l.*, ch.title as chapter_title, p.name as paper_name, s.name as subject_name, s.course_id
       FROM lectures l
       JOIN chapters ch ON l.chapter_id = ch.id
       JOIN papers p ON ch.paper_id = p.id
@@ -173,7 +273,6 @@ async function handleUser(method, path, body, db, user) {
     const membership = await db.prepare('SELECT * FROM memberships WHERE user_id = ? AND course_id = ? AND is_active = 1 AND expires_at > datetime(\'now\')').bind(user.id, lecture.course_id).first();
     if (!membership && user.role !== 'admin') return err('No active membership', 403);
 
-    // Get all lectures in this course (for sidebar)
     const allLectures = await db.prepare(`
       SELECT l.*, ch.title as chapter_title, p.name as paper_name, s.name as subject_name
       FROM lectures l
@@ -185,14 +284,15 @@ async function handleUser(method, path, body, db, user) {
     `).bind(lecture.course_id).all();
 
     const pdfs = await db.prepare('SELECT * FROM lecture_pdfs WHERE lecture_id = ?').bind(lectureId).all();
-
     return json({ lecture, allLectures: allLectures.results, pdfs: pdfs.results });
   }
 
   return err('User route not found', 404);
 }
 
-// ═══ ADMIN ROUTES ═══
+// =============================================
+// ADMIN ROUTES
+// =============================================
 async function handleAdmin(method, path, body, db, user) {
   if (!user) return err('Unauthorized', 401);
   if (user.role !== 'admin') return err('Admin access required', 403);
@@ -227,7 +327,7 @@ async function handleAdmin(method, path, body, db, user) {
 
   if (method === 'DELETE' && path.match(/^\/courses\/\d+$/)) {
     const courseId = parseInt(path.split('/')[2]);
-    // Delete cascade
+    // Cascade delete all related data
     const subjects = await db.prepare('SELECT id FROM subjects WHERE course_id = ?').bind(courseId).all();
     for (const s of subjects.results) {
       const papers = await db.prepare('SELECT id FROM papers WHERE subject_id = ?').bind(s.id).all();
@@ -249,6 +349,11 @@ async function handleAdmin(method, path, body, db, user) {
   }
 
   // ═══ SUBJECTS ═══
+  if (method === 'GET' && path === '/all-subjects') {
+    const subjects = await db.prepare('SELECT * FROM subjects ORDER BY course_id, sort_order ASC').all();
+    return json(subjects.results);
+  }
+
   if (method === 'GET' && path.match(/^\/subjects\/course\/\d+$/)) {
     const courseId = parseInt(path.split('/')[3]);
     const subjects = await db.prepare('SELECT * FROM subjects WHERE course_id = ? ORDER BY sort_order ASC').bind(courseId).all();
@@ -260,8 +365,8 @@ async function handleAdmin(method, path, body, db, user) {
     if (!course_id || !name) return err('Course and name required');
     const result = await db.prepare('INSERT INTO subjects (course_id, name, has_papers, sort_order) VALUES (?, ?, ?, ?)').bind(course_id, name, has_papers!==undefined?has_papers:1, sort_order||0).run();
     // If no papers, create a default paper
-    if (!has_papers) {
-      await db.prepare('INSERT INTO papers (subject_id, name, sort_order) VALUES (?, ?, ?)').bind(result.meta.last_row_id, 'Default', 0).run();
+    if (!has_papers || has_papers === 0 || has_papers === '0') {
+      await db.prepare('INSERT INTO papers (subject_id, name, sort_order) VALUES (?, ?, ?)').bind(result.meta.last_row_id, 'Full Course', 0).run();
     }
     return json({ id: result.meta.last_row_id, message: 'Subject created' }, 201);
   }
@@ -283,6 +388,11 @@ async function handleAdmin(method, path, body, db, user) {
   }
 
   // ═══ PAPERS ═══
+  if (method === 'GET' && path === '/all-papers') {
+    const papers = await db.prepare('SELECT * FROM papers ORDER BY subject_id, sort_order ASC').all();
+    return json(papers.results);
+  }
+
   if (method === 'GET' && path.match(/^\/papers\/subject\/\d+$/)) {
     const subjId = parseInt(path.split('/')[3]);
     const papers = await db.prepare('SELECT * FROM papers WHERE subject_id = ? ORDER BY sort_order ASC').bind(subjId).all();
@@ -309,6 +419,11 @@ async function handleAdmin(method, path, body, db, user) {
   }
 
   // ═══ CHAPTERS ═══
+  if (method === 'GET' && path === '/all-chapters') {
+    const chapters = await db.prepare('SELECT * FROM chapters ORDER BY paper_id, sort_order ASC').all();
+    return json(chapters.results);
+  }
+
   if (method === 'GET' && path.match(/^\/chapters\/paper\/\d+$/)) {
     const paperId = parseInt(path.split('/')[3]);
     const chapters = await db.prepare('SELECT * FROM chapters WHERE paper_id = ? ORDER BY sort_order ASC').bind(paperId).all();
@@ -331,6 +446,18 @@ async function handleAdmin(method, path, body, db, user) {
   }
 
   // ═══ LECTURES ═══
+  if (method === 'GET' && path === '/all-lectures') {
+    const lectures = await db.prepare(`
+      SELECT l.*, ch.title as chapter_title, p.name as paper_name, s.name as subject_name
+      FROM lectures l
+      JOIN chapters ch ON l.chapter_id = ch.id
+      JOIN papers p ON ch.paper_id = p.id
+      JOIN subjects s ON p.subject_id = s.id
+      ORDER BY l.created_at DESC
+    `).all();
+    return json(lectures.results);
+  }
+
   if (method === 'GET' && path.match(/^\/lectures\/chapter\/\d+$/)) {
     const chId = parseInt(path.split('/')[3]);
     const lectures = await db.prepare('SELECT * FROM lectures WHERE chapter_id = ? ORDER BY sort_order ASC').bind(chId).all();
@@ -365,7 +492,7 @@ async function handleAdmin(method, path, body, db, user) {
     return json({ message: 'Lecture deleted' });
   }
 
-  // ═══ PDFs & RESOURCES ═══
+  // ═══ LECTURE PDFs ═══
   if (method === 'POST' && path === '/lecture-pdfs') {
     const { lecture_id, title, pdf_url } = body;
     if (!lecture_id || !title || !pdf_url) return err('All fields required');
@@ -378,6 +505,7 @@ async function handleAdmin(method, path, body, db, user) {
     return json({ message: 'PDF deleted' });
   }
 
+  // ═══ RESOURCES ═══
   if (method === 'GET' && path.match(/^\/resources\/course\/\d+$/)) {
     const courseId = parseInt(path.split('/')[3]);
     const resources = await db.prepare('SELECT * FROM resources WHERE course_id = ? ORDER BY created_at DESC').bind(courseId).all();
@@ -453,16 +581,25 @@ async function handleAdmin(method, path, body, db, user) {
   return err('Admin route not found', 404);
 }
 
-// ═══ MAIN ═══
+// =============================================
+// MAIN EXPORT
+// =============================================
 export async function onRequest(context) {
   const { request, env } = context;
   const db = env.ABHYUDOY_DB;
+
   if (request.method === 'OPTIONS') return new Response(null, { headers: CORS });
+
+  await ensureTables(db);
 
   const url = new URL(request.url);
   const fullPath = url.pathname.replace(/^\/api/, '');
+
   let body = {};
-  if (['POST','PUT','DELETE'].includes(request.method)) try { body = await request.json(); } catch {}
+  if (['POST','PUT','DELETE'].includes(request.method)) {
+    try { body = await request.json(); } catch {}
+  }
+
   const authUser = await getUser(request);
 
   if (fullPath.startsWith('/auth/')) return handleAuth(request.method, fullPath.replace('/auth',''), body, db);
