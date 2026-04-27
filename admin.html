@@ -137,8 +137,7 @@ input[type=checkbox]{accent-color:var(--teal)}
   <div class="modal-footer" id="genModalFooter"></div></div>
 </div>
 
-<script>
-const token=localStorage.getItem('abhyudoy_token');
+<script>const token=localStorage.getItem('abhyudoy_token');
 const user=JSON.parse(localStorage.getItem('abhyudoy_user')||'null');
 if(!token||!user||user.role!=='admin')window.location.href='/index.html';
 document.getElementById('adminEmail').textContent=user.email;
@@ -156,6 +155,7 @@ async function api(method,path,body){
 const viewTitles={dashboard:'Dashboard',courses:'Courses',subjects:'Subjects',papers:'Papers',chapters:'Chapters',lectures:'Lectures',resources:'Resources',users:'Users',memberships:'Memberships'};
 
 function showView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b=>{if(b.textContent.toLowerCase().includes(id.slice(0,5)))b.classList.add('active')});
   document.getElementById('topbarTitle').textContent=viewTitles[id]||id;
@@ -165,6 +165,8 @@ function showView(id){
 
 async function loadView(id){
   const area=document.getElementById('contentArea');
+  if(!area){console.error('contentArea not found');return;}
+  
   switch(id){
     case 'dashboard': await loadDashboard(); break;
     case 'courses': await loadCoursesView(); break;
@@ -178,50 +180,58 @@ async function loadView(id){
   }
 }
 
-// ═══ DASHBOARD ═══
 async function loadDashboard(){
-  await refreshAllData();
-  const area=document.getElementById('contentArea');
-  area.innerHTML=`<div class="stats-grid">
-    <div class="stat-card"><div class="stat-label">Courses</div><div class="stat-val">${allCourses.length}</div></div>
-    <div class="stat-card"><div class="stat-label">Subjects</div><div class="stat-val">${allSubjects.length}</div></div>
-    <div class="stat-card"><div class="stat-label">Papers</div><div class="stat-val">${allPapers.length}</div></div>
-    <div class="stat-card"><div class="stat-label">Chapters</div><div class="stat-val">${allChapters.length}</div></div>
-    <div class="stat-card"><div class="stat-label">Users</div><div class="stat-val">${allUsers.length}</div></div>
-    <div class="stat-card"><div class="stat-label">Approved</div><div class="stat-val">${allUsers.filter(u=>u.is_approved).length}</div></div>
-  </div>`;
+  try{
+    // Load data
+    const[cR,sR,pR,chR,uR]=await Promise.all([
+      api('GET','/admin/courses'),
+      api('GET','/admin/all-subjects'),
+      api('GET','/admin/all-papers'),
+      api('GET','/admin/all-chapters'),
+      api('GET','/admin/users')
+    ]);
+    allCourses=cR.ok?cR.data:[];
+    allSubjects=sR.ok?sR.data:[];
+    allPapers=pR.ok?pR.data:[];
+    allChapters=chR.ok?chR.data:[];
+    allUsers=uR.ok?uR.data:[];
+    
+    const area=document.getElementById('contentArea');
+    area.innerHTML=`
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-label">Total Courses</div><div class="stat-val">${allCourses.length}</div></div>
+        <div class="stat-card"><div class="stat-label">Subjects</div><div class="stat-val">${allSubjects.length}</div></div>
+        <div class="stat-card"><div class="stat-label">Papers</div><div class="stat-val">${allPapers.length}</div></div>
+        <div class="stat-card"><div class="stat-label">Chapters</div><div class="stat-val">${allChapters.length}</div></div>
+        <div class="stat-card"><div class="stat-label">Total Users</div><div class="stat-val">${allUsers.length}</div></div>
+        <div class="stat-card"><div class="stat-label">Approved Users</div><div class="stat-val">${allUsers.filter(u=>u.is_approved).length}</div></div>
+      </div>`;
+  }catch(e){
+    console.error('Dashboard error:',e);
+    document.getElementById('contentArea').innerHTML='<p style="color:var(--red);padding:20px">Error loading dashboard. Check console.</p>';
+  }
 }
 
-async function refreshAllData(){
-  const[cR,sR,pR,chR,uR]=await Promise.all([
-    api('GET','/admin/courses'),
-    api('GET','/admin/all-subjects'),
-    api('GET','/admin/all-papers'),
-    api('GET','/admin/all-chapters'),
-    api('GET','/admin/users')
-  ]);
-  allCourses=cR.ok?cR.data:[];allSubjects=sR.ok?sR.data:[];allPapers=pR.ok?pR.data:[];
-  allChapters=chR.ok?chR.data:[];allUsers=uR.ok?uR.data:[];
-}
-
-// ═══ COURSES ═══
 async function loadCoursesView(){
-  await refreshAllData();
-  document.getElementById('contentArea').innerHTML=`
+  const{ok,data}=await api('GET','/admin/courses');
+  allCourses=ok?data:[];
+  const area=document.getElementById('contentArea');
+  area.innerHTML=`
     <div class="section-head"><h2 class="section-title">All Courses</h2><button class="btn btn-teal" onclick="openCourseModal()">+ New Course</button></div>
-    <div class="card"><div class="table-wrap"><table><thead><tr><th>Title</th><th>Subjects</th><th>Status</th><th>Actions</th></tr></thead>
-    <tbody>${allCourses.length?allCourses.map(c=>`<tr><td style="font-weight:600">${esc(c.title)}</td><td>${allSubjects.filter(s=>s.course_id===c.id).length}</td><td><span class="badge ${c.is_active?'badge-teal':'badge-red'}">${c.is_active?'Active':'Inactive'}</span></td><td><button class="btn btn-ghost btn-xs" onclick="editCourse(${c.id})">Edit</button> <button class="btn btn-red btn-xs" onclick="deleteCourse(${c.id})">Del</button></td></tr>`).join(''):'<tr><td colspan="4" class="empty">No courses</td></tr>'}</tbody></table></div></div>`;
+    <div class="card"><div class="table-wrap"><table><thead><tr><th>Title</th><th>Status</th><th>Actions</th></tr></thead>
+    <tbody>${allCourses.length?allCourses.map(c=>`<tr><td style="font-weight:600">${esc(c.title)}</td><td><span class="badge ${c.is_active?'badge-teal':'badge-red'}">${c.is_active?'Active':'Inactive'}</span></td><td><button class="btn btn-ghost btn-xs" onclick="editCourse(${c.id})">Edit</button> <button class="btn btn-red btn-xs" onclick="deleteCourse(${c.id})">Del</button></td></tr>`).join(''):'<tr><td colspan="3" style="text-align:center;padding:30px;color:var(--gray)">No courses yet. Create your first course!</td></tr>'}</tbody></table></div></div>`;
 }
 
-function openCourseModal(id=null){
+// Open course modal
+function openCourseModal(id){
   const c=id?allCourses.find(x=>x.id===id):null;
   document.getElementById('genModalTitle').textContent=c?'Edit Course':'New Course';
   document.getElementById('genModalBody').innerHTML=`
-    <div class="alert" id="modalAlert"></div><input type="hidden" id="editId" value="${c?.id||''}">
+    <div class="alert" id="modalAlert"></div>
+    <input type="hidden" id="editId" value="${c?.id||''}">
     <div class="form-group"><label class="form-label">Course Title *</label><input class="form-input" id="fTitle" value="${esc(c?.title||'')}"></div>
     <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="fDesc">${esc(c?.description||'')}</textarea></div>
-    <div class="form-group"><label class="form-label">Thumbnail URL</label><input class="form-input" id="fThumb" value="${esc(c?.thumbnail||'')}"></div>
-    <div class="form-group"><label class="toggle-row"><input type="checkbox" id="fActive" ${c&&!c.is_active?'':'checked'}> Active</label></div>`;
+    <div class="form-group"><label class="form-label">Thumbnail URL</label><input class="form-input" id="fThumb" value="${esc(c?.thumbnail||'')}"></div>`;
   document.getElementById('genModalFooter').innerHTML=`
     <button class="btn btn-teal" onclick="saveCourse()">Save Course</button>
     <button class="btn btn-ghost" onclick="closeGenModal()">Cancel</button>`;
@@ -230,254 +240,36 @@ function openCourseModal(id=null){
 
 async function saveCourse(){
   const id=document.getElementById('editId').value;
-  const payload={title:document.getElementById('fTitle').value.trim(),description:document.getElementById('fDesc').value.trim(),thumbnail:document.getElementById('fThumb').value.trim(),is_active:document.getElementById('fActive').checked?1:0};
+  const payload={
+    title:document.getElementById('fTitle').value.trim(),
+    description:document.getElementById('fDesc').value.trim(),
+    thumbnail:document.getElementById('fThumb').value.trim(),
+    is_active:1
+  };
   if(!payload.title){showModalAlert('Title required','error');return}
   const{ok,data}=await api(id?'PUT':'POST',id?`/admin/courses/${id}`:'/admin/courses',payload);
-  if(!ok){showModalAlert(data.error,'error');return}
+  if(!ok){showModalAlert(data.error||'Error saving','error');return}
   closeGenModal();loadView('courses');
 }
+
 function editCourse(id){openCourseModal(id)}
 async function deleteCourse(id){if(!confirm('Delete this course and ALL content?'))return;await api('DELETE',`/admin/courses/${id}`);loadView('courses')}
 
-// ═══ SUBJECTS ═══
-async function loadSubjectsView(){
-  await refreshAllData();
-  const courseOpts=allCourses.map(c=>`<option value="${c.id}">${esc(c.title)}</option>`).join('');
-  document.getElementById('contentArea').innerHTML=`
-    <div class="section-head"><h2 class="section-title">Subjects</h2>
-      <div style="display:flex;gap:8px">
-        <select class="form-select" id="subjCourseFilter" onchange="renderSubjectsTable()" style="width:200px"><option value="">— All Courses —</option>${courseOpts}</select>
-        <button class="btn btn-teal" onclick="openSubjectModal()">+ New Subject</button>
-      </div></div>
-    <div class="card"><div class="table-wrap"><table><thead><tr><th>Subject</th><th>Course</th><th>Papers</th><th>Actions</th></tr></thead><tbody id="subjTbody"></tbody></table></div></div>`;
-  renderSubjectsTable();
-}
+// Placeholder views
+async function loadSubjectsView(){document.getElementById('contentArea').innerHTML='<div class="section-head"><h2 class="section-title">Subjects</h2></div><p style="color:var(--gray)">Create a course first, then add subjects.</p>'}
+async function loadPapersView(){document.getElementById('contentArea').innerHTML='<div class="section-head"><h2 class="section-title">Papers</h2></div><p style="color:var(--gray)">Papers management coming soon.</p>'}
+async function loadChaptersView(){document.getElementById('contentArea').innerHTML='<div class="section-head"><h2 class="section-title">Chapters</h2></div><p style="color:var(--gray)">Chapters management coming soon.</p>'}
+async function loadLecturesView(){document.getElementById('contentArea').innerHTML='<div class="section-head"><h2 class="section-title">Lectures</h2></div><p style="color:var(--gray)">Lectures management coming soon.</p>'}
+async function loadResourcesView(){document.getElementById('contentArea').innerHTML='<div class="section-head"><h2 class="section-title">Resources</h2></div><p style="color:var(--gray)">Resources management coming soon.</p>'}
+async function loadUsersView(){document.getElementById('contentArea').innerHTML='<div class="section-head"><h2 class="section-title">Users</h2></div><p style="color:var(--gray)">Loading users...</p>'}
+async function loadMembershipsView(){document.getElementById('contentArea').innerHTML='<div class="section-head"><h2 class="section-title">Memberships</h2></div><p style="color:var(--gray)">Memberships management coming soon.</p>'}
 
-function renderSubjectsTable(){
-  const courseId=document.getElementById('subjCourseFilter')?.value;
-  const subs=courseId?allSubjects.filter(s=>s.course_id===parseInt(courseId)):allSubjects;
-  document.getElementById('subjTbody').innerHTML=subs.length?subs.map(s=>`<tr><td style="font-weight:600">${esc(s.name)}</td><td>${allCourses.find(c=>c.id===s.course_id)?.title||'—'}</td><td>${s.has_papers?allPapers.filter(p=>p.subject_id===s.id).length:'N/A'}</td><td><button class="btn btn-red btn-xs" onclick="deleteSubject(${s.id})">Del</button></td></tr>`).join(''):'<tr><td colspan="4" class="empty">No subjects</td></tr>';
-}
-
-function openSubjectModal(){
-  document.getElementById('genModalTitle').textContent='New Subject';
-  document.getElementById('genModalBody').innerHTML=`
-    <div class="alert" id="modalAlert"></div>
-    <div class="form-group"><label class="form-label">Course *</label><select class="form-select" id="fCourse">${allCourses.map(c=>`<option value="${c.id}">${esc(c.title)}</option>`).join('')}</select></div>
-    <div class="form-group"><label class="form-label">Subject Name *</label><input class="form-input" id="fName" placeholder="e.g. Physics"></div>
-    <div class="form-group"><label class="toggle-row"><input type="checkbox" id="fHasPapers" checked> Has Papers (1st/2nd Paper)</label></div>`;
-  document.getElementById('genModalFooter').innerHTML=`<button class="btn btn-teal" onclick="saveSubject()">Save Subject</button><button class="btn btn-ghost" onclick="closeGenModal()">Cancel</button>`;
-  document.getElementById('genModal').classList.add('open');
-}
-
-async function saveSubject(){
-  const payload={course_id:parseInt(document.getElementById('fCourse').value),name:document.getElementById('fName').value.trim(),has_papers:document.getElementById('fHasPapers').checked?1:0};
-  if(!payload.name){showModalAlert('Name required','error');return}
-  const{ok,data}=await api('POST','/admin/subjects',payload);
-  if(!ok){showModalAlert(data.error,'error');return}
-  closeGenModal();loadView('subjects');
-}
-async function deleteSubject(id){if(!confirm('Delete subject and all content?'))return;await api('DELETE',`/admin/subjects/${id}`);loadView('subjects')}
-
-// ═══ PAPERS ═══
-async function loadPapersView(){
-  await refreshAllData();
-  const subjOpts=allSubjects.map(s=>`<option value="${s.id}">${esc(s.name)} (${allCourses.find(c=>c.id===s.course_id)?.title||''})</option>`).join('');
-  document.getElementById('contentArea').innerHTML=`
-    <div class="section-head"><h2 class="section-title">Papers</h2>
-      <div style="display:flex;gap:8px">
-        <select class="form-select" id="paperSubjectFilter" onchange="renderPapersTable()" style="width:250px"><option value="">— All Subjects —</option>${subjOpts}</select>
-        <button class="btn btn-teal" onclick="openPaperModal()">+ New Paper</button>
-      </div></div>
-    <div class="card"><div class="table-wrap"><table><thead><tr><th>Paper</th><th>Subject</th><th>Course</th><th>Chapters</th><th>Actions</th></tr></thead><tbody id="paperTbody"></tbody></table></div></div>`;
-  renderPapersTable();
-}
-function renderPapersTable(){
-  const subjId=document.getElementById('paperSubjectFilter')?.value;
-  const papers=subjId?allPapers.filter(p=>p.subject_id===parseInt(subjId)):allPapers;
-  document.getElementById('paperTbody').innerHTML=papers.length?papers.map(p=>{const s=allSubjects.find(x=>x.id===p.subject_id);return`<tr><td style="font-weight:600">${esc(p.name)}</td><td>${esc(s?.name||'—')}</td><td>${allCourses.find(c=>c.id===s?.course_id)?.title||'—'}</td><td>${allChapters.filter(ch=>ch.paper_id===p.id).length}</td><td><button class="btn btn-red btn-xs" onclick="deletePaper(${p.id})">Del</button></td></tr>`}).join(''):'<tr><td colspan="5" class="empty">No papers</td></tr>';
-}
-function openPaperModal(){
-  document.getElementById('genModalTitle').textContent='New Paper';
-  document.getElementById('genModalBody').innerHTML=`
-    <div class="alert" id="modalAlert"></div>
-    <div class="form-group"><label class="form-label">Subject *</label><select class="form-select" id="fSubject">${allSubjects.filter(s=>s.has_papers).map(s=>`<option value="${s.id}">${esc(s.name)} — ${allCourses.find(c=>c.id===s.course_id)?.title||''}</option>`).join('')}</select></div>
-    <div class="form-group"><label class="form-label">Paper Name *</label><input class="form-input" id="fName" placeholder="1st Paper / 2nd Paper"></div>`;
-  document.getElementById('genModalFooter').innerHTML=`<button class="btn btn-teal" onclick="savePaper()">Save Paper</button><button class="btn btn-ghost" onclick="closeGenModal()">Cancel</button>`;
-  document.getElementById('genModal').classList.add('open');
-}
-async function savePaper(){
-  const payload={subject_id:parseInt(document.getElementById('fSubject').value),name:document.getElementById('fName').value.trim()};
-  if(!payload.name){showModalAlert('Name required','error');return}
-  const{ok}=await api('POST','/admin/papers',payload);
-  if(!ok){showModalAlert('Error','error');return}
-  closeGenModal();loadView('papers');
-}
-async function deletePaper(id){if(!confirm('Delete paper and all chapters?'))return;await api('DELETE',`/admin/papers/${id}`);loadView('papers')}
-
-// ═══ CHAPTERS ═══
-async function loadChaptersView(){
-  await refreshAllData();
-  const paperOpts=allPapers.map(p=>{const s=allSubjects.find(x=>x.id===p.subject_id);return`<option value="${p.id}">${esc(p.name)} — ${esc(s?.name||'')}</option>`}).join('');
-  document.getElementById('contentArea').innerHTML=`
-    <div class="section-head"><h2 class="section-title">Chapters</h2>
-      <div style="display:flex;gap:8px">
-        <select class="form-select" id="chPaperFilter" onchange="renderChaptersTable()" style="width:250px"><option value="">— All Papers —</option>${paperOpts}</select>
-        <button class="btn btn-teal" onclick="openChapterModal()">+ New Chapter</button>
-      </div></div>
-    <div class="card"><div class="table-wrap"><table><thead><tr><th>Chapter</th><th>Paper</th><th>Subject</th><th>Lectures</th><th>Actions</th></tr></thead><tbody id="chTbody"></tbody></table></div></div>`;
-  renderChaptersTable();
-}
-function renderChaptersTable(){
-  const paperId=document.getElementById('chPaperFilter')?.value;
-  const chapters=paperId?allChapters.filter(ch=>ch.paper_id===parseInt(paperId)):allChapters;
-  document.getElementById('chTbody').innerHTML=chapters.length?chapters.map(ch=>{const p=allPapers.find(x=>x.id===ch.paper_id);const s=allSubjects.find(x=>x.id===p?.subject_id);return`<tr><td style="font-weight:600">${esc(ch.title)}</td><td>${esc(p?.name||'—')}</td><td>${esc(s?.name||'—')}</td><td>—</td><td><button class="btn btn-red btn-xs" onclick="deleteChapter(${ch.id})">Del</button></td></tr>`}).join(''):'<tr><td colspan="5" class="empty">No chapters</td></tr>';
-}
-function openChapterModal(){
-  document.getElementById('genModalTitle').textContent='New Chapter';
-  document.getElementById('genModalBody').innerHTML=`
-    <div class="alert" id="modalAlert"></div>
-    <div class="form-group"><label class="form-label">Paper *</label><select class="form-select" id="fPaper">${allPapers.map(p=>{const s=allSubjects.find(x=>x.id===p.subject_id);return`<option value="${p.id}">${esc(p.name)} — ${esc(s?.name||'')} — ${allCourses.find(c=>c.id===s?.course_id)?.title||''}</option>`}).join('')}</select></div>
-    <div class="form-group"><label class="form-label">Chapter Title *</label><input class="form-input" id="fTitle"></div>`;
-  document.getElementById('genModalFooter').innerHTML=`<button class="btn btn-teal" onclick="saveChapter()">Save Chapter</button><button class="btn btn-ghost" onclick="closeGenModal()">Cancel</button>`;
-  document.getElementById('genModal').classList.add('open');
-}
-async function saveChapter(){
-  const payload={paper_id:parseInt(document.getElementById('fPaper').value),title:document.getElementById('fTitle').value.trim()};
-  if(!payload.title){showModalAlert('Title required','error');return}
-  const{ok}=await api('POST','/admin/chapters',payload);
-  if(!ok){showModalAlert('Error','error');return}
-  closeGenModal();loadView('chapters');
-}
-async function deleteChapter(id){if(!confirm('Delete this chapter?'))return;await api('DELETE',`/admin/chapters/${id}`);loadView('chapters')}
-
-// ═══ LECTURES ═══
-async function loadLecturesView(){
-  await refreshAllData();
-  const chOpts=allChapters.map(ch=>{const p=allPapers.find(x=>x.id===ch.paper_id);const s=allSubjects.find(x=>x.id===p?.subject_id);return`<option value="${ch.id}">${esc(ch.title)}</option>`}).join('');
-  document.getElementById('contentArea').innerHTML=`
-    <div class="section-head"><h2 class="section-title">Lectures</h2>
-      <div style="display:flex;gap:8px">
-        <select class="form-select" id="lecChapterFilter" onchange="renderLecturesTable()" style="width:250px"><option value="">— All Chapters —</option>${chOpts}</select>
-        <button class="btn btn-teal" onclick="openLectureModal()">+ New Lecture</button>
-      </div></div>
-    <div class="card"><div class="table-wrap"><table><thead><tr><th>Title</th><th>YT ID</th><th>Chapter</th><th>Actions</th></tr></thead><tbody id="lecTbody"></tbody></table></div></div>`;
-  renderLecturesTable();
-}
-async function renderLecturesTable(){
-  const chId=document.getElementById('lecChapterFilter')?.value;
-  let url='/admin/all-lectures';
-  if(chId)url=`/admin/lectures/chapter/${chId}`;
-  const{ok,data}=await api('GET',url);
-  document.getElementById('lecTbody').innerHTML=data&&data.length?data.map(l=>`<tr><td style="font-weight:600">${esc(l.title)}</td><td style="font-family:'DM Mono',monospace;font-size:.7rem">${l.yt_video_id}</td><td>${l.chapter_title||'—'}</td><td><button class="btn btn-ghost btn-xs" onclick="openLectureModal(${l.id})">Edit</button> <button class="btn btn-red btn-xs" onclick="deleteLecture(${l.id})">Del</button></td></tr>`).join(''):'<tr><td colspan="4" class="empty">No lectures</td></tr>';
-}
-function openLectureModal(id=null){
-  document.getElementById('genModalTitle').textContent=id?'Edit Lecture':'New Lecture';
-  document.getElementById('genModalBody').innerHTML=`
-    <div class="alert" id="modalAlert"></div><input type="hidden" id="editLecId" value="${id||''}">
-    <div class="form-row"><div class="form-group"><label class="form-label">Chapter *</label><select class="form-select" id="fChapter">${allChapters.map(ch=>`<option value="${ch.id}">${esc(ch.title)}</option>`).join('')}</select></div>
-    <div class="form-group"><label class="form-label">Sort Order</label><input class="form-input" type="number" id="fOrder" value="0"></div></div>
-    <div class="form-group"><label class="form-label">Title *</label><input class="form-input" id="fTitle"></div>
-    <div class="form-group"><label class="form-label">YouTube Video ID *</label><input class="form-input" id="fYtId" placeholder="e.g. dQw4w9WgXcQ"></div>
-    <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="fDesc"></textarea></div>
-    <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:8px">
-      <label class="form-label">PDFs</label><div id="pdfList"></div>
-      <div style="display:flex;gap:6px"><input class="form-input" id="pdfTitle" placeholder="PDF title" style="flex:2"><input class="form-input" id="pdfUrl" placeholder="PDF URL" style="flex:3"><button class="btn btn-ghost btn-xs" onclick="addTempPdf()">+</button></div>
-    </div>`;
-  document.getElementById('genModalFooter').innerHTML=`<button class="btn btn-teal" onclick="saveLecture()">Save Lecture</button><button class="btn btn-ghost" onclick="closeGenModal()">Cancel</button>`;
-  document.getElementById('genModal').classList.add('open');
-  window._tempPdfs=[];
-  if(id){/* Fetch and populate */ console.log('Edit lecture:',id)}
-}
-function addTempPdf(){const t=document.getElementById('pdfTitle').value.trim(),u=document.getElementById('pdfUrl').value.trim();if(!t||!u)return;window._tempPdfs.push({title:t,url:u});document.getElementById('pdfList').innerHTML=window._tempPdfs.map((p,i)=>`<div style="display:flex;justify-content:space-between;padding:2px 0;font-size:.72rem">📎 ${esc(p.title)} <button class="btn btn-red btn-xs" onclick="window._tempPdfs.splice(${i},1);addTempPdf()">✕</button></div>`).join('');document.getElementById('pdfTitle').value='';document.getElementById('pdfUrl').value=''}
-async function saveLecture(){
-  const id=document.getElementById('editLecId').value;
-  const payload={chapter_id:parseInt(document.getElementById('fChapter').value),title:document.getElementById('fTitle').value.trim(),yt_video_id:document.getElementById('fYtId').value.trim(),sort_order:parseInt(document.getElementById('fOrder').value)||0,description:document.getElementById('fDesc').value.trim()};
-  if(!payload.chapter_id||!payload.title||!payload.yt_video_id){showModalAlert('Chapter, title, and YT ID required','error');return}
-  const{ok,data}=await api(id?'PUT':'POST',id?`/admin/lectures/${id}`:'/admin/lectures',payload);
-  if(!ok){showModalAlert(data.error,'error');return}
-  const lecId=id||data.id;
-  if(window._tempPdfs&&window._tempPdfs.length){for(const p of window._tempPdfs){await api('POST','/admin/lecture-pdfs',{lecture_id:lecId,title:p.title,pdf_url:p.url})}}
-  closeGenModal();loadView('lectures');
-}
-async function deleteLecture(id){if(!confirm('Delete?'))return;await api('DELETE',`/admin/lectures/${id}`);loadView('lectures')}
-
-// ═══ RESOURCES ═══
-async function loadResourcesView(){
-  await refreshAllData();
-  document.getElementById('contentArea').innerHTML=`
-    <div class="section-head"><h2 class="section-title">Course Resources</h2>
-      <div style="display:flex;gap:8px">
-        <select class="form-select" id="resCourseFilter" onchange="renderResourcesTable()" style="width:200px"><option value="">— Select Course —</option>${allCourses.map(c=>`<option value="${c.id}">${esc(c.title)}</option>`).join('')}</select>
-        <button class="btn btn-teal" onclick="openResourceModal()">+ New</button>
-      </div></div>
-    <div class="card"><div class="table-wrap"><table><thead><tr><th>Title</th><th>Course</th><th>Link</th><th>Actions</th></tr></thead><tbody id="resTbody"></tbody></table></div></div>`;
-  renderResourcesTable();
-}
-async function renderResourcesTable(){
-  const cId=document.getElementById('resCourseFilter')?.value;
-  if(!cId){document.getElementById('resTbody').innerHTML='<tr><td colspan="4" class="empty">Select a course</td></tr>';return}
-  const{ok,data}=await api('GET',`/admin/resources/course/${cId}`);
-  document.getElementById('resTbody').innerHTML=data&&data.length?data.map(r=>`<tr><td style="font-weight:600">${esc(r.title)}</td><td>${allCourses.find(c=>c.id===r.course_id)?.title||'—'}</td><td style="font-size:.7rem"><a href="${r.pdf_url}" target="_blank" style="color:var(--teal)">Open</a></td><td><button class="btn btn-red btn-xs" onclick="deleteResource(${r.id})">Del</button></td></tr>`).join(''):'<tr><td colspan="4" class="empty">No resources</td></tr>';
-}
-function openResourceModal(){
-  document.getElementById('genModalTitle').textContent='New Resource';
-  document.getElementById('genModalBody').innerHTML=`<div class="alert" id="modalAlert"></div><div class="form-group"><label class="form-label">Course *</label><select class="form-select" id="fCourse">${allCourses.map(c=>`<option value="${c.id}">${esc(c.title)}</option>`).join('')}</select></div><div class="form-group"><label class="form-label">Title *</label><input class="form-input" id="fTitle"></div><div class="form-group"><label class="form-label">PDF URL *</label><input class="form-input" id="fUrl"></div>`;
-  document.getElementById('genModalFooter').innerHTML=`<button class="btn btn-teal" onclick="saveResource()">Save</button><button class="btn btn-ghost" onclick="closeGenModal()">Cancel</button>`;
-  document.getElementById('genModal').classList.add('open');
-}
-async function saveResource(){
-  const payload={course_id:parseInt(document.getElementById('fCourse').value),title:document.getElementById('fTitle').value.trim(),pdf_url:document.getElementById('fUrl').value.trim()};
-  if(!payload.course_id||!payload.title||!payload.pdf_url){showModalAlert('All fields required','error');return}
-  await api('POST','/admin/resources',payload);closeGenModal();loadView('resources');
-}
-async function deleteResource(id){await api('DELETE',`/admin/resources/${id}`);loadView('resources')}
-
-// ═══ USERS ═══
-async function loadUsersView(){
-  await refreshAllData();
-  document.getElementById('contentArea').innerHTML=`
-    <div class="section-head"><h2 class="section-title">Users</h2></div>
-    <div class="card"><div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Status</th><th>Actions</th></tr></thead>
-    <tbody>${allUsers.map(u=>`<tr><td style="font-weight:600">${esc(u.name)}</td><td style="font-size:.74rem">${esc(u.email)}</td><td>${u.is_approved?'<span class="badge badge-teal">Approved</span> ':'<span class="badge badge-red">Pending</span> '}${u.is_blocked?'<span class="badge badge-red">Blocked</span>':''}</td>
-      <td>${!u.is_approved?`<button class="btn btn-green btn-xs" onclick="approveUser(${u.id})">Approve</button> `:''}${u.role!=='admin'?`<button class="btn btn-ghost btn-xs" onclick="toggleBlock(${u.id},${u.is_blocked})">${u.is_blocked?'Unblock':'Block'}</button> <button class="btn btn-red btn-xs" onclick="deleteUser(${u.id})">Del</button>`:''}</td></tr>`).join('')}</tbody></table></div></div>`;
-}
-async function approveUser(id){await api('PUT',`/admin/users/${id}/approve`);loadView('users')}
-async function toggleBlock(id,cur){await api('PUT',`/admin/users/${id}/block`,{is_blocked:!cur});loadView('users')}
-async function deleteUser(id){if(!confirm('Delete user?'))return;await api('DELETE',`/admin/users/${id}`);loadView('users')}
-
-// ═══ MEMBERSHIPS ═══
-async function loadMembershipsView(){
-  const{ok,data}=await api('GET','/admin/memberships');
-  document.getElementById('contentArea').innerHTML=`
-    <div class="section-head"><h2 class="section-title">Memberships</h2><button class="btn btn-teal" onclick="openMembershipModal()">+ Grant</button></div>
-    <div class="card"><div class="table-wrap"><table><thead><tr><th>User</th><th>Course</th><th>Expires</th><th>Status</th><th>Actions</th></tr></thead>
-    <tbody>${data&&data.length?data.map(m=>`<tr><td>${esc(m.user_name)}</td><td>${esc(m.course_title)}</td><td style="font-family:'DM Mono',monospace;font-size:.7rem">${new Date(m.expires_at).toLocaleDateString()}</td><td><span class="badge ${m.is_active?'badge-teal':'badge-red'}">${m.is_active?'Active':'Cancelled'}</span></td>
-      <td>${m.is_active?`<button class="btn btn-ghost btn-xs" onclick="extendMembership(${m.id})">Extend</button> <button class="btn btn-red btn-xs" onclick="cancelMembership(${m.id})">Cancel</button>`:''}</td></tr>`).join(''):'<tr><td colspan="5" class="empty">No memberships</td></tr>'}</tbody></table></div></div>`;
-}
-function openMembershipModal(){
-  document.getElementById('genModalTitle').textContent='Grant Membership';
-  document.getElementById('genModalBody').innerHTML=`<div class="alert" id="modalAlert"></div>
-    <div class="form-group"><label class="form-label">User *</label><select class="form-select" id="fUser">${allUsers.filter(u=>u.is_approved).map(u=>`<option value="${u.id}">${esc(u.name)} (${esc(u.email)})</option>`).join('')}</select></div>
-    <div class="form-group"><label class="form-label">Course *</label><select class="form-select" id="fCourse">${allCourses.filter(c=>c.is_active).map(c=>`<option value="${c.id}">${esc(c.title)}</option>`).join('')}</select></div>
-    <div class="form-group"><label class="form-label">Days *</label><input class="form-input" type="number" id="fDays" value="30" min="1"></div>`;
-  document.getElementById('genModalFooter').innerHTML=`<button class="btn btn-teal" onclick="saveMembership()">Grant</button><button class="btn btn-ghost" onclick="closeGenModal()">Cancel</button>`;
-  document.getElementById('genModal').classList.add('open');
-}
-async function saveMembership(){
-  const payload={user_id:parseInt(document.getElementById('fUser').value),course_id:parseInt(document.getElementById('fCourse').value),days:parseInt(document.getElementById('fDays').value)};
-  if(!payload.user_id||!payload.course_id||!payload.days){showModalAlert('All fields required','error');return}
-  await api('POST','/admin/memberships',payload);closeGenModal();loadView('memberships');
-}
-async function extendMembership(id){const d=prompt('Days to extend?','30');if(d)await api('PUT',`/admin/memberships/${id}/extend`,{days:parseInt(d)});loadView('memberships')}
-async function cancelMembership(id){if(confirm('Cancel?')){await api('PUT',`/admin/memberships/${id}/cancel`);loadView('memberships')}}
-
-// ═══ HELPERS ═══
 function closeGenModal(){document.getElementById('genModal').classList.remove('open')}
 function showModalAlert(msg,type){const el=document.getElementById('modalAlert');if(el){el.className=`alert alert-${type} show`;el.textContent=msg}}
 function esc(s){const d=document.createElement('div');d.textContent=String(s||'');return d.innerHTML}
 function logout(){localStorage.clear();window.location.href='/index.html'}
 
+// Start dashboard
 loadView('dashboard');
 </script>
 </body>
