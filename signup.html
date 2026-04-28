@@ -3,78 +3,93 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Abhyudoy — Sign Up</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>Abhyudoy — Create Account</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cabinet+Grotesk:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#080c12;--surface:#0f141c;--border:rgba(255,255,255,0.05);--teal:#00e5c3;--white:#fff;--gray:#7a8494;--red:#ff4757;--radius:16px}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:40px 36px;width:100%;max-width:440px;text-align:center}
-.logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:6px}
-.logo img{width:40px;height:40px;border-radius:10px}
-.logo-text{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;letter-spacing:-.02em}
-.logo-text span{color:var(--teal)}
-.tagline{font-size:.82rem;color:var(--gray);margin-bottom:24px}
-.form-group{margin-bottom:12px;text-align:left}
-.form-group label{display:block;font-size:.7rem;font-weight:600;color:var(--gray);margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em}
-.form-group input{width:100%;padding:12px 14px;background:rgba(255,255,255,0.03);border:1.5px solid var(--border);border-radius:10px;color:var(--white);font-size:.9rem;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s}
-.form-group input:focus{border-color:var(--teal)}
-.btn{width:100%;padding:13px;background:var(--teal);color:#000;border:none;border-radius:10px;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
-.btn:hover{opacity:.9;transform:translateY(-1px)}
-.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.alert{padding:10px 14px;border-radius:8px;font-size:.78rem;margin-bottom:14px;display:none}
-.alert-error{display:block;background:rgba(255,71,87,.1);border:1px solid rgba(255,71,87,.2);color:var(--red)}
-.alert-success{display:block;background:rgba(0,229,195,.1);border:1px solid rgba(0,229,195,.2);color:var(--teal)}
-.link-text{margin-top:16px;font-size:.8rem;color:var(--gray)}
-.link-text a{color:var(--teal);text-decoration:none;font-weight:600}
-.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(0,0,0,.2);border-top-color:#000;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px}
+:root{
+  --bg:#05080f;--surface:#0b0f1a;--surface2:#111827;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+  --teal:#00d4aa;--teal2:#00b894;--teal-dim:rgba(0,212,170,0.08);
+  --white:#f0f4f8;--gray:#7a8899;--red:#f0566a;--red-dim:rgba(240,86,106,0.1);
+  --radius:10px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Cabinet Grotesk',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,212,170,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,170,0.025) 1px,transparent 1px);background-size:56px 56px;pointer-events:none}
+body::after{content:'';position:fixed;top:-200px;left:50%;transform:translateX(-50%);width:700px;height:500px;background:radial-gradient(ellipse,rgba(0,212,170,0.07) 0%,transparent 70%);pointer-events:none}
+
+.card{width:100%;max-width:460px;background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:48px 44px;box-shadow:0 40px 100px rgba(0,0,0,0.7);animation:up .5s ease;position:relative;z-index:1}
+@keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+.logo{text-align:center;margin-bottom:8px}
+.logo-text{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:700;letter-spacing:-0.02em}
+.logo-text em{font-style:italic;color:var(--teal)}
+.logo-sub{font-size:0.72rem;color:var(--gray);text-align:center;margin-bottom:28px;letter-spacing:0.06em}
+
+.notice{display:flex;align-items:flex-start;gap:10px;background:rgba(240,192,96,0.06);border:1px solid rgba(240,192,96,0.15);border-radius:var(--radius);padding:11px 14px;margin-bottom:22px;font-size:0.76rem;color:rgba(240,192,96,0.85);line-height:1.5}
+.notice span{flex-shrink:0;font-size:1rem}
+
+.alert{padding:11px 14px;border-radius:var(--radius);font-size:0.77rem;margin-bottom:16px;display:none;line-height:1.4}
+.alert.show{display:block}
+.alert-error{background:var(--red-dim);border:1px solid rgba(240,86,106,0.22);color:var(--red)}
+.alert-success{background:var(--teal-dim);border:1px solid rgba(0,212,170,0.2);color:var(--teal)}
+
+.fg{margin-bottom:14px}
+.fl{display:block;font-size:0.63rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--gray);margin-bottom:6px;font-family:'DM Mono',monospace}
+.fi{width:100%;padding:11px 14px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius);color:var(--white);font-size:0.87rem;font-family:'Cabinet Grotesk',sans-serif;outline:none;transition:all .2s}
+.fi:focus{border-color:var(--teal);background:rgba(0,212,170,0.03);box-shadow:0 0 0 3px var(--teal-dim)}
+.fi::placeholder{color:rgba(122,136,153,0.45)}
+
+.btn-sub{width:100%;padding:13px;background:var(--teal);color:#000;border:none;border-radius:var(--radius);font-family:'Cabinet Grotesk',sans-serif;font-size:0.88rem;font-weight:700;cursor:pointer;transition:all .2s;margin-top:4px}
+.btn-sub:hover{background:var(--teal2);transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,212,170,0.28)}
+.btn-sub:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+.foot-link{margin-top:18px;text-align:center;font-size:0.78rem;color:var(--gray)}
+.foot-link a{color:var(--teal);text-decoration:none;font-weight:600}
+
+.spinner{display:inline-block;width:13px;height:13px;border:2px solid rgba(0,0,0,.2);border-top-color:#000;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px}
 @keyframes spin{to{transform:rotate(360deg)}}
-.note{font-size:.68rem;color:var(--gray);margin-top:18px}
 </style>
 </head>
 <body>
 <div class="card">
-  <div class="logo">
-    <img src="/images/backend.png" alt="Abhyudoy" onerror="this.style.display='none'">
-    <span class="logo-text">Abhy<span>udoy</span></span>
-  </div>
-  <p class="tagline">Create your free account</p>
+  <div class="logo"><div class="logo-text">Abhy<em>udoy</em></div></div>
+  <p class="logo-sub">Create Your Account</p>
+  <div class="notice"><span>⚠️</span><span>One account per device. Your account requires admin approval before you can sign in.</span></div>
   <div class="alert" id="alert"></div>
-  <form onsubmit="handleSignup(event)">
-    <div class="form-group"><label>Full Name</label><input type="text" id="name" placeholder="Your full name" required></div>
-    <div class="form-group"><label>Email</label><input type="email" id="email" placeholder="your@email.com" required></div>
-    <div class="form-group"><label>Password</label><input type="password" id="password" placeholder="Min. 6 characters" required></div>
-    <button type="submit" class="btn" id="signupBtn">Create Account</button>
+  <form onsubmit="doSignup(event)">
+    <div class="fg"><label class="fl">Full Name</label><input class="fi" type="text" id="name" placeholder="Your full name" required autocomplete="name"></div>
+    <div class="fg"><label class="fl">Email Address</label><input class="fi" type="email" id="email" placeholder="your@email.com" required autocomplete="email"></div>
+    <div class="fg"><label class="fl">Password</label><input class="fi" type="password" id="password" placeholder="Min. 6 characters" required autocomplete="new-password"></div>
+    <button type="submit" class="btn-sub" id="signupBtn">Create Account</button>
   </form>
-  <p class="link-text">Already have an account? <a href="/index.html">Sign In</a></p>
-  <p class="note">⚠️ One account per device · Admin approval required</p>
+  <p class="foot-link">Have an account? <a href="/index.html">Sign In</a></p>
 </div>
 <script>
 function getFingerprint(){
-  const d=[navigator.hardwareConcurrency,navigator.deviceMemory,navigator.language, screen.width+'x'+screen.height,new Date().getTimezoneOffset()].join('|');
+  const d=[navigator.hardwareConcurrency,navigator.language,navigator.platform,screen.width+'x'+screen.height,new Date().getTimezoneOffset()].join('|');
   let h=0;for(let i=0;i<d.length;i++){h=((h<<5)-h)+d.charCodeAt(i);h|=0}
-  return 'fp_'+Math.abs(h).toString(36);
+  return'fp_'+Math.abs(h).toString(36);
 }
-async function handleSignup(e){
+
+async function doSignup(e){
   e.preventDefault();
   const name=document.getElementById('name').value.trim();
   const email=document.getElementById('email').value.trim();
   const password=document.getElementById('password').value;
-  const alertEl=document.getElementById('alert');
-  const btn=document.getElementById('signupBtn');
-  alertEl.className='alert';
-  if(!name||!email||!password){alertEl.className='alert alert-error';alertEl.textContent='Please fill all fields';return}
-  if(password.length<6){alertEl.className='alert alert-error';alertEl.textContent='Password must be 6+ characters';return}
-  btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Creating...';
+  const al=document.getElementById('alert'),btn=document.getElementById('signupBtn');
+  al.className='alert';
+  if(password.length<6){al.className='alert alert-error show';al.textContent='Password must be at least 6 characters.';return}
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Creating Account…';
   try{
     const res=await fetch('/api/auth/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,password,device_fingerprint:getFingerprint()})});
     const data=await res.json();
-    if(!res.ok){alertEl.className='alert alert-error';alertEl.textContent=data.error;btn.disabled=false;btn.textContent='Create Account';return}
-    alertEl.className='alert alert-success';alertEl.textContent='✅ Account created! Awaiting admin approval.';
-    document.querySelector('form').reset();
-    btn.textContent='Redirecting...';
-    setTimeout(()=>{window.location.href='/index.html'},2000);
-  }catch(e){alertEl.className='alert alert-error';alertEl.textContent='Network error';btn.disabled=false;btn.textContent='Create Account'}
+    if(!res.ok){al.className='alert alert-error show';al.textContent=data.error||'Signup failed.';btn.disabled=false;btn.textContent='Create Account';return}
+    al.className='alert alert-success show';al.textContent='✓ Account created! Awaiting admin approval. You will be notified when ready.';
+    document.querySelector('form').reset();btn.textContent='Account Created';
+    setTimeout(()=>window.location.href='/index.html',3000);
+  }catch{al.className='alert alert-error show';al.textContent='Network error. Try again.';btn.disabled=false;btn.textContent='Create Account'}
 }
 </script>
 </body>
