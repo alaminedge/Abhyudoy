@@ -6,35 +6,33 @@
 <title>Course — Abhyudoy</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#090d13;--surface:#111620;--surface2:#161c28;--border:rgba(255,255,255,0.07);--teal:#00e5c3;--teal-dim:rgba(0,229,195,0.08);--white:#fff;--gray:#8a95a8;--radius:12px}
+:root{--bg:#080c12;--surface:#0f141c;--border:rgba(255,255,255,0.05);--teal:#00e5c3;--teal-dim:rgba(0,229,195,0.06);--white:#fff;--gray:#7a8494;--radius:12px}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);min-height:100vh}
 nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.nav-logo{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;color:var(--teal);text-decoration:none}
-.nav-logo span{color:var(--white)}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-brand span{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:var(--white)}
+.nav-brand span em{font-style:normal;color:var(--teal)}
 .btn-back{padding:7px 16px;background:transparent;border:1.5px solid var(--border);color:var(--gray);border-radius:20px;cursor:pointer;font-size:.74rem;font-weight:600;font-family:'DM Sans',sans-serif;text-decoration:none;transition:all .2s}
 .btn-back:hover{border-color:var(--teal);color:var(--teal)}
-.container{max-width:900px;margin:0 auto;padding:28px 24px}
+.container{max-width:900px;margin:0 auto;padding:28px 24px 60px}
 .course-header{margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border)}
 .course-title{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:700;margin-bottom:4px}
 .course-meta{font-size:.78rem;color:var(--gray)}
-.subject-section{margin-bottom:20px}
-.subject-header{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all .2s}
-.subject-header:hover{border-color:var(--teal)}
-.subject-icon{width:28px;height:28px;background:var(--teal-dim);color:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0}
-.subject-content{padding-left:12px}
-.paper-section{margin-bottom:8px}
-.paper-header{font-size:.82rem;font-weight:600;color:var(--teal);padding:8px 14px;margin-bottom:4px}
-.lecture-list{display:flex;flex-direction:column;gap:2px;padding-left:8px}
-.lecture-item{display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:8px;cursor:pointer;transition:all .15s;border:1px solid transparent;font-size:.8rem;color:var(--gray)}
+.subject-block{margin-bottom:20px}
+.subject-head{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.subject-num{width:28px;height:28px;background:var(--teal-dim);color:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0}
+.paper-label{font-size:.8rem;font-weight:600;color:var(--teal);padding:6px 16px 4px}
+.chapter-label{font-size:.72rem;font-weight:600;color:var(--gray);padding:4px 16px 2px}
+.lecture-item{display:flex;align-items:center;gap:10px;padding:10px 16px 10px 28px;border-radius:8px;cursor:pointer;transition:all .15s;border:1px solid transparent;font-size:.82rem;color:var(--gray)}
 .lecture-item:hover{background:var(--surface);border-color:var(--border);color:var(--white)}
-.lecture-icon{color:var(--teal);flex-shrink:0;font-size:.9rem}
-.lecture-pdf-badge{font-size:.64rem;color:var(--teal);margin-left:auto;background:var(--teal-dim);padding:2px 8px;border-radius:10px}
-.resources-section{margin-top:24px;padding-top:20px;border-top:1px solid var(--border)}
+.lecture-icon{color:var(--teal);font-size:.85rem;flex-shrink:0}
+.lecture-pdf-badge{font-size:.64rem;color:var(--teal);background:var(--teal-dim);padding:2px 8px;border-radius:10px;margin-left:auto}
+.resources-section{margin-top:28px;padding-top:20px;border-top:1px solid var(--border)}
 .resources-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:12px}
-.resource-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:6px;text-decoration:none;color:var(--gray);transition:all .15s;font-size:.82rem}
+.resource-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:6px;text-decoration:none;color:var(--gray);font-size:.82rem;transition:all .15s}
 .resource-item:hover{border-color:var(--teal);color:var(--white)}
-.empty-state{text-align:center;padding:60px 20px;color:var(--gray)}
+.empty-state{text-align:center;padding:60px;color:var(--gray)}
 .loading{text-align:center;padding:60px}
 .spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--teal);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -42,12 +40,10 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24
 </head>
 <body>
 <nav>
-  <a href="/dashboard.html" class="nav-logo">Abhy<span>udoy</span></a>
+  <a href="/dashboard.html" class="nav-brand"><span>Abhy<em>udoy</em></span></a>
   <a href="/dashboard.html" class="btn-back">← My Courses</a>
 </nav>
-<div class="container" id="content">
-  <div class="loading"><div class="spinner"></div><p>Loading course...</p></div>
-</div>
+<div class="container" id="content"><div class="loading"><div class="spinner"></div><p>Loading...</p></div></div>
 <script>
 const token=localStorage.getItem('abhyudoy_token');
 const user=JSON.parse(localStorage.getItem('abhyudoy_user')||'null');
@@ -59,58 +55,30 @@ async function loadCourse(){
   try{
     const res=await fetch(`/api/user/course/${courseId}`,{headers:{Authorization:'Bearer '+token}});
     if(!res.ok){window.location.href='/dashboard.html';return}
-    const data=await res.json();
-    document.title=data.course.title+' — Abhyudoy';
-    const subjCount=data.subjects.length;
-    const totalLectures=data.subjects.reduce((acc,s)=>acc+s.papers.reduce((a,p)=>a+p.chapters.reduce((b,ch)=>b+ch.lectures.length,0),0),0);
-    
-    let html=`
-      <div class="course-header">
-        <h1 class="course-title">${esc(data.course.title)}</h1>
-        <p class="course-meta">${subjCount} Subjects · ${totalLectures} Lectures · Expires: ${new Date(data.membership.expires_at).toLocaleDateString()}</p>
-      </div>`;
-
-    data.subjects.forEach((subj,i)=>{
-      html+=`<div class="subject-section">
-        <div class="subject-header">
-          <span class="subject-icon">${String(i+1).padStart(2,'0')}</span>
-          ${esc(subj.name)}
-        </div>
-        <div class="subject-content">`;
-      
-      if(subj.papers){
-        subj.papers.forEach(paper=>{
-          if(paper.virtual && !paper.chapters.length)return;
-          html+=`<div class="paper-section">
-            ${paper.name&&!paper.virtual?`<div class="paper-header">📄 ${esc(paper.name)}</div>`:''}
-            <div class="lecture-list">`;
-          paper.chapters.forEach(ch=>{
-            html+=`<div style="font-size:.74rem;font-weight:600;color:var(--gray);padding:6px 14px 2px">📑 ${esc(ch.title)}</div>`;
-            ch.lectures.forEach(lec=>{
-              html+=`<div class="lecture-item" onclick="window.location.href='/player.html?lecture=${lec.id}&course=${courseId}'">
-                <span class="lecture-icon">▶</span>
-                <span>${esc(lec.title)}</span>
-                ${lec.pdfs&&lec.pdfs.length?`<span class="lecture-pdf-badge">📎 ${lec.pdfs.length}</span>`:''}
-              </div>`;
-            });
+    const d=await res.json();
+    document.title=d.course.title+' — Abhyudoy';
+    let totalLec=0;d.subjects.forEach(s=>s.papers.forEach(p=>p.chapters.forEach(c=>totalLec+=c.lectures.length)));
+    let html=`<div class="course-header"><h1 class="course-title">${esc(d.course.title)}</h1><p class="course-meta">${d.subjects.length} Subjects · ${totalLec} Lectures · Expires: ${new Date(d.membership.expires_at).toLocaleDateString()}</p></div>`;
+    d.subjects.forEach((s,i)=>{
+      html+=`<div class="subject-block"><div class="subject-head"><span class="subject-num">${String(i+1).padStart(2,'0')}</span>${esc(s.name)}</div>`;
+      s.papers.forEach(p=>{
+        if(!p.name||p.name==='Full Course'){}else{html+=`<div class="paper-label">📄 ${esc(p.name)}</div>`}
+        p.chapters.forEach(ch=>{
+          html+=`<div class="chapter-label">📑 ${esc(ch.title)}</div>`;
+          ch.lectures.forEach(lec=>{
+            html+=`<div class="lecture-item" onclick="window.location.href='/player.html?lecture=${lec.id}&course=${courseId}'">
+              <span class="lecture-icon">▶</span><span>${esc(lec.title)}</span>
+              ${lec.pdf_url?`<span class="lecture-pdf-badge">📎 PDF</span>`:''}
+            </div>`;
           });
-          html+=`</div></div>`;
         });
-      }
-      html+=`</div></div>`;
+      });
+      html+=`</div>`;
     });
-
-    if(data.resources&&data.resources.length){
-      html+=`<div class="resources-section">
-        <h2 class="resources-title">📚 Course Resources</h2>
-        ${data.resources.map(r=>`<a href="${esc(r.pdf_url)}" target="_blank" rel="noopener" class="resource-item">📄 ${esc(r.title)}</a>`).join('')}
-      </div>`;
-    }
-
+    if(d.resources&&d.resources.length) html+=`<div class="resources-section"><h2 class="resources-title">📚 Course Resources</h2>${d.resources.map(r=>`<a href="${esc(r.pdf_url)}" target="_blank" rel="noopener" class="resource-item">📄 ${esc(r.title)}</a>`).join('')}</div>`;
     document.getElementById('content').innerHTML=html;
-  }catch(e){document.getElementById('content').innerHTML='<div class="empty-state"><h3>Error</h3><p>Failed to load course</p></div>'}
+  }catch(e){document.getElementById('content').innerHTML='<div class="empty-state"><h3>Error</h3><p>Failed to load</p></div>'}
 }
-
 function esc(s){const d=document.createElement('div');d.textContent=String(s||'');return d.innerHTML}
 loadCourse();
 </script>
