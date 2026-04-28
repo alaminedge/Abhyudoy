@@ -10,6 +10,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);display:flex;min-height:100vh}
 ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border)}
+
 .sidebar{width:var(--sw);background:var(--surface);border-right:1px solid var(--border);position:fixed;top:0;left:0;bottom:0;z-index:50;display:flex;flex-direction:column;overflow-y:auto}
 .sidebar-top{padding:20px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
 .sidebar-top img{width:34px;height:34px;border-radius:8px}
@@ -19,6 +20,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);di
 .nav-item:hover{color:var(--white);background:rgba(255,255,255,0.02)}.nav-item.active{color:var(--teal);background:var(--teal-dim);border-left-color:var(--teal)}
 .sidebar-footer{margin-top:auto;padding:12px 18px;border-top:1px solid var(--border);font-size:.68rem;color:var(--gray)}
 .btn-logout{width:100%;padding:7px;background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--gray);border-radius:6px;font-size:.66rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;text-transform:uppercase;letter-spacing:.04em;margin-top:8px}.btn-logout:hover{border-color:var(--red);color:var(--red)}
+
 .main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;min-height:100vh}
 .topbar{height:52px;padding:0 24px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40}
 .topbar-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem}
@@ -26,18 +28,21 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);di
 .btn-view-site{padding:5px 12px;border:1px solid var(--border);color:var(--gray);border-radius:16px;font-size:.66rem;text-decoration:none}.btn-view-site:hover{border-color:var(--teal);color:var(--teal)}
 .content{padding:24px;flex:1}
 .view{display:none}.view.active{display:block}
+
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:24px}
 .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 14px}.stat-label{font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);font-weight:700;margin-bottom:4px;font-family:'DM Mono',monospace}.stat-val{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:var(--teal)}
+
 .section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
 .section-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700}
+
 .btn{font-family:'DM Sans',sans-serif;font-size:.7rem;font-weight:600;padding:7px 14px;border-radius:6px;border:none;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:4px;letter-spacing:.03em;text-transform:uppercase}
 .btn-teal{background:var(--teal);color:#000}.btn-teal:hover{opacity:.85}
 .btn-ghost{background:transparent;color:var(--gray);border:1px solid var(--border)}.btn-ghost:hover{border-color:var(--teal);color:var(--teal)}
 .btn-red{background:rgba(255,71,87,0.06);color:var(--red);border:1px solid rgba(255,71,87,.1)}.btn-red:hover{background:var(--red);color:#fff}
 .btn-green{background:rgba(46,213,115,0.06);color:var(--green);border:1px solid rgba(46,213,115,.1)}.btn-green:hover{background:var(--green);color:#fff}
 .btn-xs{padding:3px 6px;font-size:.6rem;border-radius:3px}
+
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
-.card-body{padding:18px}
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse}
 th{padding:8px 10px;text-align:left;font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);font-weight:700;background:var(--surface2);border-bottom:2px solid var(--border);white-space:nowrap;font-family:'DM Mono',monospace}
@@ -45,13 +50,14 @@ td{padding:8px 10px;font-size:.76rem;border-bottom:1px solid var(--border)}tr:ho
 .badge{font-size:.56rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 7px;border-radius:10px;display:inline-block;font-family:'DM Mono',monospace}
 .badge-teal{background:var(--teal-dim);color:var(--teal)}.badge-red{background:rgba(255,71,87,0.06);color:var(--red)}.badge-green{background:rgba(46,213,115,0.06);color:var(--green)}
 .empty{text-align:center;padding:40px;color:var(--gray);font-size:.8rem}
+
 .form-group{margin-bottom:12px}
 .form-label{display:block;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);margin-bottom:4px;font-family:'DM Mono',monospace}
 .form-input,.form-select,.form-textarea{width:100%;padding:9px 12px;background:var(--surface2);border:1.5px solid var(--border);border-radius:6px;font-family:'DM Sans',sans-serif;font-size:.82rem;color:var(--white);outline:none;transition:border-color .15s}
 .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--teal)}
 .form-select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%237a8494' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
 .form-textarea{resize:vertical;min-height:60px}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:none;place-items:center;padding:16px;backdrop-filter:blur(3px)}.modal-overlay.open{display:grid}
 .modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);max-width:500px;width:100%;max-height:85vh;overflow-y:auto;animation:modalIn .2s ease}@keyframes modalIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
 .modal-head{padding:16px 18px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}.modal-head h3{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700}
@@ -60,11 +66,12 @@ td{padding:8px 10px;font-size:.76rem;border-bottom:1px solid var(--border)}tr:ho
 .alert{padding:8px 12px;border-radius:6px;font-size:.74rem;margin-bottom:10px;display:none}.alert.show{display:block}
 .alert-error{background:rgba(255,71,87,0.06);border:1px solid rgba(255,71,87,.1);color:var(--red)}
 .alert-success{background:rgba(46,213,115,0.06);border:1px solid rgba(46,213,115,.1);color:var(--green)}
+
 .breadcrumb{display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--gray);margin-bottom:16px;flex-wrap:wrap}
 .breadcrumb a{color:var(--teal);cursor:pointer;text-decoration:none}.breadcrumb span{color:var(--gray)}
-.tree{margin-left:0}.tree-item{padding:8px 12px;border:1px solid var(--border);border-radius:6px;margin-bottom:4px;display:flex;align-items:center;justify-content:space-between;font-size:.78rem;background:var(--surface)}.tree-item:hover{background:var(--surface2)}
+.tree-item{padding:8px 12px;border:1px solid var(--border);border-radius:6px;margin-bottom:4px;display:flex;align-items:center;justify-content:space-between;font-size:.78rem;background:var(--surface)}.tree-item:hover{background:var(--surface2)}
 .tree-actions{display:flex;gap:4px}
-@media(max-width:768px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.menu-btn{display:block}.content{padding:14px}.form-row{grid-template-columns:1fr}}
+@media(max-width:768px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.menu-btn{display:block}.content{padding:14px}}
 </style>
 </head>
 <body>
@@ -87,15 +94,10 @@ td{padding:8px 10px;font-size:.76rem;border-bottom:1px solid var(--border)}tr:ho
     <a href="/dashboard.html" target="_blank" class="btn-view-site">View Site →</a>
   </div>
   <div class="content">
-    <!-- Dashboard -->
     <div class="view active" id="view-dashboard"><div class="stats-grid" id="dashStats"></div></div>
-    <!-- Courses List -->
     <div class="view" id="view-courses"><div id="coursesContent"></div></div>
-    <!-- Course Detail (Subjects/Papers/Chapters/Lectures/Resources) -->
     <div class="view" id="view-course-detail"><div id="courseDetailContent"></div></div>
-    <!-- Users -->
     <div class="view" id="view-users"><div id="usersContent"></div></div>
-    <!-- Memberships -->
     <div class="view" id="view-memberships"><div id="membershipsContent"></div></div>
   </div>
 </main>
@@ -117,19 +119,30 @@ async function api(m,p,b){
 }
 
 // ═══ NAVIGATION ═══
+const viewTitles={dashboard:'Dashboard',courses:'Courses',users:'Users',memberships:'Memberships'};
+
+function showView(viewName){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  const target=document.getElementById('view-'+viewName);
+  if(target)target.classList.add('active');
+  document.getElementById('topbarTitle').textContent=viewTitles[viewName]||viewName;
+  
+  // Update active nav
+  document.querySelectorAll('.nav-item').forEach(b=>{
+    b.classList.toggle('active',b.getAttribute('data-view')===viewName);
+  });
+}
+
 document.querySelectorAll('.nav-item').forEach(btn=>{
   btn.addEventListener('click',function(){
-    document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
-    this.classList.add('active');
-    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-    const v=this.getAttribute('data-view');
-    document.getElementById('view-'+v).classList.add('active');
-    document.getElementById('topbarTitle').textContent=this.textContent.trim();
+    const view=this.getAttribute('data-view');
+    if(view==='course-detail')return;
+    showView(view);
     document.getElementById('sidebar').classList.remove('open');
-    if(v==='dashboard')loadDashboard();
-    if(v==='courses')loadCourses();
-    if(v==='users')loadUsers();
-    if(v==='memberships')loadMemberships();
+    if(view==='dashboard')loadDashboard();
+    if(view==='courses')loadCourses();
+    if(view==='users')loadUsers();
+    if(view==='memberships')loadMemberships();
   });
 });
 
@@ -140,7 +153,7 @@ async function loadDashboard(){
   document.getElementById('dashStats').innerHTML=`<div class="stat-card"><div class="stat-label">Courses</div><div class="stat-val">${allCourses.length}</div></div><div class="stat-card"><div class="stat-label">Subjects</div><div class="stat-val">${subs.length}</div></div><div class="stat-card"><div class="stat-label">Chapters</div><div class="stat-val">${chs.length}</div></div><div class="stat-card"><div class="stat-label">Lectures</div><div class="stat-val">${lecs.length}</div></div>`;
 }
 
-// ═══ COURSES LIST ═══
+// ═══ COURSES ═══
 async function loadCourses(){
   const{ok,data}=await api('/admin/courses','GET');allCourses=ok?data:[];
   document.getElementById('coursesContent').innerHTML=`
@@ -164,18 +177,16 @@ async function saveCourse(){
 }
 async function delCourse(id){if(!confirm('Delete this course and ALL content?'))return;await api('/admin/courses/'+id,'DELETE');loadCourses();loadDashboard()}
 
-// ═══ COURSE DETAIL (THE MAIN WORKFLOW) ═══
+// ═══ COURSE DETAIL ═══
 async function openCourseDetail(courseId){
   currentCourse=courseId;
+  showView('course-detail');
+  
   const{ok,data}=await api('/user/course/'+courseId,'GET');
   if(!ok)return;
   const course=data.course,subjects=data.subjects,resources=data.resources;
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  document.getElementById('view-course-detail').classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
-  document.getElementById('topbarTitle').textContent=course.title;
   
-  let html=`<div class="breadcrumb"><a onclick="loadViewTab('courses')">Courses</a><span>›</span><strong>${esc(course.title)}</strong></div>
+  let html=`<div class="breadcrumb"><a onclick="showView('courses');loadCourses()">Courses</a><span>›</span><strong>${esc(course.title)}</strong></div>
     <div class="section-head"><h2 class="section-title">${esc(course.title)}</h2>
       <div style="display:flex;gap:6px">
         <button class="btn btn-teal" onclick="openSubjectModal(${courseId})">+ Subject</button>
@@ -183,8 +194,7 @@ async function openCourseDetail(courseId){
       </div>
     </div>`;
   
-  // Subjects
-  if(subjects.length){
+  if(subjects&&subjects.length){
     subjects.forEach((s,i)=>{
       html+=`<div class="card" style="margin-bottom:8px"><div style="padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)"><span style="font-family:'Syne',sans-serif;font-weight:700">📖 ${esc(s.name)}</span><div style="display:flex;gap:4px">${s.has_papers?`<button class="btn btn-ghost btn-xs" onclick="openPaperModal(${s.id})">+ Paper</button>`:''}<button class="btn btn-red btn-xs" onclick="delSubject(${s.id})">Del</button></div></div><div style="padding:8px 16px">`;
       if(s.papers&&s.papers.length){
@@ -208,7 +218,6 @@ async function openCourseDetail(courseId){
     });
   }else{html+=`<div class="empty">No subjects yet. Start by adding a subject.</div>`}
   
-  // Resources
   if(resources&&resources.length){
     html+=`<div class="section-head" style="margin-top:20px"><h2 class="section-title">📎 Course Resources</h2></div>`;
     resources.forEach(r=>{html+=`<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--surface);border:1px solid var(--border);border-radius:6px;margin-bottom:4px;font-size:.78rem"><a href="${r.pdf_url}" target="_blank" style="color:var(--teal)">📄 ${esc(r.title)}</a><button class="btn btn-red btn-xs" onclick="delResource(${r.id})">Del</button></div>`});
@@ -261,7 +270,7 @@ function openLectureModal(chapterId,editId){
   document.getElementById('modalTitle').textContent=editId?'Edit Lecture':'New Lecture';
   document.getElementById('modalBody').innerHTML=`<div class="alert" id="modalAlert"></div><input type="hidden" id="editLecId" value="${editId||''}"><div class="form-group"><label class="form-label">Title *</label><input class="form-input" id="fTitle"></div><div class="form-group"><label class="form-label">YouTube Video ID *</label><input class="form-input" id="fYtId" placeholder="e.g. dQw4w9WgXcQ"></div><div class="form-group"><label class="form-label">PDF Link (optional)</label><input class="form-input" id="fPdf" placeholder="https://..."></div><div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="fDesc"></textarea></div>`;
   document.getElementById('modalFooter').innerHTML=`<button class="btn btn-teal" onclick="saveLecture(${chapterId})">Save</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`;
-  if(editId){/* Pre-fill if editing */ console.log('Edit lecture:',editId)}
+  if(editId){console.log('Edit lecture:',editId)}
   document.getElementById('genModal').classList.add('open');
 }
 async function saveLecture(chapterId){
@@ -326,11 +335,8 @@ function closeModal(){document.getElementById('genModal').classList.remove('open
 function showAlert(id,msg,type){const el=document.getElementById(id);if(el){el.className=`alert alert-${type} show`;el.textContent=msg}}
 function esc(s){const d=document.createElement('div');d.textContent=String(s||'');return d.innerHTML}
 function logout(){localStorage.clear();window.location.href='/index.html'}
-function loadViewTab(tab){
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  if(tab==='courses'){document.getElementById('view-courses').classList.add('active');loadCourses();}
-}
 
+// ═══ INIT ═══
 loadDashboard();
 </script>
 </body>
