@@ -6,12 +6,14 @@
 <title>My Courses — Abhyudoy</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#090d13;--surface:#111620;--surface2:#161c28;--border:rgba(255,255,255,0.07);--teal:#00e5c3;--white:#fff;--gray:#8a95a8;--red:#ff4757;--orange:#f59e0b;--radius:14px}
+:root{--bg:#080c12;--surface:#0f141c;--border:rgba(255,255,255,0.05);--teal:#00e5c3;--white:#fff;--gray:#7a8494;--red:#ff4757;--orange:#f59e0b;--radius:14px}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--white);min-height:100vh}
 nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.nav-logo{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;color:var(--teal);text-decoration:none;letter-spacing:-.02em}
-.nav-logo span{color:var(--white)}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-brand img{width:32px;height:32px;border-radius:8px}
+.nav-brand span{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:var(--white);letter-spacing:-.02em}
+.nav-brand span em{font-style:normal;color:var(--teal)}
 .nav-right{display:flex;align-items:center;gap:12px}
 .user-name{font-size:.82rem;font-weight:500;color:var(--gray)}
 .btn-signout{padding:7px 16px;background:transparent;border:1.5px solid var(--border);color:var(--gray);border-radius:20px;cursor:pointer;font-size:.74rem;font-weight:600;font-family:'DM Sans',sans-serif;transition:all .2s}
@@ -25,9 +27,8 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24
 .course-card:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,0,0,.4);border-color:rgba(0,229,195,.2)}
 .course-card-header{padding:24px 20px 16px;border-bottom:1px solid var(--border)}
 .course-title{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:700;line-height:1.3;margin-bottom:6px}
-.course-desc{font-size:.74rem;color:var(--gray);line-height:1.5}
+.course-desc{font-size:.74rem;color:var(--gray);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .course-card-body{padding:16px 20px}
-.course-meta{font-size:.72rem;color:var(--gray);margin-bottom:4px}
 .expiry-badge{display:inline-block;padding:4px 12px;border-radius:12px;font-size:.66rem;font-weight:600}
 .expiry-active{background:rgba(0,229,195,.1);color:var(--teal)}
 .expiry-warning{background:rgba(245,158,11,.1);color:var(--orange)}
@@ -40,17 +41,17 @@ nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24
 </head>
 <body>
 <nav>
-  <a href="/dashboard.html" class="nav-logo">Abhy<span>udoy</span></a>
+  <a href="/dashboard.html" class="nav-brand">
+    <img src="/images/backend.png" alt="Abhyudoy" onerror="this.style.display='none'">
+    <span>Abhy<em>udoy</em></span>
+  </a>
   <div class="nav-right">
     <span class="user-name" id="userName"></span>
     <button class="btn-signout" onclick="logout()">Sign Out</button>
   </div>
 </nav>
 <div class="container">
-  <div class="page-header">
-    <h1>My Courses</h1>
-    <p>Your enrolled courses with active memberships</p>
-  </div>
+  <div class="page-header"><h1>My Courses</h1><p>Your enrolled courses with active memberships</p></div>
   <div id="content"><div class="loading"><div class="spinner"></div><p>Loading courses...</p></div></div>
 </div>
 <script>
@@ -65,27 +66,21 @@ async function loadCourses(){
     const courses=await res.json();
     const content=document.getElementById('content');
     if(!courses.length){
-      content.innerHTML='<div class="empty-state"><h3>No Active Courses</h3><p>You don\'t have any active course memberships yet. Contact admin for access.</p></div>';
+      content.innerHTML='<div class="empty-state"><h3>No Active Courses</h3><p>You don\'t have any active course memberships. Contact admin for access.</p></div>';
       return;
     }
     content.innerHTML=`<div class="course-grid">${courses.map(c=>{
-      const expDate=new Date(c.expires_at),now=new Date();
-      const daysLeft=Math.ceil((expDate-now)/(1000*60*60*24));
-      let expClass='expiry-active',expText=`Expires: ${expDate.toLocaleDateString()}`;
-      if(daysLeft<0){expClass='expiry-warning';expText='Expired';}
-      else if(daysLeft<=7){expClass='expiry-warning';expText=`${daysLeft} days left`;}
+      const exp=new Date(c.expires_at),now=new Date();
+      const days=Math.ceil((exp-now)/86400000);
+      let cls='expiry-active',txt=`Expires: ${exp.toLocaleDateString()}`;
+      if(days<0){cls='expiry-warning';txt='Expired';}
+      else if(days<=7){cls='expiry-warning';txt=`${days} days left`;}
       return`<div class="course-card" onclick="window.location.href='/course.html?id=${c.id}'">
-        <div class="course-card-header">
-          <div class="course-title">${esc(c.title)}</div>
-          <div class="course-desc">${esc(c.description||'No description')}</div>
-        </div>
-        <div class="course-card-body">
-          <span class="expiry-badge ${expClass}">${expText}</span>
-        </div>
+        <div class="course-card-header"><div class="course-title">${esc(c.title)}</div><div class="course-desc">${esc(c.description||'No description')}</div></div>
+        <div class="course-card-body"><span class="expiry-badge ${cls}">${txt}</span></div>
       </div>`}).join('')}</div>`;
   }catch(e){document.getElementById('content').innerHTML='<div class="empty-state"><h3>Error</h3><p>Failed to load courses</p></div>'}
 }
-
 function esc(s){const d=document.createElement('div');d.textContent=String(s||'');return d.innerHTML}
 function logout(){localStorage.clear();window.location.href='/index.html'}
 loadCourses();
