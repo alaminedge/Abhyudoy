@@ -9,147 +9,704 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:#04060e;--sidebar-bg:#070b14;
-  --surface:#0b0f1a;--surface2:#111827;--surface3:#161e2e;
-  --border:rgba(255,255,255,0.05);--border2:rgba(255,255,255,0.09);--border3:rgba(255,255,255,0.13);
-  --teal:#00d4aa;--teal2:#00b894;--teal-dim:rgba(0,212,170,0.07);--teal-glow:rgba(0,212,170,0.14);
-  --white:#f1f5f9;--gray:#6b7d91;--gray2:#94a3b8;--gray3:#cbd5e1;
-  --red:#f0566a;--red-dim:rgba(240,86,106,0.08);--green:#10d48e;--green-dim:rgba(16,212,142,0.08);
-  --orange:#f59e0b;--orange-dim:rgba(245,158,11,0.08);
-  --radius:9px;--radius-sm:6px;--radius-lg:13px;--sw:248px;
-  --transition:0.18s cubic-bezier(0.4,0,0.2,1);
+  --bg: #04060e;
+  --sidebar-bg: #070b14;
+  --surface: #0b0f1a;
+  --surface2: #111827;
+  --surface3: #161e2e;
+  --border: rgba(255,255,255,0.05);
+  --border2: rgba(255,255,255,0.09);
+  --border3: rgba(255,255,255,0.13);
+  --teal: #00d4aa;
+  --teal2: #00b894;
+  --teal-dim: rgba(0,212,170,0.07);
+  --teal-glow: rgba(0,212,170,0.14);
+  --white: #f1f5f9;
+  --gray: #6b7d91;
+  --gray2: #94a3b8;
+  --gray3: #cbd5e1;
+  --red: #f0566a;
+  --red-dim: rgba(240,86,106,0.08);
+  --green: #10d48e;
+  --green-dim: rgba(16,212,142,0.08);
+  --orange: #f59e0b;
+  --orange-dim: rgba(245,158,11,0.08);
+  --radius: 9px;
+  --radius-sm: 6px;
+  --radius-lg: 13px;
+  --sw: 248px;
+  --transition: 0.18s cubic-bezier(0.4,0,0.2,1);
 }
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--white);-webkit-font-smoothing:antialiased}
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.06);border-radius:4px}
 
-.sidebar{width:var(--sw);background:var(--sidebar-bg);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:60;overflow-y:auto;overflow-x:hidden;transition:transform 0.28s cubic-bezier(0.4,0,0.2,1)}
-.sb-top{padding:22px 18px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
-.sb-logo-img{height:28px;flex-shrink:0}
-.sb-brand{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:var(--white);letter-spacing:-0.01em}
-.sb-role{font-family:'JetBrains Mono',monospace;font-size:0.54rem;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.18);margin-top:2px}
-.nav-section{padding:4px 0}
-.nav-group{font-family:'JetBrains Mono',monospace;font-size:0.52rem;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.14);font-weight:600;padding:12px 18px 6px}
-.nav-item{display:flex;align-items:center;gap:10px;padding:9px 18px;font-size:0.78rem;font-weight:500;color:rgba(255,255,255,0.4);cursor:pointer;border:none;background:transparent;width:100%;text-align:left;transition:all var(--transition);border-left:2px solid transparent;font-family:'Inter',sans-serif;letter-spacing:0.01em}
-.nav-item svg{width:16px;height:16px;flex-shrink:0;opacity:0.6;stroke:currentColor;fill:none}
-.nav-item:hover{color:rgba(255,255,255,0.75);background:rgba(255,255,255,0.02)}
-.nav-item.active{color:var(--teal);background:var(--teal-dim);border-left-color:var(--teal)}
-.nav-item.active svg{opacity:1}
-.sb-footer{margin-top:auto;padding:14px 18px;border-top:1px solid var(--border)}
-.sb-email{font-family:'JetBrains Mono',monospace;font-size:0.64rem;color:rgba(255,255,255,0.2);margin-bottom:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.btn-logout{width:100%;padding:8px 14px;background:transparent;border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.35);border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:0.7rem;font-weight:600;cursor:pointer;transition:all var(--transition);letter-spacing:0.04em;text-transform:uppercase}
-.btn-logout:hover{border-color:var(--red);color:var(--red);background:var(--red-dim)}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-.main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;min-height:100vh}
-.topbar{height:56px;padding:0 22px;background:rgba(11,15,26,0.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40}
-.topbar-left{display:flex;align-items:center;gap:12px}
-.menu-btn{display:none;background:none;border:none;color:var(--gray2);cursor:pointer;padding:5px}
-.menu-btn svg{width:20px;height:20px;fill:currentColor}
-.topbar-title{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1rem;letter-spacing:-0.01em}
-.topbar-right{display:flex;align-items:center;gap:8px}
-.role-pill{font-family:'JetBrains Mono',monospace;font-size:0.58rem;font-weight:500;text-transform:uppercase;letter-spacing:0.1em;padding:4px 12px;border-radius:20px;background:var(--teal-dim);color:var(--teal);border:1px solid rgba(0,212,170,0.2)}
-.btn-site{padding:6px 14px;border:1px solid var(--border2);color:var(--gray);border-radius:20px;font-size:0.7rem;text-decoration:none;transition:all var(--transition);font-family:'Inter',sans-serif;font-weight:500;display:inline-flex;align-items:center;gap:4px}
-.btn-site:hover{border-color:var(--teal);color:var(--teal)}
-.btn-site svg{width:13px;height:13px;stroke:currentColor;fill:none}
+html, body {
+  height: 100%;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-.content{padding:24px;flex:1}
-.view{display:none;animation:fadeIn 0.2s ease}
-.view.active{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.06); border-radius: 4px; }
 
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:24px}
-.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px}
-.stat-card:hover{border-color:var(--border2)}
-.stat-label{font-family:'JetBrains Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--gray);margin-bottom:8px;font-weight:500}
-.stat-val{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:var(--teal);line-height:1}
+.sidebar {
+  width: var(--sw);
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 60;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+}
 
-.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
-.sec-title{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:700;letter-spacing:-0.01em}
+.sb-top {
+  padding: 22px 18px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-.btn{font-family:'Inter',sans-serif;font-size:0.7rem;font-weight:600;padding:7px 14px;border-radius:var(--radius-sm);border:none;cursor:pointer;transition:all var(--transition);display:inline-flex;align-items:center;gap:5px;letter-spacing:0.03em;text-transform:uppercase;white-space:nowrap}
-.btn-primary{background:var(--teal);color:#000}.btn-primary:hover{background:var(--teal2);transform:translateY(-1px)}
-.btn-ghost{background:transparent;color:var(--gray);border:1.5px solid var(--border2)}.btn-ghost:hover{border-color:var(--teal);color:var(--teal);background:var(--teal-dim)}
-.btn-danger{background:var(--red-dim);color:var(--red);border:1.5px solid rgba(240,86,106,0.18)}.btn-danger:hover{background:var(--red);color:#fff;border-color:var(--red)}
-.btn-success{background:var(--green-dim);color:var(--green);border:1.5px solid rgba(16,212,142,0.2)}.btn-success:hover{background:var(--green);color:#fff;border-color:var(--green)}
-.btn-orange{background:var(--orange-dim);color:var(--orange);border:1.5px solid rgba(245,158,11,0.2)}.btn-orange:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
-.btn-sm{padding:4px 10px;font-size:0.65rem}
-.btn-xs{padding:3px 8px;font-size:0.6rem}
+.sb-logo-img { height: 28px; flex-shrink: 0; }
 
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:16px}
-.card-pad{padding:18px}
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse}
-thead tr{background:var(--surface2);border-bottom:2px solid var(--border)}
-th{padding:9px 12px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:0.56rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--gray);font-weight:500;white-space:nowrap}
-td{padding:9px 12px;font-size:0.76rem;border-bottom:1px solid var(--border);vertical-align:middle;color:var(--gray2)}
-td.strong{font-weight:600;color:var(--white)}
-tr:last-child td{border-bottom:none}
-tr:hover td{background:rgba(255,255,255,0.012)}
-.td-max{max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sb-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: -0.01em;
+}
 
-.badge{font-family:'JetBrains Mono',monospace;font-size:0.56rem;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;padding:3px 8px;border-radius:20px;display:inline-block;white-space:nowrap}
-.b-active{background:var(--green-dim);color:var(--green);border:1px solid rgba(16,212,142,0.2)}
-.b-inactive{background:rgba(107,125,145,0.06);color:var(--gray);border:1px solid var(--border)}
-.b-blocked{background:var(--red-dim);color:var(--red);border:1px solid rgba(240,86,106,0.2)}
-.b-pending{background:var(--orange-dim);color:var(--orange);border:1px solid rgba(245,158,11,0.2)}
-.b-admin{background:var(--teal-dim);color:var(--teal);border:1px solid rgba(0,212,170,0.2)}
-.b-user{background:rgba(107,125,145,0.04);color:var(--gray);border:1px solid var(--border)}
-.b-info{background:var(--teal-dim);color:var(--teal);border:1px solid rgba(0,212,170,0.2)}
-.b-warning{background:var(--orange-dim);color:var(--orange);border:1px solid rgba(245,158,11,0.2)}
-.b-draft{background:rgba(107,125,145,0.06);color:var(--gray);border:1px solid var(--border)}
+.sb-role {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.54rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.18);
+  margin-top: 2px;
+}
 
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.fg{margin-bottom:14px}
-.fl{display:block;font-family:'JetBrains Mono',monospace;font-size:0.58rem;font-weight:500;text-transform:uppercase;letter-spacing:0.1em;color:var(--gray);margin-bottom:6px}
-.fi,.fs,.fta{width:100%;padding:9px 12px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:0.82rem;color:var(--white);outline:none;transition:all var(--transition)}
-.fi:focus,.fs:focus,.fta:focus{border-color:var(--teal);background:rgba(0,212,170,0.03);box-shadow:0 0 0 3px var(--teal-dim)}
-.fs{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='%236b7d91'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
-.fta{resize:vertical;min-height:80px;line-height:1.55}
-.toggle-row{display:flex;align-items:center;gap:8px;font-size:0.82rem;cursor:pointer;user-select:none;color:var(--gray2)}
-input[type=checkbox]{accent-color:var(--teal);width:14px;height:14px;cursor:pointer;flex-shrink:0}
-.hint{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--gray);margin-top:4px}
-.hint strong{color:var(--teal)}
+.nav-section { padding: 4px 0; }
 
-.alert{padding:10px 14px;border-radius:var(--radius-sm);font-size:0.76rem;margin-bottom:14px;display:none;line-height:1.4}
-.alert.show{display:block}
-.alert-error{background:var(--red-dim);border:1px solid rgba(240,86,106,0.2);color:var(--red)}
-.alert-success{background:var(--green-dim);border:1px solid rgba(16,212,142,0.2);color:var(--green)}
+.nav-group {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.52rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(255,255,255,0.14);
+  font-weight: 600;
+  padding: 12px 18px 6px;
+}
 
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:none;place-items:center;padding:20px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
-.modal-overlay.open{display:grid}
-.modal{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-lg);max-width:620px;width:100%;max-height:85vh;overflow-y:auto;animation:slideUp 0.22s cubic-bezier(0.34,1.3,0.64,1)}
-@keyframes slideUp{from{opacity:0;transform:translateY(14px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-.modal-head{padding:18px 20px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--surface);z-index:1}
-.modal-head h3{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;letter-spacing:-0.01em}
-.modal-close{background:var(--surface2);border:none;width:26px;height:26px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gray);transition:all var(--transition);flex-shrink:0}
-.modal-close:hover{background:var(--border2);color:var(--white)}
-.modal-close svg{width:10px;height:10px;fill:currentColor}
-.modal-body{padding:18px 20px}
-.modal-footer{padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 18px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.4);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  transition: all var(--transition);
+  border-left: 2px solid transparent;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.01em;
+}
 
-.tree-section{margin-bottom:18px}
-.tree-course-header{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:3px}
-.tree-course-title{font-family:'Cormorant Garamond',serif;font-size:0.92rem;font-weight:700;flex:1}
-.tree-indent-1{margin-left:18px}.tree-indent-2{margin-left:36px}.tree-indent-3{margin-left:54px}
-.tree-row{display:flex;align-items:center;gap:8px;padding:7px 12px;border-left:2px solid var(--border);margin-bottom:1px;font-size:0.76rem;color:var(--gray2)}
-.tree-row:hover{border-left-color:var(--teal);background:rgba(0,212,170,0.02)}
-.tree-label{font-family:'JetBrains Mono',monospace;font-size:0.56rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--gray);margin-right:4px;flex-shrink:0}
-.tree-name{flex:1;font-weight:500;color:var(--white)}
-.tree-actions{display:flex;gap:3px;flex-wrap:wrap}
+.nav-item svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  opacity: 0.6;
+  stroke: currentColor;
+  fill: none;
+}
 
-.empty-row td{text-align:center;padding:36px!important;color:var(--gray)!important;font-style:italic}
+.nav-item:hover {
+  color: rgba(255,255,255,0.75);
+  background: rgba(255,255,255,0.02);
+}
 
-.toast-container{position:fixed;bottom:20px;right:20px;z-index:300;display:flex;flex-direction:column;gap:8px}
-.toast{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius);padding:12px 16px;font-size:0.78rem;color:var(--white);box-shadow:0 8px 32px rgba(0,0,0,0.5);animation:slideIn 0.3s ease,slideOut 0.3s ease 3s forwards;display:flex;align-items:center;gap:8px;min-width:260px}
-.toast-success{border-color:rgba(16,212,142,0.3)}.ts-icon{color:var(--green)}
-.toast-error{border-color:rgba(240,86,106,0.3)}.te-icon{color:var(--red)}
-@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
-@keyframes slideOut{from{opacity:1}to{opacity:0;transform:translateX(20px)}}
+.nav-item.active {
+  color: var(--teal);
+  background: var(--teal-dim);
+  border-left-color: var(--teal);
+}
 
-footer{border-top:1px solid var(--border);background:var(--surface);padding:14px 22px;font-size:0.68rem;color:rgba(255,255,255,0.15);display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;flex-wrap:wrap;gap:8px}
-footer a{color:var(--teal);text-decoration:none}
+.nav-item.active svg { opacity: 1; }
 
-@media(max-width:960px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.menu-btn{display:flex}.content{padding:14px 12px}.form-row{grid-template-columns:1fr}.stats-grid{grid-template-columns:repeat(2,1fr)}}
+.sb-footer {
+  margin-top: auto;
+  padding: 14px 18px;
+  border-top: 1px solid var(--border);
+}
+
+.sb-email {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.64rem;
+  color: rgba(255,255,255,0.2);
+  margin-bottom: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.btn-logout {
+  width: 100%;
+  padding: 8px 14px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.35);
+  border-radius: var(--radius-sm);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.btn-logout:hover {
+  border-color: var(--red);
+  color: var(--red);
+  background: var(--red-dim);
+}
+
+.main {
+  margin-left: var(--sw);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.topbar {
+  height: 56px;
+  padding: 0 22px;
+  background: rgba(11,15,26,0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+.topbar-left { display: flex; align-items: center; gap: 12px; }
+
+.menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--gray2);
+  cursor: pointer;
+  padding: 5px;
+}
+
+.menu-btn svg { width: 20px; height: 20px; fill: currentColor; }
+
+.topbar-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+}
+
+.topbar-right { display: flex; align-items: center; gap: 8px; }
+
+.role-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: var(--teal-dim);
+  color: var(--teal);
+  border: 1px solid rgba(0,212,170,0.2);
+}
+
+.btn-site {
+  padding: 6px 14px;
+  border: 1px solid var(--border2);
+  color: var(--gray);
+  border-radius: 20px;
+  font-size: 0.7rem;
+  text-decoration: none;
+  transition: all var(--transition);
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-site:hover {
+  border-color: var(--teal);
+  color: var(--teal);
+}
+
+.btn-site svg { width: 13px; height: 13px; stroke: currentColor; fill: none; }
+
+.content { padding: 24px; flex: 1; }
+
+.view { display: none; animation: fadeIn 0.2s ease; }
+.view.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+}
+
+.stat-card:hover { border-color: var(--border2); }
+
+.stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gray);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.stat-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--teal);
+  line-height: 1;
+}
+
+.sec-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.sec-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.btn-primary { background: var(--teal); color: #000; }
+.btn-primary:hover { background: var(--teal2); transform: translateY(-1px); }
+.btn-ghost { background: transparent; color: var(--gray); border: 1.5px solid var(--border2); }
+.btn-ghost:hover { border-color: var(--teal); color: var(--teal); background: var(--teal-dim); }
+.btn-danger { background: var(--red-dim); color: var(--red); border: 1.5px solid rgba(240,86,106,0.18); }
+.btn-danger:hover { background: var(--red); color: #fff; border-color: var(--red); }
+.btn-success { background: var(--green-dim); color: var(--green); border: 1.5px solid rgba(16,212,142,0.2); }
+.btn-success:hover { background: var(--green); color: #fff; border-color: var(--green); }
+.btn-orange { background: var(--orange-dim); color: var(--orange); border: 1.5px solid rgba(245,158,11,0.2); }
+.btn-orange:hover { background: var(--orange); color: #fff; border-color: var(--orange); }
+.btn-sm { padding: 4px 10px; font-size: 0.65rem; }
+.btn-xs { padding: 3px 8px; font-size: 0.6rem; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.card-pad { padding: 18px; }
+
+.table-wrap { overflow-x: auto; }
+
+table { width: 100%; border-collapse: collapse; }
+
+thead tr {
+  background: var(--surface2);
+  border-bottom: 2px solid var(--border);
+}
+
+th {
+  padding: 9px 12px;
+  text-align: left;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.56rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gray);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+td {
+  padding: 9px 12px;
+  font-size: 0.76rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  color: var(--gray2);
+}
+
+td.strong { font-weight: 600; color: var(--white); }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(255,255,255,0.012); }
+
+.td-max {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.56rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 3px 8px;
+  border-radius: 20px;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.b-active { background: var(--green-dim); color: var(--green); border: 1px solid rgba(16,212,142,0.2); }
+.b-inactive { background: rgba(107,125,145,0.06); color: var(--gray); border: 1px solid var(--border); }
+.b-blocked { background: var(--red-dim); color: var(--red); border: 1px solid rgba(240,86,106,0.2); }
+.b-pending { background: var(--orange-dim); color: var(--orange); border: 1px solid rgba(245,158,11,0.2); }
+.b-admin { background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(0,212,170,0.2); }
+.b-user { background: rgba(107,125,145,0.04); color: var(--gray); border: 1px solid var(--border); }
+.b-info { background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(0,212,170,0.2); }
+.b-warning { background: var(--orange-dim); color: var(--orange); border: 1px solid rgba(245,158,11,0.2); }
+.b-draft { background: rgba(107,125,145,0.06); color: var(--gray); border: 1px solid var(--border); }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.fg { margin-bottom: 14px; }
+
+.fl {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gray);
+  margin-bottom: 6px;
+}
+
+.fi, .fs, .fta {
+  width: 100%;
+  padding: 9px 12px;
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  color: var(--white);
+  outline: none;
+  transition: all var(--transition);
+}
+
+.fi:focus, .fs:focus, .fta:focus {
+  border-color: var(--teal);
+  background: rgba(0,212,170,0.03);
+  box-shadow: 0 0 0 3px var(--teal-dim);
+}
+
+.fs {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='%236b7d91'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+
+.fta { resize: vertical; min-height: 80px; line-height: 1.55; }
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  user-select: none;
+  color: var(--gray2);
+}
+
+input[type=checkbox] {
+  accent-color: var(--teal);
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.hint {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--gray);
+  margin-top: 4px;
+}
+
+.hint strong { color: var(--teal); }
+
+.alert {
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.76rem;
+  margin-bottom: 14px;
+  display: none;
+  line-height: 1.4;
+}
+
+.alert.show { display: block; }
+.alert-error { background: var(--red-dim); border: 1px solid rgba(240,86,106,0.2); color: var(--red); }
+.alert-success { background: var(--green-dim); border: 1px solid rgba(16,212,142,0.2); color: var(--green); }
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 200;
+  display: none;
+  place-items: center;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.modal-overlay.open { display: grid; }
+
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-lg);
+  max-width: 620px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  animation: slideUp 0.22s cubic-bezier(0.34,1.3,0.64,1);
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(14px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-head {
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  background: var(--surface);
+  z-index: 1;
+}
+
+.modal-head h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.modal-close {
+  background: var(--surface2);
+  border: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray);
+  transition: all var(--transition);
+  flex-shrink: 0;
+}
+
+.modal-close:hover { background: var(--border2); color: var(--white); }
+.modal-close svg { width: 10px; height: 10px; fill: currentColor; }
+
+.modal-body { padding: 18px 20px; }
+.modal-footer { padding: 12px 20px; border-top: 1px solid var(--border); display: flex; gap: 8px; }
+
+.tree-section { margin-bottom: 18px; }
+
+.tree-course-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 3px;
+}
+
+.tree-course-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  flex: 1;
+}
+
+.tree-indent-1 { margin-left: 18px; }
+.tree-indent-2 { margin-left: 36px; }
+.tree-indent-3 { margin-left: 54px; }
+
+.tree-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border-left: 2px solid var(--border);
+  margin-bottom: 1px;
+  font-size: 0.76rem;
+  color: var(--gray2);
+}
+
+.tree-row:hover {
+  border-left-color: var(--teal);
+  background: rgba(0,212,170,0.02);
+}
+
+.tree-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.56rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gray);
+  margin-right: 4px;
+  flex-shrink: 0;
+}
+
+.tree-name { flex: 1; font-weight: 500; color: var(--white); }
+.tree-actions { display: flex; gap: 3px; flex-wrap: wrap; }
+
+.empty-row td {
+  text-align: center;
+  padding: 36px !important;
+  color: var(--gray) !important;
+  font-style: italic;
+}
+
+.toast-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.toast {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  font-size: 0.78rem;
+  color: var(--white);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  animation: slideIn 0.3s ease, slideOut 0.3s ease 3s forwards;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 260px;
+}
+
+.toast-success { border-color: rgba(16,212,142,0.3); }
+.ts-icon { color: var(--green); font-weight: 700; }
+.toast-error { border-color: rgba(240,86,106,0.3); }
+.te-icon { color: var(--red); font-weight: 700; }
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideOut {
+  from { opacity: 1; }
+  to { opacity: 0; transform: translateX(20px); }
+}
+
+footer {
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  padding: 14px 22px;
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.15);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'JetBrains Mono', monospace;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+footer a { color: var(--teal); text-decoration: none; }
+
+@media (max-width: 960px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; }
+  .menu-btn { display: flex; }
+  .content { padding: 14px 12px; }
+  .form-row { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
 </style>
 </head>
 <body>
@@ -157,37 +714,61 @@ footer a{color:var(--teal);text-decoration:none}
 <aside class="sidebar" id="sidebar">
   <div class="sb-top">
     <img src="/images/reallogo.png" height="28" alt="Abhyudoy" class="sb-logo-img">
-    <div><div class="sb-brand">Abhyudoy</div><div class="sb-role">Admin Panel</div></div>
+    <div>
+      <div class="sb-brand">Abhyudoy</div>
+      <div class="sb-role">Admin Panel</div>
+    </div>
   </div>
+
   <div class="nav-section"><div class="nav-group">Overview</div></div>
   <button class="nav-item active" data-view="dashboard" onclick="showView('dashboard')">
-    <svg viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</button>
+    <svg viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    Dashboard
+  </button>
 
   <div class="nav-section"><div class="nav-group">Content</div></div>
   <button class="nav-item" data-view="courses" onclick="showView('courses')">
-    <svg viewBox="0 0 24 24" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>Courses</button>
+    <svg viewBox="0 0 24 24" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+    Courses
+  </button>
   <button class="nav-item" data-view="content" onclick="showView('content')">
-    <svg viewBox="0 0 24 24" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/></svg>Content Tree</button>
+    <svg viewBox="0 0 24 24" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/></svg>
+    Content Tree
+  </button>
   <button class="nav-item" data-view="lectures" onclick="showView('lectures')">
-    <svg viewBox="0 0 24 24" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>Lectures</button>
+    <svg viewBox="0 0 24 24" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+    Lectures
+  </button>
   <button class="nav-item" data-view="resources" onclick="showView('resources')">
-    <svg viewBox="0 0 24 24" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Resources</button>
+    <svg viewBox="0 0 24 24" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    Resources
+  </button>
 
   <div class="nav-section"><div class="nav-group">Communication</div></div>
   <button class="nav-item" data-view="notifications" onclick="showView('notifications')">
-    <svg viewBox="0 0 24 24" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>Notifications</button>
+    <svg viewBox="0 0 24 24" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+    Notifications
+  </button>
   <button class="nav-item" data-view="tickets" onclick="showView('tickets')">
-    <svg viewBox="0 0 24 24" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Support Tickets</button>
+    <svg viewBox="0 0 24 24" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+    Support Tickets
+  </button>
 
   <div class="nav-section"><div class="nav-group">Updates</div></div>
   <button class="nav-item" data-view="changelog" onclick="showView('changelog')">
-    <svg viewBox="0 0 24 24" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>Changelog</button>
+    <svg viewBox="0 0 24 24" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+    Changelog
+  </button>
 
   <div class="nav-section"><div class="nav-group">Management</div></div>
   <button class="nav-item" data-view="users" onclick="showView('users')">
-    <svg viewBox="0 0 24 24" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>Users</button>
+    <svg viewBox="0 0 24 24" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+    Users
+  </button>
   <button class="nav-item" data-view="memberships" onclick="showView('memberships')">
-    <svg viewBox="0 0 24 24" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Memberships</button>
+    <svg viewBox="0 0 24 24" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+    Memberships
+  </button>
 
   <div class="sb-footer">
     <div class="sb-email" id="adminEmail"></div>
@@ -205,7 +786,9 @@ footer a{color:var(--teal);text-decoration:none}
     </div>
     <div class="topbar-right">
       <a href="/dashboard.html" target="_blank" class="btn-site">
-        <svg viewBox="0 0 24 24" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>View Site</a>
+        <svg viewBox="0 0 24 24" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        View Site
+      </a>
       <span class="role-pill">Admin</span>
     </div>
   </div>
@@ -223,12 +806,20 @@ footer a{color:var(--teal);text-decoration:none}
     <div class="view" id="view-memberships"></div>
   </div>
 
-  <footer><span>&copy; 2024 Abhyudoy</span><span>v2.1.4</span></footer>
+  <footer>
+    <span>&copy; 2024 Abhyudoy</span>
+    <span>v2.1.4</span>
+  </footer>
 </main>
 
 <div class="modal-overlay" id="gModal" onclick="if(event.target===this)closeModal()">
   <div class="modal">
-    <div class="modal-head"><h3 id="gModalTitle">—</h3><button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button></div>
+    <div class="modal-head">
+      <h3 id="gModalTitle">—</h3>
+      <button class="modal-close" onclick="closeModal()">
+        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </button>
+    </div>
     <div class="modal-body" id="gModalBody"></div>
     <div class="modal-footer" id="gModalFooter"></div>
   </div>
@@ -237,318 +828,1195 @@ footer a{color:var(--teal);text-decoration:none}
 <div class="toast-container" id="toastContainer"></div>
 
 <script>
-var token=localStorage.getItem('abhyudoy_token');
-var user=JSON.parse(localStorage.getItem('abhyudoy_user')||'null');
-if(!token||!user||user.role!=='admin'){window.location.href='/index.html';}
-document.getElementById('adminEmail').textContent=user.email;
+// ── AUTH CHECK ──
+var token = localStorage.getItem('abhyudoy_token');
+var user = JSON.parse(localStorage.getItem('abhyudoy_user') || 'null');
+if (!token || !user || user.role !== 'admin') {
+  window.location.href = '/index.html';
+}
+document.getElementById('adminEmail').textContent = user.email;
 
-var allCourses=[],allSubjects=[],allPapers=[],allChapters=[],allUsers=[];
-var titles={dashboard:'Dashboard',courses:'Courses',content:'Content Tree',lectures:'Lectures',resources:'Resources',notifications:'Notifications',tickets:'Support Tickets',changelog:'Changelog',users:'Users',memberships:'Memberships'};
+// ── GLOBAL STATE ──
+var allCourses = [];
+var allSubjects = [];
+var allPapers = [];
+var allChapters = [];
+var allUsers = [];
 
-function showToast(msg,type){
-  var c=document.getElementById('toastContainer');
-  var t=document.createElement('div');
-  t.className='toast toast-'+(type==='success'?'success':'error');
-  var icon=type==='success'?'\u2713':'\u2717';
-  var iconClass=type==='success'?'ts-icon':'te-icon';
-  t.innerHTML='<span class="'+iconClass+'">'+icon+'</span><span>'+msg+'</span>';
-  c.appendChild(t);setTimeout(function(){t.remove();},3500);
+var titles = {
+  dashboard: 'Dashboard',
+  courses: 'Courses',
+  content: 'Content Tree',
+  lectures: 'Lectures',
+  resources: 'Resources',
+  notifications: 'Notifications',
+  tickets: 'Support Tickets',
+  changelog: 'Changelog',
+  users: 'Users',
+  memberships: 'Memberships'
+};
+
+// ── HELPERS ──
+function showToast(msg, type) {
+  var container = document.getElementById('toastContainer');
+  var toast = document.createElement('div');
+  toast.className = 'toast toast-' + (type === 'success' ? 'success' : 'error');
+  var iconClass = type === 'success' ? 'ts-icon' : 'te-icon';
+  var icon = type === 'success' ? '\u2713' : '\u2717';
+  toast.innerHTML = '<span class="' + iconClass + '">' + icon + '</span><span>' + msg + '</span>';
+  container.appendChild(toast);
+  setTimeout(function() { toast.remove(); }, 3500);
 }
 
-async function api(method,path,body){
-  var opts={method:method,headers:{'Content-Type':'application/json',Authorization:'Bearer '+token}};
-  if(body)opts.body=JSON.stringify(body);
-  var res=await fetch('/api'+path,opts);
-  var data=await res.json();
-  return{ok:res.ok,data:data,status:res.status};
+async function api(method, path, body) {
+  var opts = {
+    method: method,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token
+    }
+  };
+  if (body) {
+    opts.body = JSON.stringify(body);
+  }
+  var res = await fetch('/api' + path, opts);
+  var data = await res.json();
+  return { ok: res.ok, data: data, status: res.status };
 }
 
-function showView(id){
-  document.querySelectorAll('.view').forEach(function(v){v.classList.remove('active');});
-  document.querySelectorAll('.nav-item').forEach(function(b){b.classList.remove('active');});
-  var targetView=document.getElementById('view-'+id);
-  if(targetView)targetView.classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(function(b){
-    if(b.getAttribute('data-view')===id)b.classList.add('active');
-  });
-  document.getElementById('topbarTitle').textContent=titles[id]||id;
+function esc(s) {
+  var d = document.createElement('div');
+  d.textContent = String(s || '');
+  return d.innerHTML;
+}
+
+function openModal(title, bodyHtml, footerHtml) {
+  document.getElementById('gModalTitle').textContent = title;
+  document.getElementById('gModalBody').innerHTML = bodyHtml;
+  document.getElementById('gModalFooter').innerHTML = footerHtml || '';
+  document.getElementById('gModal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('gModal').classList.remove('open');
+}
+
+function showAlert(msg, type) {
+  var el = document.getElementById('_alert');
+  if (el) {
+    el.className = 'alert alert-' + type + ' show';
+    el.textContent = msg;
+  }
+}
+
+function logout() {
+  localStorage.clear();
+  window.location.href = '/index.html';
+}
+
+// ── VIEW NAVIGATION ──
+function showView(id) {
+  // Hide all views
+  var views = document.querySelectorAll('.view');
+  for (var i = 0; i < views.length; i++) {
+    views[i].classList.remove('active');
+  }
+
+  // Show target view
+  var targetView = document.getElementById('view-' + id);
+  if (targetView) {
+    targetView.classList.add('active');
+  }
+
+  // Update nav items
+  var navItems = document.querySelectorAll('.nav-item');
+  for (var j = 0; j < navItems.length; j++) {
+    navItems[j].classList.remove('active');
+    if (navItems[j].getAttribute('data-view') === id) {
+      navItems[j].classList.add('active');
+    }
+  }
+
+  // Update topbar title
+  document.getElementById('topbarTitle').textContent = titles[id] || id;
+
+  // Close mobile sidebar
   document.getElementById('sidebar').classList.remove('open');
+
+  // Load view content
   loadView(id);
 }
 
-function loadView(id){
-  if(id==='dashboard')loadDashboard();
-  else if(id==='courses')loadCourses();
-  else if(id==='content')loadContent();
-  else if(id==='lectures')loadLectures();
-  else if(id==='resources')loadResources();
-  else if(id==='notifications')loadNotifications();
-  else if(id==='tickets')loadTickets();
-  else if(id==='changelog')loadChangelog();
-  else if(id==='users')loadUsers();
-  else if(id==='memberships')loadMemberships();
+function loadView(id) {
+  if (id === 'dashboard') loadDashboard();
+  else if (id === 'courses') loadCourses();
+  else if (id === 'content') loadContent();
+  else if (id === 'lectures') loadLectures();
+  else if (id === 'resources') loadResources();
+  else if (id === 'notifications') loadNotifications();
+  else if (id === 'tickets') loadTickets();
+  else if (id === 'changelog') loadChangelog();
+  else if (id === 'users') loadUsers();
+  else if (id === 'memberships') loadMemberships();
 }
-
-function logout(){localStorage.clear();window.location.href='/index.html';}
-function esc(s){var d=document.createElement('div');d.textContent=String(s||'');return d.innerHTML;}
-function openModal(title,bodyHtml,footerHtml){
-  document.getElementById('gModalTitle').textContent=title;
-  document.getElementById('gModalBody').innerHTML=bodyHtml;
-  document.getElementById('gModalFooter').innerHTML=footerHtml||'';
-  document.getElementById('gModal').classList.add('open');
-}
-function closeModal(){document.getElementById('gModal').classList.remove('open');}
-function showAlert(msg,type){var el=document.getElementById('_alert');if(el){el.className='alert alert-'+type+' show';el.textContent=msg;}}
 
 // ── DASHBOARD ──
-async function loadDashboard(){
-  var results=await Promise.all([api('GET','/admin/courses'),api('GET','/admin/all-subjects'),api('GET','/admin/all-papers'),api('GET','/admin/all-chapters'),api('GET','/admin/users'),api('GET','/admin/memberships'),api('GET','/admin/notifications'),api('GET','/admin/support-tickets')]);
-  allCourses=results[0].ok?results[0].data:[];allSubjects=results[1].ok?results[1].data:[];
-  allPapers=results[2].ok?results[2].data:[];allChapters=results[3].ok?results[3].data:[];allUsers=results[4].ok?results[4].data:[];
-  var mems=results[5].ok?results[5].data:[];var notifs=results[6].ok?results[6].data:[];var tickets=results[7].ok?results[7].data:[];
-  var active=mems.filter(function(m){return m.is_active&&new Date(m.expires_at)>new Date();}).length;
-  var pending=allUsers.filter(function(u){return!u.is_approved;}).length;
-  var browseCount=allCourses.filter(function(c){return c.show_in_browse;}).length;
-  var unresolvedTickets=tickets.filter(function(t){return!t.is_resolved;}).length;
-  var activeNotifs=notifs.filter(function(n){return n.is_active;}).length;
-  var stats=[['Courses',allCourses.length],['Browse Visible',browseCount],['Subjects',allSubjects.length],['Papers',allPapers.length],['Chapters',allChapters.length],['Total Users',allUsers.length],['Pending Approval',pending],['Active Memberships',active],['Unresolved Tickets',unresolvedTickets],['Active Notifications',activeNotifs]];
-  var html='<div class="stats-grid">';
-  stats.forEach(function(s){html+='<div class="stat-card"><div class="stat-label">'+s[0]+'</div><div class="stat-val">'+s[1]+'</div></div>';});
-  html+='</div>';
-  if(pending)html+='<div style="background:var(--orange-dim);border:1px solid rgba(245,158,11,.2);border-radius:var(--radius);padding:12px 16px;font-size:.78rem;color:var(--orange);margin-bottom:16px"><strong>'+pending+' user'+(pending>1?'s':'')+' awaiting approval.</strong> <a href="#" onclick="showView(\'users\');return false;" style="color:var(--orange);text-decoration:underline;font-weight:600">Review now</a></div>';
-  if(unresolvedTickets)html+='<div style="background:var(--red-dim);border:1px solid rgba(240,86,106,.2);border-radius:var(--radius);padding:12px 16px;font-size:.78rem;color:var(--red);margin-bottom:16px"><strong>'+unresolvedTickets+' unresolved ticket'+(unresolvedTickets>1?'s':'')+'.</strong> <a href="#" onclick="showView(\'tickets\');return false;" style="color:var(--red);text-decoration:underline;font-weight:600">View now</a></div>';
-  document.getElementById('view-dashboard').innerHTML=html;
+async function loadDashboard() {
+  var results = await Promise.all([
+    api('GET', '/admin/courses'),
+    api('GET', '/admin/all-subjects'),
+    api('GET', '/admin/all-papers'),
+    api('GET', '/admin/all-chapters'),
+    api('GET', '/admin/users'),
+    api('GET', '/admin/memberships'),
+    api('GET', '/admin/notifications'),
+    api('GET', '/admin/support-tickets')
+  ]);
+
+  allCourses = results[0].ok ? results[0].data : [];
+  allSubjects = results[1].ok ? results[1].data : [];
+  allPapers = results[2].ok ? results[2].data : [];
+  allChapters = results[3].ok ? results[3].data : [];
+  allUsers = results[4].ok ? results[4].data : [];
+
+  var mems = results[5].ok ? results[5].data : [];
+  var notifs = results[6].ok ? results[6].data : [];
+  var tickets = results[7].ok ? results[7].data : [];
+
+  var activeMems = 0;
+  for (var i = 0; i < mems.length; i++) {
+    if (mems[i].is_active && new Date(mems[i].expires_at) > new Date()) {
+      activeMems++;
+    }
+  }
+
+  var pending = 0;
+  for (var j = 0; j < allUsers.length; j++) {
+    if (!allUsers[j].is_approved) pending++;
+  }
+
+  var browseCount = 0;
+  for (var k = 0; k < allCourses.length; k++) {
+    if (allCourses[k].show_in_browse) browseCount++;
+  }
+
+  var unresolvedTickets = 0;
+  for (var t = 0; t < tickets.length; t++) {
+    if (!tickets[t].is_resolved) unresolvedTickets++;
+  }
+
+  var activeNotifs = 0;
+  for (var n = 0; n < notifs.length; n++) {
+    if (notifs[n].is_active) activeNotifs++;
+  }
+
+  var stats = [
+    ['Courses', allCourses.length],
+    ['Browse Visible', browseCount],
+    ['Subjects', allSubjects.length],
+    ['Papers', allPapers.length],
+    ['Chapters', allChapters.length],
+    ['Total Users', allUsers.length],
+    ['Pending Approval', pending],
+    ['Active Memberships', activeMems],
+    ['Unresolved Tickets', unresolvedTickets],
+    ['Active Notifications', activeNotifs]
+  ];
+
+  var html = '<div class="stats-grid">';
+  for (var s = 0; s < stats.length; s++) {
+    html += '<div class="stat-card"><div class="stat-label">' + stats[s][0] + '</div><div class="stat-val">' + stats[s][1] + '</div></div>';
+  }
+  html += '</div>';
+
+  if (pending > 0) {
+    html += '<div style="background:var(--orange-dim);border:1px solid rgba(245,158,11,.2);border-radius:var(--radius);padding:12px 16px;font-size:.78rem;color:var(--orange);margin-bottom:16px"><strong>' + pending + ' user' + (pending > 1 ? 's' : '') + ' awaiting approval.</strong> <a href="#" onclick="showView(\'users\');return false;" style="color:var(--orange);text-decoration:underline;font-weight:600">Review now</a></div>';
+  }
+
+  if (unresolvedTickets > 0) {
+    html += '<div style="background:var(--red-dim);border:1px solid rgba(240,86,106,.2);border-radius:var(--radius);padding:12px 16px;font-size:.78rem;color:var(--red);margin-bottom:16px"><strong>' + unresolvedTickets + ' unresolved ticket' + (unresolvedTickets > 1 ? 's' : '') + '.</strong> <a href="#" onclick="showView(\'tickets\');return false;" style="color:var(--red);text-decoration:underline;font-weight:600">View now</a></div>';
+  }
+
+  document.getElementById('view-dashboard').innerHTML = html;
 }
 
 // ── COURSES ──
-async function loadCourses(){
-  var res=await api('GET','/admin/courses');allCourses=res.ok?res.data:[];
-  var html='<div class="sec-head"><h2 class="sec-title">Courses</h2><button class="btn btn-primary" onclick="openCourseModal()">+ New Course</button></div><div class="card"><div class="table-wrap"><table><thead><tr><th>Title</th><th>Slug</th><th>Subject</th><th>Browse</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
-  if(allCourses.length){
-    allCourses.forEach(function(c){
-      html+='<tr><td class="strong td-max">'+esc(c.title)+'</td><td style="font-family:JetBrains Mono,monospace;font-size:.66rem;color:var(--gray)">'+esc(c.slug||'—')+'</td><td>'+esc(c.subject_area||'—')+'</td><td><span class="badge '+(c.show_in_browse?'b-active':'b-inactive')+'">'+(c.show_in_browse?'Visible':'Hidden')+'</span></td><td><span class="badge '+(c.is_active?'b-active':'b-inactive')+'">'+(c.is_active?'Active':'Inactive')+'</span></td><td><div style="display:flex;gap:3px"><button class="btn btn-ghost btn-xs" onclick="openCourseModal('+c.id+')">Edit</button><button class="btn btn-danger btn-xs" onclick="deleteCourse('+c.id+')">Del</button></div></td></tr>';
-    });
-  }else{html+='<tr class="empty-row"><td colspan="6">No courses yet.</td></tr>';}
-  html+='</tbody></table></div></div>';
-  document.getElementById('view-courses').innerHTML=html;
+async function loadCourses() {
+  var res = await api('GET', '/admin/courses');
+  allCourses = res.ok ? res.data : [];
+
+  var html = '<div class="sec-head"><h2 class="sec-title">Courses</h2><button class="btn btn-primary" onclick="openCourseModal()">+ New Course</button></div>';
+  html += '<div class="card"><div class="table-wrap"><table>';
+  html += '<thead><tr><th>Title</th><th>Slug</th><th>Subject</th><th>Browse</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+
+  if (allCourses.length > 0) {
+    for (var i = 0; i < allCourses.length; i++) {
+      var c = allCourses[i];
+      html += '<tr>';
+      html += '<td class="strong td-max">' + esc(c.title) + '</td>';
+      html += '<td style="font-family:JetBrains Mono,monospace;font-size:.66rem;color:var(--gray)">' + esc(c.slug || '—') + '</td>';
+      html += '<td>' + esc(c.subject_area || '—') + '</td>';
+      html += '<td><span class="badge ' + (c.show_in_browse ? 'b-active' : 'b-inactive') + '">' + (c.show_in_browse ? 'Visible' : 'Hidden') + '</span></td>';
+      html += '<td><span class="badge ' + (c.is_active ? 'b-active' : 'b-inactive') + '">' + (c.is_active ? 'Active' : 'Inactive') + '</span></td>';
+      html += '<td><div style="display:flex;gap:3px">';
+      html += '<button class="btn btn-ghost btn-xs" onclick="openCourseModal(' + c.id + ')">Edit</button>';
+      html += '<button class="btn btn-danger btn-xs" onclick="deleteCourse(' + c.id + ')">Del</button>';
+      html += '</div></td></tr>';
+    }
+  } else {
+    html += '<tr class="empty-row"><td colspan="6">No courses yet.</td></tr>';
+  }
+
+  html += '</tbody></table></div></div>';
+  document.getElementById('view-courses').innerHTML = html;
 }
 
-function openCourseModal(id){
-  var c=id?allCourses.find(function(x){return x.id===id;}):null;
-  openModal(c?'Edit Course':'New Course',
-    '<div class="alert" id="_alert"></div><input type="hidden" id="_id" value="'+(c?c.id:'')+'">'+
-    '<div class="form-row"><div class="fg"><label class="fl">Title *</label><input class="fi" id="_title" value="'+esc(c?c.title:'')+'" placeholder="Course title"></div>'+
-    '<div class="fg"><label class="fl">Slug (optional)</label><input class="fi" id="_slug" value="'+esc(c?c.slug:'')+'" placeholder="Auto-generated"><div class="hint">Leave empty to auto-generate from title</div></div></div>'+
-    '<div class="fg"><label class="fl">Description</label><textarea class="fta" id="_desc">'+esc(c?c.description:'')+'</textarea></div>'+
-    '<div class="form-row"><div class="fg"><label class="fl">Thumbnail URL</label><input class="fi" id="_thumb" value="'+esc(c?c.thumbnail:'')+'" placeholder="https://..."></div>'+
-    '<div class="fg"><label class="fl">Subject Area</label><input class="fi" id="_subject" value="'+esc(c?c.subject_area:'')+'" placeholder="e.g. Mathematics"></div></div>'+
-    '<div class="form-row"><div class="fg"><label class="fl">Difficulty</label><select class="fs" id="_diff"><option value="all" '+(c&&c.difficulty_level==='all'?'selected':'')+'>All Levels</option><option value="beginner" '+(c&&c.difficulty_level==='beginner'?'selected':'')+'>Beginner</option><option value="intermediate" '+(c&&c.difficulty_level==='intermediate'?'selected':'')+'>Intermediate</option><option value="advanced" '+(c&&c.difficulty_level==='advanced'?'selected':'')+'>Advanced</option></select></div>'+
-    '<div class="fg"><label class="fl">Enrollment</label><select class="fs" id="_enroll"><option value="open" '+(c&&c.enrollment_type==='open'?'selected':'')+'>Open</option><option value="approval" '+(c&&c.enrollment_type==='approval'?'selected':'')+'>Approval Required</option></select></div></div>'+
-    '<div style="display:flex;gap:20px;flex-wrap:wrap"><label class="toggle-row"><input type="checkbox" id="_active" '+(!c||c.is_active?'checked':'')+'> Active</label><label class="toggle-row"><input type="checkbox" id="_browse" '+(c&&c.show_in_browse?'checked':'')+'> Show in Browse</label></div>',
-    '<button class="btn btn-primary" onclick="saveCourse()">Save</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>');
+function openCourseModal(id) {
+  var c = null;
+  if (id) {
+    for (var i = 0; i < allCourses.length; i++) {
+      if (allCourses[i].id === id) {
+        c = allCourses[i];
+        break;
+      }
+    }
+  }
+
+  var title = c ? 'Edit Course' : 'New Course';
+  var bodyHtml = '<div class="alert" id="_alert"></div>';
+  bodyHtml += '<input type="hidden" id="_id" value="' + (c ? c.id : '') + '">';
+
+  bodyHtml += '<div class="form-row">';
+  bodyHtml += '<div class="fg"><label class="fl">Title *</label><input class="fi" id="_title" value="' + esc(c ? c.title : '') + '" placeholder="Course title"></div>';
+  bodyHtml += '<div class="fg"><label class="fl">Slug (optional)</label><input class="fi" id="_slug" value="' + esc(c ? c.slug : '') + '" placeholder="Auto-generated"><div class="hint">Leave empty to auto-generate from title</div></div>';
+  bodyHtml += '</div>';
+
+  bodyHtml += '<div class="fg"><label class="fl">Description</label><textarea class="fta" id="_desc">' + esc(c ? c.description : '') + '</textarea></div>';
+
+  bodyHtml += '<div class="form-row">';
+  bodyHtml += '<div class="fg"><label class="fl">Thumbnail URL</label><input class="fi" id="_thumb" value="' + esc(c ? c.thumbnail : '') + '" placeholder="https://..."></div>';
+  bodyHtml += '<div class="fg"><label class="fl">Subject Area</label><input class="fi" id="_subject" value="' + esc(c ? c.subject_area : '') + '" placeholder="e.g. Mathematics"></div>';
+  bodyHtml += '</div>';
+
+  bodyHtml += '<div class="form-row">';
+  bodyHtml += '<div class="fg"><label class="fl">Difficulty</label><select class="fs" id="_diff">';
+  bodyHtml += '<option value="all"' + (c && c.difficulty_level === 'all' ? ' selected' : '') + '>All Levels</option>';
+  bodyHtml += '<option value="beginner"' + (c && c.difficulty_level === 'beginner' ? ' selected' : '') + '>Beginner</option>';
+  bodyHtml += '<option value="intermediate"' + (c && c.difficulty_level === 'intermediate' ? ' selected' : '') + '>Intermediate</option>';
+  bodyHtml += '<option value="advanced"' + (c && c.difficulty_level === 'advanced' ? ' selected' : '') + '>Advanced</option>';
+  bodyHtml += '</select></div>';
+
+  bodyHtml += '<div class="fg"><label class="fl">Enrollment</label><select class="fs" id="_enroll">';
+  bodyHtml += '<option value="open"' + (c && c.enrollment_type === 'open' ? ' selected' : '') + '>Open</option>';
+  bodyHtml += '<option value="approval"' + (c && c.enrollment_type === 'approval' ? ' selected' : '') + '>Approval Required</option>';
+  bodyHtml += '</select></div>';
+  bodyHtml += '</div>';
+
+  bodyHtml += '<div style="display:flex;gap:20px;flex-wrap:wrap">';
+  bodyHtml += '<label class="toggle-row"><input type="checkbox" id="_active"' + (!c || c.is_active ? ' checked' : '') + '> Active</label>';
+  bodyHtml += '<label class="toggle-row"><input type="checkbox" id="_browse"' + (c && c.show_in_browse ? ' checked' : '') + '> Show in Browse</label>';
+  bodyHtml += '</div>';
+
+  var footerHtml = '<button class="btn btn-primary" onclick="saveCourse()">Save</button>';
+  footerHtml += '<button class="btn btn-ghost" onclick="closeModal()">Cancel</button>';
+
+  openModal(title, bodyHtml, footerHtml);
 }
 
-async function saveCourse(){
-  var id=document.getElementById('_id').value;
-  var payload={
-    title:document.getElementById('_title').value.trim(),
-    slug:document.getElementById('_slug').value.trim(),
-    description:document.getElementById('_desc').value.trim(),
-    thumbnail:document.getElementById('_thumb').value.trim()||null,
-    subject_area:document.getElementById('_subject').value.trim()||null,
-    difficulty_level:document.getElementById('_diff').value,
-    enrollment_type:document.getElementById('_enroll').value,
-    is_active:document.getElementById('_active').checked?1:0,
-    show_in_browse:document.getElementById('_browse').checked?1:0
+async function saveCourse() {
+  var id = document.getElementById('_id').value;
+  var payload = {
+    title: document.getElementById('_title').value.trim(),
+    slug: document.getElementById('_slug').value.trim(),
+    description: document.getElementById('_desc').value.trim(),
+    thumbnail: document.getElementById('_thumb').value.trim() || null,
+    subject_area: document.getElementById('_subject').value.trim() || null,
+    difficulty_level: document.getElementById('_diff').value,
+    enrollment_type: document.getElementById('_enroll').value,
+    is_active: document.getElementById('_active').checked ? 1 : 0,
+    show_in_browse: document.getElementById('_browse').checked ? 1 : 0
   };
-  if(!payload.title){showAlert('Title required.');return;}
-  var res=await api(id?'PUT':'POST',id?'/admin/courses/'+id:'/admin/courses',payload);
-  if(!res.ok){showAlert(res.data.error||'Error.');return;}
-  closeModal();loadCourses();loadDashboard();showToast('Course saved','success');
+
+  if (!payload.title) {
+    showAlert('Title is required.');
+    return;
+  }
+
+  var res;
+  if (id) {
+    res = await api('PUT', '/admin/courses/' + id, payload);
+  } else {
+    res = await api('POST', '/admin/courses', payload);
+  }
+
+  if (!res.ok) {
+    showAlert(res.data.error || 'Error saving.');
+    return;
+  }
+
+  closeModal();
+  loadCourses();
+  loadDashboard();
+  showToast('Course saved', 'success');
 }
-async function deleteCourse(id){if(!confirm('Delete this course and ALL content?'))return;await api('DELETE','/admin/courses/'+id);loadCourses();loadDashboard();}
+
+async function deleteCourse(id) {
+  if (!confirm('Delete this course and ALL its content permanently?')) return;
+  await api('DELETE', '/admin/courses/' + id);
+  loadCourses();
+  loadDashboard();
+}
 
 // ── CONTENT TREE ──
-async function loadContent(){
-  var results=await Promise.all([api('GET','/admin/courses'),api('GET','/admin/all-subjects'),api('GET','/admin/all-papers'),api('GET','/admin/all-chapters')]);
-  allCourses=results[0].ok?results[0].data:[];allSubjects=results[1].ok?results[1].data:[];allPapers=results[2].ok?results[2].data:[];allChapters=results[3].ok?results[3].data:[];
-  var html='<div class="sec-head"><h2 class="sec-title">Content Tree</h2></div>';
-  if(!allCourses.length){html+='<div class="card card-pad"><p style="color:var(--gray);font-style:italic">No courses yet.</p></div>';document.getElementById('view-content').innerHTML=html;return;}
-  allCourses.forEach(function(course){
-    html+='<div class="tree-section card card-pad"><div class="tree-course-header"><span style="font-size:.64rem;font-family:JetBrains Mono,monospace;color:var(--teal)">COURSE</span><span class="tree-course-title">'+esc(course.title)+'</span><div style="display:flex;gap:4px"><button class="btn btn-ghost btn-xs" onclick="openSubjectModal('+course.id+',\''+esc(course.title)+'\')">+ Subject</button></div></div>';
-    var subjects=allSubjects.filter(function(s){return s.course_id===course.id;});
-    if(!subjects.length){html+='<p style="color:var(--gray);font-size:.74rem;padding:6px 16px;font-style:italic">No subjects yet.</p>';}
-    subjects.forEach(function(subj){
-      html+='<div class="tree-indent-1"><div class="tree-row"><span class="tree-label">Subj</span><span class="tree-name">'+esc(subj.name)+'</span><div class="tree-actions"><button class="btn btn-ghost btn-xs" onclick="openPaperModal('+subj.id+',\''+esc(subj.name)+'\')">+ Paper</button><button class="btn btn-danger btn-xs" onclick="deleteSubject('+subj.id+')">Del</button></div></div>';
-      var papers=allPapers.filter(function(p){return p.subject_id===subj.id;});
-      papers.forEach(function(paper){
-        html+='<div class="tree-indent-2"><div class="tree-row"><span class="tree-label">Paper</span><span class="tree-name">'+esc(paper.name)+'</span><div class="tree-actions"><button class="btn btn-ghost btn-xs" onclick="openChapterModal('+paper.id+',\''+esc(paper.name)+'\')">+ Chapter</button><button class="btn btn-danger btn-xs" onclick="deletePaper('+paper.id+')">Del</button></div></div>';
-        var chapters=allChapters.filter(function(c){return c.paper_id===paper.id;});
-        chapters.forEach(function(ch){
-          html+='<div class="tree-indent-3"><div class="tree-row"><span class="tree-label">Ch</span><span class="tree-name">'+esc(ch.title)+'</span><div class="tree-actions"><button class="btn btn-ghost btn-xs" onclick="openLectureModal(null,'+ch.id+',\''+esc(ch.title)+'\')">+ Lecture</button><button class="btn btn-danger btn-xs" onclick="deleteChapter('+ch.id+')">Del</button></div></div></div>';
-        });
-        html+='</div>';
-      });
-      html+='</div>';
-    });
-    html+='</div>';
-  });
-  document.getElementById('view-content').innerHTML=html;
+async function loadContent() {
+  var results = await Promise.all([
+    api('GET', '/admin/courses'),
+    api('GET', '/admin/all-subjects'),
+    api('GET', '/admin/all-papers'),
+    api('GET', '/admin/all-chapters')
+  ]);
+
+  allCourses = results[0].ok ? results[0].data : [];
+  allSubjects = results[1].ok ? results[1].data : [];
+  allPapers = results[2].ok ? results[2].data : [];
+  allChapters = results[3].ok ? results[3].data : [];
+
+  var html = '<div class="sec-head"><h2 class="sec-title">Content Tree</h2></div>';
+
+  if (allCourses.length === 0) {
+    html += '<div class="card card-pad"><p style="color:var(--gray);font-style:italic">No courses yet.</p></div>';
+    document.getElementById('view-content').innerHTML = html;
+    return;
+  }
+
+  for (var ci = 0; ci < allCourses.length; ci++) {
+    var course = allCourses[ci];
+    html += '<div class="tree-section card card-pad">';
+    html += '<div class="tree-course-header">';
+    html += '<span style="font-size:.64rem;font-family:JetBrains Mono,monospace;color:var(--teal)">COURSE</span>';
+    html += '<span class="tree-course-title">' + esc(course.title) + '</span>';
+    html += '<div style="display:flex;gap:4px"><button class="btn btn-ghost btn-xs" onclick="openSubjectModal(' + course.id + ')">+ Subject</button></div>';
+    html += '</div>';
+
+    var subjects = [];
+    for (var si = 0; si < allSubjects.length; si++) {
+      if (allSubjects[si].course_id === course.id) {
+        subjects.push(allSubjects[si]);
+      }
+    }
+
+    if (subjects.length === 0) {
+      html += '<p style="color:var(--gray);font-size:.74rem;padding:6px 16px;font-style:italic">No subjects yet.</p>';
+    }
+
+    for (var sj = 0; sj < subjects.length; sj++) {
+      var subj = subjects[sj];
+      html += '<div class="tree-indent-1"><div class="tree-row">';
+      html += '<span class="tree-label">Subj</span><span class="tree-name">' + esc(subj.name) + '</span>';
+      html += '<div class="tree-actions">';
+      html += '<button class="btn btn-ghost btn-xs" onclick="openPaperModal(' + subj.id + ')">+ Paper</button>';
+      html += '<button class="btn btn-danger btn-xs" onclick="deleteSubject(' + subj.id + ')">Del</button>';
+      html += '</div></div>';
+
+      var papers = [];
+      for (var pi = 0; pi < allPapers.length; pi++) {
+        if (allPapers[pi].subject_id === subj.id) {
+          papers.push(allPapers[pi]);
+        }
+      }
+
+      for (var pj = 0; pj < papers.length; pj++) {
+        var paper = papers[pj];
+        html += '<div class="tree-indent-2"><div class="tree-row">';
+        html += '<span class="tree-label">Paper</span><span class="tree-name">' + esc(paper.name) + '</span>';
+        html += '<div class="tree-actions">';
+        html += '<button class="btn btn-ghost btn-xs" onclick="openChapterModal(' + paper.id + ')">+ Chapter</button>';
+        html += '<button class="btn btn-danger btn-xs" onclick="deletePaper(' + paper.id + ')">Del</button>';
+        html += '</div></div>';
+
+        var chapters = [];
+        for (var ci2 = 0; ci2 < allChapters.length; ci2++) {
+          if (allChapters[ci2].paper_id === paper.id) {
+            chapters.push(allChapters[ci2]);
+          }
+        }
+
+        for (var cj = 0; cj < chapters.length; cj++) {
+          var ch = chapters[cj];
+          html += '<div class="tree-indent-3"><div class="tree-row">';
+          html += '<span class="tree-label">Ch</span><span class="tree-name">' + esc(ch.title) + '</span>';
+          html += '<div class="tree-actions">';
+          html += '<button class="btn btn-ghost btn-xs" onclick="openLectureModal(null,' + ch.id + ')">+ Lecture</button>';
+          html += '<button class="btn btn-danger btn-xs" onclick="deleteChapter(' + ch.id + ')">Del</button>';
+          html += '</div></div></div>';
+        }
+        html += '</div>';
+      }
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+
+  document.getElementById('view-content').innerHTML = html;
 }
 
-function openSubjectModal(courseId,courseTitle){
-  openModal('New Subject — '+courseTitle,'<div class="alert" id="_alert"></div><input type="hidden" id="_cid" value="'+courseId+'"><div class="fg"><label class="fl">Name *</label><input class="fi" id="_name" placeholder="Subject name"></div><label class="toggle-row"><input type="checkbox" id="_hasPapers" checked> Has Papers</label>','<button class="btn btn-primary" onclick="saveSubject()">Add</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>');
+function openSubjectModal(courseId) {
+  openModal('New Subject',
+    '<div class="alert" id="_alert"></div><input type="hidden" id="_cid" value="' + courseId + '">' +
+    '<div class="fg"><label class="fl">Name *</label><input class="fi" id="_name" placeholder="Subject name"></div>' +
+    '<label class="toggle-row"><input type="checkbox" id="_hasPapers" checked> Has Papers</label>',
+    '<button class="btn btn-primary" onclick="saveSubject()">Add</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>'
+  );
 }
-async function saveSubject(){
-  var name=document.getElementById('_name').value.trim();
-  if(!name){showAlert('Name required.');return;}
-  await api('POST','/admin/subjects',{course_id:parseInt(document.getElementById('_cid').value),name:name,has_papers:document.getElementById('_hasPapers').checked?1:0});
-  closeModal();loadContent();loadDashboard();showToast('Subject created','success');
+
+async function saveSubject() {
+  var name = document.getElementById('_name').value.trim();
+  if (!name) { showAlert('Name required.'); return; }
+  var res = await api('POST', '/admin/subjects', {
+    course_id: parseInt(document.getElementById('_cid').value),
+    name: name,
+    has_papers: document.getElementById('_hasPapers').checked ? 1 : 0
+  });
+  if (!res.ok) return;
+  closeModal();
+  loadContent();
+  loadDashboard();
+  showToast('Subject created', 'success');
 }
-async function deleteSubject(id){if(!confirm('Delete subject and all content?'))return;await api('DELETE','/admin/subjects/'+id);loadContent();loadDashboard();}
-function openPaperModal(subjId,subjName){openModal('New Paper — '+subjName,'<div class="alert" id="_alert"></div><input type="hidden" id="_sid" value="'+subjId+'"><div class="fg"><label class="fl">Name *</label><input class="fi" id="_name" placeholder="Paper name"></div>','<button class="btn btn-primary" onclick="savePaper()">Add</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>');}
-async function savePaper(){var name=document.getElementById('_name').value.trim();if(!name){showAlert('Name required.');return;}await api('POST','/admin/papers',{subject_id:parseInt(document.getElementById('_sid').value),name:name});closeModal();loadContent();loadDashboard();showToast('Paper created','success');}
-async function deletePaper(id){if(!confirm('Delete paper and all chapters?'))return;await api('DELETE','/admin/papers/'+id);loadContent();loadDashboard();}
-function openChapterModal(paperId,paperName){openModal('New Chapter — '+paperName,'<div class="alert" id="_alert"></div><input type="hidden" id="_pid" value="'+paperId+'"><div class="fg"><label class="fl">Title *</label><input class="fi" id="_title" placeholder="Chapter title"></div><div class="fg"><label class="fl">Sort Order</label><input class="fi" type="number" id="_order" value="0"></div>','<button class="btn btn-primary" onclick="saveChapter()">Add</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>');}
-async function saveChapter(){var title=document.getElementById('_title').value.trim();if(!title){showAlert('Title required.');return;}await api('POST','/admin/chapters',{paper_id:parseInt(document.getElementById('_pid').value),title:title,sort_order:parseInt(document.getElementById('_order').value)||0});closeModal();loadContent();loadDashboard();showToast('Chapter created','success');}
-async function deleteChapter(id){if(!confirm('Delete chapter and all lectures?'))return;await api('DELETE','/admin/chapters/'+id);loadContent();loadDashboard();}
+
+async function deleteSubject(id) {
+  if (!confirm('Delete subject and all its content?')) return;
+  await api('DELETE', '/admin/subjects/' + id);
+  loadContent();
+  loadDashboard();
+}
+
+function openPaperModal(subjId) {
+  openModal('New Paper',
+    '<div class="alert" id="_alert"></div><input type="hidden" id="_sid" value="' + subjId + '">' +
+    '<div class="fg"><label class="fl">Name *</label><input class="fi" id="_name" placeholder="Paper name"></div>',
+    '<button class="btn btn-primary" onclick="savePaper()">Add</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>'
+  );
+}
+
+async function savePaper() {
+  var name = document.getElementById('_name').value.trim();
+  if (!name) { showAlert('Name required.'); return; }
+  var res = await api('POST', '/admin/papers', {
+    subject_id: parseInt(document.getElementById('_sid').value),
+    name: name
+  });
+  if (!res.ok) return;
+  closeModal();
+  loadContent();
+  loadDashboard();
+  showToast('Paper created', 'success');
+}
+
+async function deletePaper(id) {
+  if (!confirm('Delete paper and all its chapters?')) return;
+  await api('DELETE', '/admin/papers/' + id);
+  loadContent();
+  loadDashboard();
+}
+
+function openChapterModal(paperId) {
+  openModal('New Chapter',
+    '<div class="alert" id="_alert"></div><input type="hidden" id="_pid" value="' + paperId + '">' +
+    '<div class="fg"><label class="fl">Title *</label><input class="fi" id="_title" placeholder="Chapter title"></div>' +
+    '<div class="fg"><label class="fl">Sort Order</label><input class="fi" type="number" id="_order" value="0"></div>',
+    '<button class="btn btn-primary" onclick="saveChapter()">Add</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>'
+  );
+}
+
+async function saveChapter() {
+  var title = document.getElementById('_title').value.trim();
+  if (!title) { showAlert('Title required.'); return; }
+  var res = await api('POST', '/admin/chapters', {
+    paper_id: parseInt(document.getElementById('_pid').value),
+    title: title,
+    sort_order: parseInt(document.getElementById('_order').value) || 0
+  });
+  if (!res.ok) return;
+  closeModal();
+  loadContent();
+  loadDashboard();
+  showToast('Chapter created', 'success');
+}
+
+async function deleteChapter(id) {
+  if (!confirm('Delete chapter and all its lectures?')) return;
+  await api('DELETE', '/admin/chapters/' + id);
+  loadContent();
+  loadDashboard();
+}
 
 // ── LECTURES ──
-async function loadLectures(){
-  var results=await Promise.all([api('GET','/admin/all-lectures'),api('GET','/admin/all-chapters')]);
-  allChapters=results[1].ok?results[1].data:[];var lecs=results[0].ok?results[0].data:[];
-  var html='<div class="sec-head"><h2 class="sec-title">All Lectures</h2><button class="btn btn-primary" onclick="openLectureModal()">+ Add Lecture</button></div><div class="card"><div class="table-wrap"><table><thead><tr><th>Title</th><th>Subject</th><th>Chapter</th><th>YouTube ID</th><th>Actions</th></tr></thead><tbody>';
-  if(lecs.length){lecs.forEach(function(l){html+='<tr><td class="strong td-max">'+esc(l.title)+'</td><td style="font-size:.7rem">'+esc(l.subject_name||'—')+'</td><td style="font-size:.7rem">'+esc(l.chapter_title||'—')+'</td><td><a href="https://youtu.be/'+esc(l.yt_video_id)+'" target="_blank" style="font-family:JetBrains Mono,monospace;font-size:.66rem;color:var(--teal)">'+esc(l.yt_video_id)+'</a></td><td><div style="display:flex;gap:3px"><button class="btn btn-ghost btn-xs" onclick="openLectureModal('+l.id+')">Edit</button><button class="btn btn-orange btn-xs" onclick="openPdfModal('+l.id+',\''+esc(l.title)+'\')">PDFs</button><button class="btn btn-danger btn-xs" onclick="deleteLecture('+l.id+')">Del</button></div></td></tr>';});}else{html+='<tr class="empty-row"><td colspan="5">No lectures yet.</td></tr>';}
-  html+='</tbody></table></div></div>';
-  document.getElementById('view-lectures').innerHTML=html;
+async function loadLectures() {
+  var results = await Promise.all([
+    api('GET', '/admin/all-lectures'),
+    api('GET', '/admin/all-chapters')
+  ]);
+  allChapters = results[1].ok ? results[1].data : [];
+  var lecs = results[0].ok ? results[0].data : [];
+
+  var html = '<div class="sec-head"><h2 class="sec-title">All Lectures</h2><button class="btn btn-primary" onclick="openLectureModal()">+ Add Lecture</button></div>';
+  html += '<div class="card"><div class="table-wrap"><table>';
+  html += '<thead><tr><th>Title</th><th>Subject</th><th>Chapter</th><th>YouTube ID</th><th>Actions</th></tr></thead><tbody>';
+
+  if (lecs.length > 0) {
+    for (var i = 0; i < lecs.length; i++) {
+      var l = lecs[i];
+      html += '<tr>';
+      html += '<td class="strong td-max">' + esc(l.title) + '</td>';
+      html += '<td style="font-size:.7rem">' + esc(l.subject_name || '—') + '</td>';
+      html += '<td style="font-size:.7rem">' + esc(l.chapter_title || '—') + '</td>';
+      html += '<td><a href="https://youtu.be/' + esc(l.yt_video_id) + '" target="_blank" style="font-family:JetBrains Mono,monospace;font-size:.66rem;color:var(--teal)">' + esc(l.yt_video_id) + '</a></td>';
+      html += '<td><div style="display:flex;gap:3px">';
+      html += '<button class="btn btn-ghost btn-xs" onclick="openLectureModal(' + l.id + ')">Edit</button>';
+      html += '<button class="btn btn-orange btn-xs" onclick="openPdfModal(' + l.id + ')">PDFs</button>';
+      html += '<button class="btn btn-danger btn-xs" onclick="deleteLecture(' + l.id + ')">Del</button>';
+      html += '</div></td></tr>';
+    }
+  } else {
+    html += '<tr class="empty-row"><td colspan="5">No lectures yet.</td></tr>';
+  }
+
+  html += '</tbody></table></div></div>';
+  document.getElementById('view-lectures').innerHTML = html;
 }
 
-function openLectureModal(id,preChapterId,preChapterName){
-  var chOptions=allChapters.map(function(c){return'<option value="'+c.id+'" '+(preChapterId===c.id?'selected':'')+'>'+esc(c.title)+'</option>';}).join('');
-  openModal(id?'Edit Lecture':'New Lecture','<div class="alert" id="_alert"></div><input type="hidden" id="_id" value="'+(id||'')+'"><div class="fg"><label class="fl">Chapter *</label><select class="fs" id="_chap"><option value="">— Select —</option>'+chOptions+'</select></div><div class="fg"><label class="fl">Title *</label><input class="fi" id="_title" placeholder="Lecture title"></div><div class="fg"><label class="fl">YouTube Video ID *</label><input class="fi" id="_ytid" placeholder="dQw4w9WgXcQ"><div class="hint">From youtube.com/watch?v=<strong>ID</strong></div></div><div class="fg"><label class="fl">Sort Order</label><input class="fi" type="number" id="_order" value="0"></div><div class="fg"><label class="fl">Description</label><textarea class="fta" id="_desc"></textarea></div>','<button class="btn btn-primary" onclick="saveLecture()">Save</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>');
-}
-async function saveLecture(){
-  var id=document.getElementById('_id').value;
-  var chapter_id=document.getElementById('_chap').value;
-  var title=document.getElementById('_title').value.trim();
-  var yt_video_id=document.getElementById('_ytid').value.trim();
-  if(!chapter_id||!title||!yt_video_id){showAlert('All required fields needed.');return;}
-  await api(id?'PUT':'POST',id?'/admin/lectures/'+id:'/admin/lectures',{chapter_id:parseInt(chapter_id),title:title,yt_video_id:yt_video_id,sort_order:parseInt(document.getElementById('_order').value)||0,description:document.getElementById('_desc').value.trim()});
-  closeModal();loadLectures();loadDashboard();showToast('Lecture saved','success');
-}
-async function deleteLecture(id){if(!confirm('Delete lecture?'))return;await api('DELETE','/admin/lectures/'+id);loadLectures();loadDashboard();}
+function openLectureModal(id, preChapterId) {
+  var chOptions = '';
+  for (var i = 0; i < allChapters.length; i++) {
+    var c = allChapters[i];
+    var sel = (preChapterId === c.id) ? ' selected' : '';
+    chOptions += '<option value="' + c.id + '"' + sel + '>' + esc(c.title) + '</option>';
+  }
 
-async function openPdfModal(lectureId,lecTitle){
-  var pdfRes=await fetch('/api/user/lecture-by-id/'+lectureId,{headers:{Authorization:'Bearer '+token}});
-  var existingPdfs=[];if(pdfRes.ok){var pd=await pdfRes.json();existingPdfs=pd.pdfs||[];}
-  openModal('PDFs — '+lecTitle,
-    '<div class="alert" id="_alert"></div><input type="hidden" id="_lid" value="'+lectureId+'">'+
-    '<h4 style="font-size:.76rem;color:var(--gray2);margin-bottom:8px;font-family:JetBrains Mono,monospace;text-transform:uppercase;letter-spacing:.08em">Existing PDFs</h4><div id="_existPdfs">'+
-    (existingPdfs.length?existingPdfs.map(function(p){return'<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)"><span style="flex:1;font-size:.76rem;color:var(--gray2)">'+esc(p.title)+'</span><button class="btn btn-danger btn-xs" onclick="deletePdf('+p.id+')">Remove</button></div>';}).join(''):'<p style="color:var(--gray);font-size:.74rem;font-style:italic">No PDFs yet.</p>')+
-    '</div><hr style="border-color:var(--border);margin:14px 0">'+
-    '<h4 style="font-size:.76rem;color:var(--gray2);margin-bottom:8px;font-family:JetBrains Mono,monospace;text-transform:uppercase;letter-spacing:.08em">Add New PDF</h4>'+
-    '<div class="fg"><label class="fl">Title *</label><input class="fi" id="_pTitle" placeholder="PDF title"></div><div class="fg"><label class="fl">URL *</label><input class="fi" id="_pUrl" placeholder="https://...pdf"></div>',
-    '<button class="btn btn-primary" onclick="addPdf()">Add PDF</button><button class="btn btn-ghost" onclick="closeModal()">Done</button>');
+  openModal(id ? 'Edit Lecture' : 'New Lecture',
+    '<div class="alert" id="_alert"></div><input type="hidden" id="_id" value="' + (id || '') + '">' +
+    '<div class="fg"><label class="fl">Chapter *</label><select class="fs" id="_chap"><option value="">— Select —</option>' + chOptions + '</select></div>' +
+    '<div class="fg"><label class="fl">Title *</label><input class="fi" id="_title" placeholder="Lecture title"></div>' +
+    '<div class="fg"><label class="fl">YouTube Video ID *</label><input class="fi" id="_ytid" placeholder="dQw4w9WgXcQ"><div class="hint">From youtube.com/watch?v=<strong>ID</strong></div></div>' +
+    '<div class="fg"><label class="fl">Sort Order</label><input class="fi" type="number" id="_order" value="0"></div>' +
+    '<div class="fg"><label class="fl">Description</label><textarea class="fta" id="_desc"></textarea></div>',
+    '<button class="btn btn-primary" onclick="saveLecture()">Save</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>'
+  );
 }
-async function addPdf(){
-  var lecture_id=parseInt(document.getElementById('_lid').value);
-  var title=document.getElementById('_pTitle').value.trim();
-  var pdf_url=document.getElementById('_pUrl').value.trim();
-  if(!title||!pdf_url){showAlert('Title and URL required.');return;}
-  await api('POST','/admin/lecture-pdfs',{lecture_id:lecture_id,title:title,pdf_url:pdf_url});
-  document.getElementById('_pTitle').value='';document.getElementById('_pUrl').value='';
-  var pdfRes=await fetch('/api/user/lecture-by-id/'+lecture_id,{headers:{Authorization:'Bearer '+token}});
-  if(pdfRes.ok){var pd=await pdfRes.json();var ep=document.getElementById('_existPdfs');if(ep&&pd.pdfs){ep.innerHTML=pd.pdfs.map(function(p){return'<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)"><span style="flex:1;font-size:.76rem;color:var(--gray2)">'+esc(p.title)+'</span><button class="btn btn-danger btn-xs" onclick="deletePdf('+p.id+')">Remove</button></div>';}).join('');}}
+
+async function saveLecture() {
+  var id = document.getElementById('_id').value;
+  var chapter_id = document.getElementById('_chap').value;
+  var title = document.getElementById('_title').value.trim();
+  var yt_video_id = document.getElementById('_ytid').value.trim();
+  var sort_order = parseInt(document.getElementById('_order').value) || 0;
+  var description = document.getElementById('_desc').value.trim();
+
+  if (!chapter_id || !title || !yt_video_id) {
+    showAlert('Chapter, title, and YouTube ID are required.');
+    return;
+  }
+
+  var payload = {
+    chapter_id: parseInt(chapter_id),
+    title: title,
+    yt_video_id: yt_video_id,
+    sort_order: sort_order,
+    description: description
+  };
+
+  var res;
+  if (id) {
+    res = await api('PUT', '/admin/lectures/' + id, payload);
+  } else {
+    res = await api('POST', '/admin/lectures', payload);
+  }
+
+  if (!res.ok) return;
+  closeModal();
+  loadLectures();
+  loadDashboard();
+  showToast('Lecture saved', 'success');
 }
-async function deletePdf(id){if(!confirm('Remove PDF?'))return;await api('DELETE','/admin/lecture-pdfs/'+id);}
+
+async function deleteLecture(id) {
+  if (!confirm('Delete this lecture?')) return;
+  await api('DELETE', '/admin/lectures/' + id);
+  loadLectures();
+  loadDashboard();
+}
+
+async function openPdfModal(lectureId) {
+  var pdfRes = await fetch('/api/user/lecture-by-id/' + lectureId, {
+    headers: { 'Authorization': 'Bearer ' + token }
+  });
+  var existingPdfs = [];
+  if (pdfRes.ok) {
+    var pd = await pdfRes.json();
+    existingPdfs = pd.pdfs || [];
+  }
+
+  var existingHtml = '';
+  if (existingPdfs.length > 0) {
+    for (var i = 0; i < existingPdfs.length; i++) {
+      var p = existingPdfs[i];
+      existingHtml += '<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">';
+      existingHtml += '<span style="flex:1;font-size:.76rem;color:var(--gray2)">' + esc(p.title) + '</span>';
+      existingHtml += '<button class="btn btn-danger btn-xs" onclick="deletePdf(' + p.id + ')">Remove</button>';
+      existingHtml += '</div>';
+    }
+  } else {
+    existingHtml = '<p style="color:var(--gray);font-size:.74rem;font-style:italic">No PDFs yet.</p>';
+  }
+
+  openModal('PDFs',
+    '<div class="alert" id="_alert"></div><input type="hidden" id="_lid" value="' + lectureId + '">' +
+    '<h4 style="font-size:.76rem;color:var(--gray2);margin-bottom:8px;font-family:JetBrains Mono,monospace;text-transform:uppercase;letter-spacing:.08em">Existing PDFs</h4>' +
+    '<div id="_existPdfs">' + existingHtml + '</div>' +
+    '<hr style="border-color:var(--border);margin:14px 0">' +
+    '<h4 style="font-size:.76rem;color:var(--gray2);margin-bottom:8px;font-family:JetBrains Mono,monospace;text-transform:uppercase;letter-spacing:.08em">Add New PDF</h4>' +
+    '<div class="fg"><label class="fl">Title *</label><input class="fi" id="_pTitle" placeholder="PDF title"></div>' +
+    '<div class="fg"><label class="fl">URL *</label><input class="fi" id="_pUrl" placeholder="https://...pdf"></div>',
+    '<button class="btn btn-primary" onclick="addPdf()">Add PDF</button><button class="btn btn-ghost" onclick="closeModal()">Done</button>'
+  );
+}
+
+async function addPdf() {
+  var lecture_id = parseInt(document.getElementById('_lid').value);
+  var title = document.getElementById('_pTitle').value.trim();
+  var pdf_url = document.getElementById('_pUrl').value.trim();
+
+  if (!title || !pdf_url) {
+    showAlert('Title and URL required.');
+    return;
+  }
+
+  var res = await api('POST', '/admin/lecture-pdfs', {
+    lecture_id: lecture_id,
+    title: title,
+    pdf_url: pdf_url
+  });
+
+  if (!res.ok) return;
+
+  document.getElementById('_pTitle').value = '';
+  document.getElementById('_pUrl').value = '';
+
+  var pdfRes = await fetch('/api/user/lecture-by-id/' + lecture_id, {
+    headers: { 'Authorization': 'Bearer ' + token }
+  });
+  if (pdfRes.ok) {
+    var pd = await pdfRes.json();
+    var ep = document.getElementById('_existPdfs');
+    if (ep && pd.pdfs) {
+      var html = '';
+      for (var i = 0; i < pd.pdfs.length; i++) {
+        var p = pd.pdfs[i];
+        html += '<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">';
+        html += '<span style="flex:1;font-size:.76rem;color:var(--gray2)">' + esc(p.title) + '</span>';
+        html += '<button class="btn btn-danger btn-xs" onclick="deletePdf(' + p.id + ')">Remove</button>';
+        html += '</div>';
+      }
+      ep.innerHTML = html;
+    }
+  }
+}
+
+async function deletePdf(id) {
+  if (!confirm('Remove this PDF?')) return;
+  await api('DELETE', '/admin/lecture-pdfs/' + id);
+}
 
 // ── RESOURCES ──
-async function loadResources(){
-  var res=await api('GET','/admin/courses');allCourses=res.ok?res.data:[];
-  var html='<div class="sec-head"><h2 class="sec-title">Course Resources</h2></div>';
-  for(var i=0;i<allCourses.length;i++){
-    var c=allCourses[i];
-    var rres=await api('GET','/admin/resources/course/'+c.id);
-    var resources=rres.ok?rres.data:[];
-    html+='<div class="card" style="margin-bottom:16px"><div style="padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between"><span style="font-family:Cormorant Garamond,serif;font-weight:700">'+esc(c.title)+'</span><button class="btn btn-ghost btn-sm" onclick="openResourceModal('+c.id+',\''+esc(c.title)+'\')">+ Add</button></div><div class="table-wrap"><table><thead><tr><th>Title</th><th>URL</th><th>Actions</th></tr></thead><tbody>';
-    if(resources.length){resources.forEach(function(r){html+='<tr><td class="strong">'+esc(r.title)+'</td><td><a href="'+esc(r.pdf_url)+'" target="_blank" style="color:var(--teal);font-size:.68rem;font-family:JetBrains Mono,monospace">View</a></td><td><button class="btn btn-danger btn-xs" onclick="deleteResource('+r.id+')">Del</button></td></tr>';});}else{html+='<tr class="empty-row"><td colspan="3">None</td></tr>';}
-    html+='</tbody></table></div></div>';
+async function loadResources() {
+  var res = await api('GET', '/admin/courses');
+  allCourses = res.ok ? res.data : [];
+
+  var html = '<div class="sec-head"><h2 class="sec-title">Course Resources</h2></div>';
+
+  for (var i = 0; i < allCourses.length; i++) {
+    var c = allCourses[i];
+    var rres = await api('GET', '/admin/resources/course/' + c.id);
+    var resources = rres.ok ? rres.data : [];
+
+    html += '<div class="card" style="margin-bottom:16px">';
+    html += '<div style="padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">';
+    html += '<span style="font-family:Cormorant Garamond,serif;font-weight:700">' + esc(c.title) + '</span>';
+    html += '<button class="btn btn-ghost btn-sm" onclick="openResourceModal(' + c.id + ')">+ Add</button>';
+    html += '</div>';
+    html += '<div class="table-wrap"><table><thead><tr><th>Title</th><th>URL</th><th>Actions</th></tr></thead><tbody>';
+
+    if (resources.length > 0) {
+      for (var j = 0; j < resources.length; j++) {
+        var r = resources[j];
+        html += '<tr>';
+        html += '<td class="strong">' + esc(r.title) + '</td>';
+        html += '<td><a href="' + esc(r.pdf_url) + '" target="_blank" style="color:var(--teal);font-size:.68rem;font-family:JetBrains Mono,monospace">View</a></td>';
+        html += '<td><button class="btn btn-danger btn-xs" onclick="deleteResource(' + r.id + ')">Del</button></td>';
+        html += '</tr>';
+      }
+    } else {
+      html += '<tr class="empty-row"><td colspan="3">None</td></tr>';
+    }
+
+    html += '</tbody></table></div></div>';
   }
-  document.getElementById('view-resources').innerHTML=html;
+
+  document.getElementById('view-resources').innerHTML = html;
 }
-function openResourceModal(courseId,courseTitle){openModal('Add Resource — '+courseTitle,'<div class="alert" id="_alert"></div><input type="hidden" id="_cid" value="'+courseId+'"><div class="fg"><label class="fl">Title *</label><input class="fi" id="_title" placeholder="Resource title"></div><div class="fg"><label class="fl">URL *</label><input class="fi" id="_url" placeholder="https://..."></div>','<button class="btn btn-primary" onclick="saveResource()">Add</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>');}
-async function saveResource(){var course_id=parseInt(document.getElementById('_cid').value);var title=document.getElementById('_title').value.trim();var pdf_url=document.getElementById('_url').value.trim();if(!title||!pdf_url){showAlert('Title and URL required.');return;}await api('POST','/admin/resources',{course_id:course_id,title:title,pdf_url:pdf_url});closeModal();loadResources();showToast('Resource added','success');}
-async function deleteResource(id){if(!confirm('Delete?'))return;await api('DELETE','/admin/resources/'+id);loadResources();}
+
+function openResourceModal(courseId) {
+  openModal('Add Resource',
+    '<div class="alert" id="_alert"></div><input type="hidden" id="_cid" value="' + courseId + '">' +
+    '<div class="fg"><label class="fl">Title *</label><input class="fi" id="_title" placeholder="Resource title"></div>' +
+    '<div class="fg"><label class="fl">URL *</label><input class="fi" id="_url" placeholder="https://..."></div>',
+    '<button class="btn btn-primary" onclick="saveResource()">Add</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>'
+  );
+}
+
+async function saveResource() {
+  var course_id = parseInt(document.getElementById('_cid').value);
+  var title = document.getElementById('_title').value.trim();
+  var pdf_url = document.getElementById('_url').value.trim();
+
+  if (!title || !pdf_url) {
+    showAlert('Title and URL required.');
+    return;
+  }
+
+  var res = await api('POST', '/admin/resources', {
+    course_id: course_id,
+    title: title,
+    pdf_url: pdf_url
+  });
+
+  if (!res.ok) return;
+  closeModal();
+  loadResources();
+  showToast('Resource added', 'success');
+}
+
+async function deleteResource(id) {
+  if (!confirm('Delete this resource?')) return;
+  await api('DELETE', '/admin/resources/' + id);
+  loadResources();
+}
 
 // ── NOTIFICATIONS ──
-async function loadNotifications(){
-  var res=await api('GET','/admin/notifications');var notifs=res.ok?res.data:[];
-  var html='<div class="sec-head"><h2 class="sec-title">Notifications</h2><button class="btn btn-primary" onclick="openNotifModal()">+ Create</button></div><div class="card"><div class="table-wrap"><table><thead><tr><th>Title</th><th>Type</th><th>Target</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody>';
-  if(notifs.length){notifs.forEach(function(n){html+='<tr><td class="strong td-max">'+esc(n.title)+'</td><td><span class="badge b-'+(n.type||'info')+'">'+esc(n.type||'info')+'</span></td><td>'+(n.target_type==='all'?'All Users':n.target_type==='user'?'User':'Course')+'</td><td><span class="badge '+(n.is_active?'b-active':'b-inactive')+'">'+(n.is_active?'Active':'Inactive')+'</span></td><td style="font-family:JetBrains Mono,monospace;font-size:.66rem">'+new Date(n.created_at).toLocaleDateString()+'</td><td><button class="btn btn-danger btn-xs" onclick="deleteNotif('+n.id+')">Del</button></td></tr>';});}else{html+='<tr class="empty-row"><td colspan="6">No notifications yet.</td></tr>';}
-  html+='</tbody></table></div></div>';
-  document.getElementById('view-notifications').innerHTML=html;
+async function loadNotifications() {
+  var res = await api('GET', '/admin/notifications');
+  var notifs = res.ok ? res.data : [];
+
+  var html = '<div class="sec-head"><h2 class="sec-title">Notifications</h2><button class="btn btn-primary" onclick="openNotifModal()">+ Create</button></div>';
+  html += '<div class="card"><div class="table-wrap"><table>';
+  html += '<thead><tr><th>Title</th><th>Type</th><th>Target</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody>';
+
+  if (notifs.length > 0) {
+    for (var i = 0; i < notifs.length; i++) {
+      var n = notifs[i];
+      var targetLabel = n.target_type === 'all' ? 'All Users' : (n.target_type === 'user' ? 'User' : 'Course');
+      html += '<tr>';
+      html += '<td class="strong td-max">' + esc(n.title) + '</td>';
+      html += '<td><span class="badge b-' + (n.type || 'info') + '">' + esc(n.type || 'info') + '</span></td>';
+      html += '<td>' + targetLabel + '</td>';
+      html += '<td><span class="badge ' + (n.is_active ? 'b-active' : 'b-inactive') + '">' + (n.is_active ? 'Active' : 'Inactive') + '</span></td>';
+      html += '<td style="font-family:JetBrains Mono,monospace;font-size:.66rem">' + new Date(n.created_at).toLocaleDateString() + '</td>';
+      html += '<td><button class="btn btn-danger btn-xs" onclick="deleteNotif(' + n.id + ')">Del</button></td>';
+      html += '</tr>';
+    }
+  } else {
+    html += '<tr class="empty-row"><td colspan="6">No notifications yet.</td></tr>';
+  }
+
+  html += '</tbody></table></div></div>';
+  document.getElementById('view-notifications').innerHTML = html;
 }
-function openNotifModal(){openModal('Create Notification','<div class="alert" id="_alert"></div><div class="fg"><label class="fl">Title *</label><input class="fi" id="_ntitle" placeholder="Notification title"></div><div class="form-row"><div class="fg"><label class="fl">Type</label><select class="fs" id="_ntype"><option value="info">Information</option><option value="warning">Warning</option><option value="success">Success</option><option value="important">Important</option></select></div><div class="fg"><label class="fl">Target</label><select class="fs" id="_ntarget"><option value="all">All Users</option><option value="course">Course</option><option value="user">User</option></select></div></div><div class="fg"><label class="fl">Message *</label><textarea class="fta" id="_nmsg" placeholder="Notification message"></textarea></div><div class="form-row"><div class="fg"><label class="fl">Action URL</label><input class="fi" id="_naction" placeholder="/browse.html"></div><div class="fg"><label class="fl">Action Label</label><input class="fi" id="_nactionLabel" placeholder="View"></div></div>','<button class="btn btn-primary" onclick="saveNotif()">Create</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>');}
-async function saveNotif(){var title=document.getElementById('_ntitle').value.trim();var message=document.getElementById('_nmsg').value.trim();if(!title||!message){showAlert('Title and message required.');return;}await api('POST','/admin/notifications',{title:title,message:message,type:document.getElementById('_ntype').value,target_type:document.getElementById('_ntarget').value,action_url:document.getElementById('_naction').value||null,action_label:document.getElementById('_nactionLabel').value||null});closeModal();loadNotifications();showToast('Notification created','success');}
-async function deleteNotif(id){if(!confirm('Delete?'))return;await api('DELETE','/admin/notifications/'+id);loadNotifications();}
+
+function openNotifModal() {
+  openModal('Create Notification',
+    '<div class="alert" id="_alert"></div>' +
+    '<div class="fg"><label class="fl">Title *</label><input class="fi" id="_ntitle" placeholder="Notification title"></div>' +
+    '<div class="form-row">' +
+    '<div class="fg"><label class="fl">Type</label><select class="fs" id="_ntype"><option value="info">Information</option><option value="warning">Warning</option><option value="success">Success</option><option value="important">Important</option></select></div>' +
+    '<div class="fg"><label class="fl">Target</label><select class="fs" id="_ntarget"><option value="all">All Users</option><option value="course">Course</option><option value="user">User</option></select></div>' +
+    '</div>' +
+    '<div class="fg"><label class="fl">Message *</label><textarea class="fta" id="_nmsg" placeholder="Notification message"></textarea></div>' +
+    '<div class="form-row">' +
+    '<div class="fg"><label class="fl">Action URL</label><input class="fi" id="_naction" placeholder="/browse.html"></div>' +
+    '<div class="fg"><label class="fl">Action Label</label><input class="fi" id="_nactionLabel" placeholder="View"></div>' +
+    '</div>',
+    '<button class="btn btn-primary" onclick="saveNotif()">Create</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>'
+  );
+}
+
+async function saveNotif() {
+  var title = document.getElementById('_ntitle').value.trim();
+  var message = document.getElementById('_nmsg').value.trim();
+
+  if (!title || !message) {
+    showAlert('Title and message required.');
+    return;
+  }
+
+  var res = await api('POST', '/admin/notifications', {
+    title: title,
+    message: message,
+    type: document.getElementById('_ntype').value,
+    target_type: document.getElementById('_ntarget').value,
+    action_url: document.getElementById('_naction').value || null,
+    action_label: document.getElementById('_nactionLabel').value || null
+  });
+
+  if (!res.ok) return;
+  closeModal();
+  loadNotifications();
+  showToast('Notification created', 'success');
+}
+
+async function deleteNotif(id) {
+  if (!confirm('Delete this notification?')) return;
+  await api('DELETE', '/admin/notifications/' + id);
+  loadNotifications();
+}
 
 // ── SUPPORT TICKETS ──
-async function loadTickets(){
-  var res=await api('GET','/admin/support-tickets');var tickets=res.ok?res.data:[];
-  var html='<div class="sec-head"><h2 class="sec-title">Support Tickets</h2></div><div class="card"><div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
-  if(tickets.length){tickets.forEach(function(t){html+='<tr><td class="strong">'+esc(t.name)+'</td><td style="font-family:JetBrains Mono,monospace;font-size:.66rem">'+esc(t.email)+'</td><td>'+esc(t.subject)+'</td><td style="font-family:JetBrains Mono,monospace;font-size:.66rem">'+new Date(t.created_at).toLocaleDateString()+'</td><td><span class="badge '+(t.is_resolved?'b-active':'b-pending')+'">'+(t.is_resolved?'Resolved':'Open')+'</span></td><td><div style="display:flex;gap:3px"><button class="btn btn-ghost btn-xs" onclick="viewTicket(\''+esc(t.name)+'\',\''+esc(t.subject)+'\',\''+esc(t.message).replace(/'/g,"\\'")+'\')">View</button>'+(t.is_resolved?'':'<button class="btn btn-success btn-xs" onclick="resolveTicket('+t.id+')">Resolve</button>')+'</div></td></tr>';});}else{html+='<tr class="empty-row"><td colspan="6">No tickets yet.</td></tr>';}
-  html+='</tbody></table></div></div>';
-  document.getElementById('view-tickets').innerHTML=html;
+async function loadTickets() {
+  var res = await api('GET', '/admin/support-tickets');
+  var tickets = res.ok ? res.data : [];
+
+  var html = '<div class="sec-head"><h2 class="sec-title">Support Tickets</h2></div>';
+  html += '<div class="card"><div class="table-wrap"><table>';
+  html += '<thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+
+  if (tickets.length > 0) {
+    for (var i = 0; i < tickets.length; i++) {
+      var t = tickets[i];
+      html += '<tr>';
+      html += '<td class="strong">' + esc(t.name) + '</td>';
+      html += '<td style="font-family:JetBrains Mono,monospace;font-size:.66rem">' + esc(t.email) + '</td>';
+      html += '<td>' + esc(t.subject) + '</td>';
+      html += '<td style="font-family:JetBrains Mono,monospace;font-size:.66rem">' + new Date(t.created_at).toLocaleDateString() + '</td>';
+      html += '<td><span class="badge ' + (t.is_resolved ? 'b-active' : 'b-pending') + '">' + (t.is_resolved ? 'Resolved' : 'Open') + '</span></td>';
+      html += '<td><div style="display:flex;gap:3px">';
+      html += '<button class="btn btn-ghost btn-xs" onclick="viewTicket(\'' + esc(t.name) + '\',\'' + esc(t.subject) + '\',\'' + esc(t.message).replace(/'/g, "\\'").replace(/\n/g, '\\n') + '\')">View</button>';
+      if (!t.is_resolved) {
+        html += '<button class="btn btn-success btn-xs" onclick="resolveTicket(' + t.id + ')">Resolve</button>';
+      }
+      html += '</div></td></tr>';
+    }
+  } else {
+    html += '<tr class="empty-row"><td colspan="6">No tickets yet.</td></tr>';
+  }
+
+  html += '</tbody></table></div></div>';
+  document.getElementById('view-tickets').innerHTML = html;
 }
-function viewTicket(name,subject,message){openModal(subject+' — '+name,'<div style="font-size:.82rem;color:var(--gray2);line-height:1.7;white-space:pre-wrap">'+esc(message)+'</div>','<button class="btn btn-ghost" onclick="closeModal()">Close</button>');}
-async function resolveTicket(id){await api('PUT','/admin/support-tickets/'+id+'/resolve',{});loadTickets();loadDashboard();showToast('Ticket resolved','success');}
+
+function viewTicket(name, subject, message) {
+  openModal(subject + ' — ' + name,
+    '<div style="font-size:.82rem;color:var(--gray2);line-height:1.7;white-space:pre-wrap">' + esc(message) + '</div>',
+    '<button class="btn btn-ghost" onclick="closeModal()">Close</button>'
+  );
+}
+
+async function resolveTicket(id) {
+  await api('PUT', '/admin/support-tickets/' + id + '/resolve', {});
+  loadTickets();
+  loadDashboard();
+  showToast('Ticket resolved', 'success');
+}
 
 // ── CHANGELOG ──
-async function loadChangelog(){
-  var res=await api('GET','/admin/updates');var updates=res.ok?res.data:[];
-  var html='<div class="sec-head"><h2 class="sec-title">Changelog</h2><button class="btn btn-primary" onclick="openChangelogModal()">+ Post Update</button></div><div class="card"><div class="table-wrap"><table><thead><tr><th>Version</th><th>Title</th><th>Type</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
-  if(updates.length){updates.forEach(function(u){html+='<tr><td style="font-family:JetBrains Mono,monospace;font-size:.66rem;color:var(--teal)">v'+esc(u.version)+'</td><td class="strong">'+esc(u.title)+'</td><td><span class="badge b-info">'+esc(u.type)+'</span></td><td style="font-family:JetBrains Mono,monospace;font-size:.66rem">'+new Date(u.release_date).toLocaleDateString()+'</td><td><span class="badge '+(u.is_draft?'b-draft':'b-active')+'">'+(u.is_draft?'Draft':'Published')+'</span></td><td><button class="btn btn-danger btn-xs" onclick="deleteUpdate('+u.id+')">Del</button></td></tr>';});}else{html+='<tr class="empty-row"><td colspan="6">No updates yet.</td></tr>';}
-  html+='</tbody></table></div></div>';
-  document.getElementById('view-changelog').innerHTML=html;
+async function loadChangelog() {
+  var res = await api('GET', '/admin/updates');
+  var updates = res.ok ? res.data : [];
+
+  var html = '<div class="sec-head"><h2 class="sec-title">Changelog</h2><button class="btn btn-primary" onclick="openChangelogModal()">+ Post Update</button></div>';
+  html += '<div class="card"><div class="table-wrap"><table>';
+  html += '<thead><tr><th>Version</th><th>Title</th><th>Type</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+
+  if (updates.length > 0) {
+    for (var i = 0; i < updates.length; i++) {
+      var u = updates[i];
+      html += '<tr>';
+      html += '<td style="font-family:JetBrains Mono,monospace;font-size:.66rem;color:var(--teal)">v' + esc(u.version) + '</td>';
+      html += '<td class="strong">' + esc(u.title) + '</td>';
+      html += '<td><span class="badge b-info">' + esc(u.type) + '</span></td>';
+      html += '<td style="font-family:JetBrains Mono,monospace;font-size:.66rem">' + new Date(u.release_date).toLocaleDateString() + '</td>';
+      html += '<td><span class="badge ' + (u.is_draft ? 'b-draft' : 'b-active') + '">' + (u.is_draft ? 'Draft' : 'Published') + '</span></td>';
+      html += '<td><button class="btn btn-danger btn-xs" onclick="deleteUpdate(' + u.id + ')">Del</button></td>';
+      html += '</tr>';
+    }
+  } else {
+    html += '<tr class="empty-row"><td colspan="6">No updates yet.</td></tr>';
+  }
+
+  html += '</tbody></table></div></div>';
+  document.getElementById('view-changelog').innerHTML = html;
 }
-function openChangelogModal(){openModal('Post Update','<div class="alert" id="_alert"></div><div class="form-row"><div class="fg"><label class="fl">Version *</label><input class="fi" id="_ver" placeholder="2.1.4"></div><div class="fg"><label class="fl">Date *</label><input class="fi" type="date" id="_rdate"></div></div><div class="form-row"><div class="fg"><label class="fl">Title *</label><input class="fi" id="_utitle" placeholder="Update title"></div><div class="fg"><label class="fl">Type</label><select class="fs" id="_utype"><option value="feature">Feature</option><option value="bug">Bug Fix</option><option value="maintenance">Maintenance</option><option value="announcement">Announcement</option></select></div></div><div class="fg"><label class="fl">Changelog *</label><textarea class="fta" id="_ulog" placeholder="- New feature"></textarea></div><div style="display:flex;gap:16px"><label class="toggle-row"><input type="checkbox" id="_ushow" checked> Show popup</label><label class="toggle-row"><input type="checkbox" id="_udismiss" checked> Dismissible</label></div>','<button class="btn btn-primary" onclick="saveUpdate()">Post</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>');}
-async function saveUpdate(){var version=document.getElementById('_ver').value.trim();var title=document.getElementById('_utitle').value.trim();var changelog=document.getElementById('_ulog').value.trim();var release_date=document.getElementById('_rdate').value;if(!version||!title||!changelog||!release_date){showAlert('All fields required.');return;}await api('POST','/admin/updates',{version:version,title:title,changelog:changelog,type:document.getElementById('_utype').value,release_date:release_date,show_popup:document.getElementById('_ushow').checked?1:0,dismissible:document.getElementById('_udismiss').checked?1:0});closeModal();loadChangelog();showToast('Update posted','success');}
-async function deleteUpdate(id){if(!confirm('Delete?'))return;await api('DELETE','/admin/updates/'+id);loadChangelog();}
+
+function openChangelogModal() {
+  openModal('Post Update',
+    '<div class="alert" id="_alert"></div>' +
+    '<div class="form-row">' +
+    '<div class="fg"><label class="fl">Version *</label><input class="fi" id="_ver" placeholder="2.1.4"></div>' +
+    '<div class="fg"><label class="fl">Date *</label><input class="fi" type="date" id="_rdate"></div>' +
+    '</div>' +
+    '<div class="form-row">' +
+    '<div class="fg"><label class="fl">Title *</label><input class="fi" id="_utitle" placeholder="Update title"></div>' +
+    '<div class="fg"><label class="fl">Type</label><select class="fs" id="_utype"><option value="feature">Feature</option><option value="bug">Bug Fix</option><option value="maintenance">Maintenance</option><option value="announcement">Announcement</option></select></div>' +
+    '</div>' +
+    '<div class="fg"><label class="fl">Changelog *</label><textarea class="fta" id="_ulog" placeholder="- New feature"></textarea></div>' +
+    '<div style="display:flex;gap:16px">' +
+    '<label class="toggle-row"><input type="checkbox" id="_ushow" checked> Show popup</label>' +
+    '<label class="toggle-row"><input type="checkbox" id="_udismiss" checked> Dismissible</label>' +
+    '</div>',
+    '<button class="btn btn-primary" onclick="saveUpdate()">Post</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>'
+  );
+}
+
+async function saveUpdate() {
+  var version = document.getElementById('_ver').value.trim();
+  var title = document.getElementById('_utitle').value.trim();
+  var changelog = document.getElementById('_ulog').value.trim();
+  var release_date = document.getElementById('_rdate').value;
+
+  if (!version || !title || !changelog || !release_date) {
+    showAlert('All fields required.');
+    return;
+  }
+
+  var res = await api('POST', '/admin/updates', {
+    version: version,
+    title: title,
+    changelog: changelog,
+    type: document.getElementById('_utype').value,
+    release_date: release_date,
+    show_popup: document.getElementById('_ushow').checked ? 1 : 0,
+    dismissible: document.getElementById('_udismiss').checked ? 1 : 0
+  });
+
+  if (!res.ok) return;
+  closeModal();
+  loadChangelog();
+  showToast('Update posted', 'success');
+}
+
+async function deleteUpdate(id) {
+  if (!confirm('Delete this update?')) return;
+  await api('DELETE', '/admin/updates/' + id);
+  loadChangelog();
+}
 
 // ── USERS ──
-async function loadUsers(){
-  var res=await api('GET','/admin/users');allUsers=res.ok?res.data:[];
-  var html='<div class="sec-head"><h2 class="sec-title">Users</h2></div><div class="card"><div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead><tbody>';
-  if(allUsers.length){allUsers.forEach(function(u){html+='<tr><td class="strong">'+esc(u.name)+'</td><td style="font-family:JetBrains Mono,monospace;font-size:.66rem">'+esc(u.email)+'</td><td><span class="badge '+(u.role==='admin'?'b-admin':'b-user')+'">'+u.role+'</span></td><td>'+(u.is_blocked?'<span class="badge b-blocked">Blocked</span>':u.is_approved?'<span class="badge b-active">Approved</span>':'<span class="badge b-pending">Pending</span>')+'</td><td style="font-family:JetBrains Mono,monospace;font-size:.64rem">'+new Date(u.created_at).toLocaleDateString()+'</td><td><div style="display:flex;gap:3px;flex-wrap:wrap">'+(u.role!=='admin'&&!u.is_approved?'<button class="btn btn-success btn-xs" onclick="approveUser('+u.id+')">Approve</button>':'')+(u.role!=='admin'?'<button class="btn '+(u.is_blocked?'btn-success':'btn-danger')+' btn-xs" onclick="toggleBlock('+u.id+','+u.is_blocked+')">'+(u.is_blocked?'Unblock':'Block')+'</button>':'')+(u.role!=='admin'?'<button class="btn btn-orange btn-xs" onclick="overrideRestriction('+u.id+')">Unlock</button>':'')+(u.role!=='admin'?'<button class="btn btn-danger btn-xs" onclick="deleteUser('+u.id+')">Del</button>':'')+'</div></td></tr>';});}else{html+='<tr class="empty-row"><td colspan="6">No users yet.</td></tr>';}
-  html+='</tbody></table></div></div>';
-  document.getElementById('view-users').innerHTML=html;
+async function loadUsers() {
+  var res = await api('GET', '/admin/users');
+  allUsers = res.ok ? res.data : [];
+
+  var html = '<div class="sec-head"><h2 class="sec-title">Users</h2></div>';
+  html += '<div class="card"><div class="table-wrap"><table>';
+  html += '<thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead><tbody>';
+
+  if (allUsers.length > 0) {
+    for (var i = 0; i < allUsers.length; i++) {
+      var u = allUsers[i];
+      var statusHtml = '';
+      if (u.is_blocked) {
+        statusHtml = '<span class="badge b-blocked">Blocked</span>';
+      } else if (u.is_approved) {
+        statusHtml = '<span class="badge b-active">Approved</span>';
+      } else {
+        statusHtml = '<span class="badge b-pending">Pending</span>';
+      }
+
+      var actionsHtml = '<div style="display:flex;gap:3px;flex-wrap:wrap">';
+      if (u.role !== 'admin' && !u.is_approved) {
+        actionsHtml += '<button class="btn btn-success btn-xs" onclick="approveUser(' + u.id + ')">Approve</button>';
+      }
+      if (u.role !== 'admin') {
+        actionsHtml += '<button class="btn ' + (u.is_blocked ? 'btn-success' : 'btn-danger') + ' btn-xs" onclick="toggleBlock(' + u.id + ',' + (u.is_blocked ? 1 : 0) + ')">' + (u.is_blocked ? 'Unblock' : 'Block') + '</button>';
+      }
+      if (u.role !== 'admin') {
+        actionsHtml += '<button class="btn btn-orange btn-xs" onclick="overrideRestriction(' + u.id + ')">Unlock</button>';
+      }
+      if (u.role !== 'admin') {
+        actionsHtml += '<button class="btn btn-danger btn-xs" onclick="deleteUser(' + u.id + ')">Del</button>';
+      }
+      actionsHtml += '</div>';
+
+      html += '<tr>';
+      html += '<td class="strong">' + esc(u.name) + '</td>';
+      html += '<td style="font-family:JetBrains Mono,monospace;font-size:.66rem">' + esc(u.email) + '</td>';
+      html += '<td><span class="badge ' + (u.role === 'admin' ? 'b-admin' : 'b-user') + '">' + u.role + '</span></td>';
+      html += '<td>' + statusHtml + '</td>';
+      html += '<td style="font-family:JetBrains Mono,monospace;font-size:.64rem">' + new Date(u.created_at).toLocaleDateString() + '</td>';
+      html += '<td>' + actionsHtml + '</td>';
+      html += '</tr>';
+    }
+  } else {
+    html += '<tr class="empty-row"><td colspan="6">No users yet.</td></tr>';
+  }
+
+  html += '</tbody></table></div></div>';
+  document.getElementById('view-users').innerHTML = html;
 }
-async function approveUser(id){await api('PUT','/admin/users/'+id+'/approve',{});loadUsers();loadDashboard();showToast('User approved','success');}
-async function toggleBlock(id,current){await api('PUT','/admin/users/'+id+'/block',{is_blocked:current?0:1});loadUsers();}
-async function overrideRestriction(id){if(!confirm('Override 90-day restriction?'))return;await api('PUT','/admin/users/'+id+'/override-restriction',{});showToast('Restrictions overridden','success');}
-async function deleteUser(id){if(!confirm('Permanently delete?'))return;await api('DELETE','/admin/users/'+id);loadUsers();loadDashboard();}
+
+async function approveUser(id) {
+  await api('PUT', '/admin/users/' + id + '/approve', {});
+  loadUsers();
+  loadDashboard();
+  showToast('User approved', 'success');
+}
+
+async function toggleBlock(id, isBlocked) {
+  await api('PUT', '/admin/users/' + id + '/block', { is_blocked: isBlocked ? 0 : 1 });
+  loadUsers();
+}
+
+async function overrideRestriction(id) {
+  if (!confirm('Override 90-day restriction for this user?')) return;
+  await api('PUT', '/admin/users/' + id + '/override-restriction', {});
+  showToast('Restrictions overridden', 'success');
+}
+
+async function deleteUser(id) {
+  if (!confirm('Permanently delete this user?')) return;
+  await api('DELETE', '/admin/users/' + id);
+  loadUsers();
+  loadDashboard();
+}
 
 // ── MEMBERSHIPS ──
-async function loadMemberships(){
-  var results=await Promise.all([api('GET','/admin/memberships'),api('GET','/admin/courses'),api('GET','/admin/users')]);
-  var mems=results[0].ok?results[0].data:[];allCourses=results[1].ok?results[1].data:[];allUsers=results[2].ok?results[2].data:[];
-  var html='<div class="sec-head"><h2 class="sec-title">Memberships</h2><button class="btn btn-primary" onclick="openMembershipModal()">+ Grant</button></div><div class="card"><div class="table-wrap"><table><thead><tr><th>User</th><th>Course</th><th>Status</th><th>Expires</th><th>Actions</th></tr></thead><tbody>';
-  if(mems.length){mems.forEach(function(m){var exp=new Date(m.expires_at),now=new Date();var active=m.is_active&&exp>now;var days=Math.ceil((exp-now)/86400000);html+='<tr><td><div class="strong">'+esc(m.user_name)+'</div><div style="font-family:JetBrains Mono,monospace;font-size:.64rem;color:var(--gray)">'+esc(m.user_email)+'</div></td><td>'+esc(m.course_title)+'</td><td><span class="badge '+(active?'b-active':'b-inactive')+'">'+(active?'Active':'Expired')+'</span></td><td style="font-family:JetBrains Mono,monospace;font-size:.66rem">'+exp.toLocaleDateString()+'<div style="font-size:.62rem;color:'+(days>0&&active?'var(--teal)':'var(--red)')+'">'+(days>0?days+'d left':'Expired')+'</div></td><td><div style="display:flex;gap:3px"><button class="btn btn-ghost btn-xs" onclick="openExtendModal('+m.id+')">Extend</button>'+(active?'<button class="btn btn-danger btn-xs" onclick="cancelMembership('+m.id+')">Cancel</button>':'')+'</div></td></tr>';});}else{html+='<tr class="empty-row"><td colspan="5">No memberships.</td></tr>';}
-  html+='</tbody></table></div></div>';
-  document.getElementById('view-memberships').innerHTML=html;
-}
-function openMembershipModal(){
-  var uOpts=allUsers.filter(function(u){return u.role!=='admin'&&u.is_approved;}).map(function(u){return'<option value="'+u.id+'">'+esc(u.name)+' ('+esc(u.email)+')</option>';}).join('');
-  var cOpts=allCourses.map(function(c){return'<option value="'+c.id+'">'+esc(c.title)+'</option>';}).join('');
-  openModal('Grant Membership','<div class="alert" id="_alert"></div><div class="fg"><label class="fl">User *</label><select class="fs" id="_uid"><option value="">— Select —</option>'+uOpts+'</select></div><div class="fg"><label class="fl">Course *</label><select class="fs" id="_cid"><option value="">— Select —</option>'+cOpts+'</select></div><div class="fg"><label class="fl">Duration (days) *</label><input class="fi" type="number" id="_days" value="30" min="1"><div id="_expPrev" style="font-family:JetBrains Mono,monospace;font-size:.66rem;color:var(--teal);margin-top:4px"></div></div>','<button class="btn btn-primary" onclick="grantMembership()">Grant</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>');
-  document.getElementById('_days').addEventListener('input',function(){var d=parseInt(document.getElementById('_days').value)||0;if(d>0){var e=new Date(Date.now()+d*86400000);document.getElementById('_expPrev').textContent='Expires: '+e.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});}});
-}
-async function grantMembership(){var user_id=document.getElementById('_uid').value;var course_id=document.getElementById('_cid').value;var days=parseInt(document.getElementById('_days').value)||0;if(!user_id||!course_id||!days){showAlert('All fields required.');return;}await api('POST','/admin/memberships',{user_id:parseInt(user_id),course_id:parseInt(course_id),days:days});closeModal();loadMemberships();loadDashboard();showToast('Membership granted','success');}
-function openExtendModal(memId){openModal('Extend Membership','<div class="alert" id="_alert"></div><input type="hidden" id="_mid" value="'+memId+'"><div class="fg"><label class="fl">Extend by (days) *</label><input class="fi" type="number" id="_days" value="30" min="1"></div>','<button class="btn btn-primary" onclick="extendMembership()">Extend</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>');}
-async function extendMembership(){var days=parseInt(document.getElementById('_days').value)||0;if(!days){showAlert('Days required.');return;}await api('PUT','/admin/memberships/'+document.getElementById('_mid').value+'/extend',{days:days});closeModal();loadMemberships();showToast('Extended','success');}
-async function cancelMembership(id){if(!confirm('Cancel?'))return;await api('PUT','/admin/memberships/'+id+'/cancel',{});loadMemberships();}
+async function loadMemberships() {
+  var results = await Promise.all([
+    api('GET', '/admin/memberships'),
+    api('GET', '/admin/courses'),
+    api('GET', '/admin/users')
+  ]);
 
-// Init
+  var mems = results[0].ok ? results[0].data : [];
+  allCourses = results[1].ok ? results[1].data : [];
+  allUsers = results[2].ok ? results[2].data : [];
+
+  var html = '<div class="sec-head"><h2 class="sec-title">Memberships</h2><button class="btn btn-primary" onclick="openMembershipModal()">+ Grant</button></div>';
+  html += '<div class="card"><div class="table-wrap"><table>';
+  html += '<thead><tr><th>User</th><th>Course</th><th>Status</th><th>Expires</th><th>Actions</th></tr></thead><tbody>';
+
+  if (mems.length > 0) {
+    for (var i = 0; i < mems.length; i++) {
+      var m = mems[i];
+      var exp = new Date(m.expires_at);
+      var now = new Date();
+      var active = m.is_active && exp > now;
+      var days = Math.ceil((exp - now) / 86400000);
+      var daysColor = (days > 0 && active) ? 'var(--teal)' : 'var(--red)';
+      var daysText = days > 0 ? days + 'd left' : 'Expired';
+
+      html += '<tr>';
+      html += '<td><div class="strong">' + esc(m.user_name) + '</div><div style="font-family:JetBrains Mono,monospace;font-size:.64rem;color:var(--gray)">' + esc(m.user_email) + '</div></td>';
+      html += '<td>' + esc(m.course_title) + '</td>';
+      html += '<td><span class="badge ' + (active ? 'b-active' : 'b-inactive') + '">' + (active ? 'Active' : 'Expired') + '</span></td>';
+      html += '<td style="font-family:JetBrains Mono,monospace;font-size:.66rem">' + exp.toLocaleDateString() + '<div style="font-size:.62rem;color:' + daysColor + '">' + daysText + '</div></td>';
+      html += '<td><div style="display:flex;gap:3px">';
+      html += '<button class="btn btn-ghost btn-xs" onclick="openExtendModal(' + m.id + ')">Extend</button>';
+      if (active) {
+        html += '<button class="btn btn-danger btn-xs" onclick="cancelMembership(' + m.id + ')">Cancel</button>';
+      }
+      html += '</div></td></tr>';
+    }
+  } else {
+    html += '<tr class="empty-row"><td colspan="5">No memberships.</td></tr>';
+  }
+
+  html += '</tbody></table></div></div>';
+  document.getElementById('view-memberships').innerHTML = html;
+}
+
+function openMembershipModal() {
+  var uOpts = '';
+  for (var i = 0; i < allUsers.length; i++) {
+    var u = allUsers[i];
+    if (u.role !== 'admin' && u.is_approved) {
+      uOpts += '<option value="' + u.id + '">' + esc(u.name) + ' (' + esc(u.email) + ')</option>';
+    }
+  }
+
+  var cOpts = '';
+  for (var j = 0; j < allCourses.length; j++) {
+    var c = allCourses[j];
+    cOpts += '<option value="' + c.id + '">' + esc(c.title) + '</option>';
+  }
+
+  openModal('Grant Membership',
+    '<div class="alert" id="_alert"></div>' +
+    '<div class="fg"><label class="fl">User *</label><select class="fs" id="_uid"><option value="">— Select —</option>' + uOpts + '</select></div>' +
+    '<div class="fg"><label class="fl">Course *</label><select class="fs" id="_cid"><option value="">— Select —</option>' + cOpts + '</select></div>' +
+    '<div class="fg"><label class="fl">Duration (days) *</label><input class="fi" type="number" id="_days" value="30" min="1"><div id="_expPrev" style="font-family:JetBrains Mono,monospace;font-size:.66rem;color:var(--teal);margin-top:4px"></div></div>',
+    '<button class="btn btn-primary" onclick="grantMembership()">Grant</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>'
+  );
+
+  document.getElementById('_days').addEventListener('input', function() {
+    var d = parseInt(document.getElementById('_days').value) || 0;
+    if (d > 0) {
+      var e = new Date(Date.now() + d * 86400000);
+      document.getElementById('_expPrev').textContent = 'Expires: ' + e.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+  });
+}
+
+async function grantMembership() {
+  var user_id = document.getElementById('_uid').value;
+  var course_id = document.getElementById('_cid').value;
+  var days = parseInt(document.getElementById('_days').value) || 0;
+
+  if (!user_id || !course_id || !days) {
+    showAlert('All fields required.');
+    return;
+  }
+
+  var res = await api('POST', '/admin/memberships', {
+    user_id: parseInt(user_id),
+    course_id: parseInt(course_id),
+    days: days
+  });
+
+  if (!res.ok) return;
+  closeModal();
+  loadMemberships();
+  loadDashboard();
+  showToast('Membership granted', 'success');
+}
+
+function openExtendModal(memId) {
+  openModal('Extend Membership',
+    '<div class="alert" id="_alert"></div><input type="hidden" id="_mid" value="' + memId + '">' +
+    '<div class="fg"><label class="fl">Extend by (days) *</label><input class="fi" type="number" id="_days" value="30" min="1"></div>',
+    '<button class="btn btn-primary" onclick="extendMembership()">Extend</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>'
+  );
+}
+
+async function extendMembership() {
+  var days = parseInt(document.getElementById('_days').value) || 0;
+  if (!days) {
+    showAlert('Days required.');
+    return;
+  }
+
+  var res = await api('PUT', '/admin/memberships/' + document.getElementById('_mid').value + '/extend', { days: days });
+  if (!res.ok) return;
+  closeModal();
+  loadMemberships();
+  showToast('Extended', 'success');
+}
+
+async function cancelMembership(id) {
+  if (!confirm('Cancel this membership?')) return;
+  await api('PUT', '/admin/memberships/' + id + '/cancel', {});
+  loadMemberships();
+}
+
+// ── INIT ──
 loadView('dashboard');
 </script>
 </body>
