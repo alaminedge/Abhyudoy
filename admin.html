@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:#04060e;--sidebar-bg:#070b14;--sidebar-hover:#0a0e1a;
+  --bg:#04060e;--sidebar-bg:#070b14;
   --surface:#0b0f1a;--surface2:#111827;--surface3:#161e2e;
   --border:rgba(255,255,255,0.05);--border2:rgba(255,255,255,0.09);--border3:rgba(255,255,255,0.13);
   --teal:#00d4aa;--teal2:#00b894;--teal-dim:rgba(0,212,170,0.07);--teal-glow:rgba(0,212,170,0.14);
@@ -23,17 +23,13 @@
 html,body{height:100%;font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--white);-webkit-font-smoothing:antialiased}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.06);border-radius:4px}
 
-/* SIDEBAR */
 .sidebar{width:var(--sw);background:var(--sidebar-bg);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:60;overflow-y:auto;overflow-x:hidden;transition:transform 0.28s cubic-bezier(0.4,0,0.2,1)}
-.sidebar.open{transform:translateX(0)}
 .sb-top{padding:22px 18px 16px;border-bottom:1px solid var(--border)}
 .sb-logo-img{height:28px}
-.sb-logo{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;letter-spacing:-0.02em;text-decoration:none;color:var(--white);display:flex;align-items:center;gap:8px}
 .sb-role{font-family:'JetBrains Mono',monospace;font-size:0.56rem;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.2);margin-top:6px}
-.nav-section{padding:4px 0}
 .nav-group{font-family:'JetBrains Mono',monospace;font-size:0.54rem;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.16);font-weight:600;padding:12px 18px 6px}
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 18px;font-size:0.78rem;font-weight:500;color:rgba(255,255,255,0.4);cursor:pointer;border:none;background:transparent;width:100%;text-align:left;transition:all var(--transition);border-left:2px solid transparent;font-family:'Inter',sans-serif;letter-spacing:0.01em}
-.nav-item svg{width:16px;height:16px;flex-shrink:0;opacity:0.6;transition:opacity var(--transition)}
+.nav-item svg{width:16px;height:16px;flex-shrink:0;opacity:0.6}
 .nav-item:hover{color:rgba(255,255,255,0.75);background:rgba(255,255,255,0.02)}
 .nav-item.active{color:var(--teal);background:var(--teal-dim);border-left-color:var(--teal)}
 .nav-item.active svg{opacity:1}
@@ -42,12 +38,11 @@ html,body{height:100%;font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-
 .btn-logout{width:100%;padding:8px 14px;background:transparent;border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.35);border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:0.7rem;font-weight:600;cursor:pointer;transition:all var(--transition);letter-spacing:0.04em;text-transform:uppercase}
 .btn-logout:hover{border-color:var(--red);color:var(--red);background:var(--red-dim)}
 
-/* MAIN */
 .main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;min-height:100vh}
 .topbar{height:56px;padding:0 22px;background:rgba(11,15,26,0.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40}
 .topbar-left{display:flex;align-items:center;gap:12px}
 .menu-btn{display:none;background:none;border:none;color:var(--gray2);cursor:pointer;padding:5px}
-.menu-btn svg{width:20px;height:20px;fill:currentColor}
+.menu-btn svg{width:20px;height:20px}
 .topbar-title{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1rem;letter-spacing:-0.01em}
 .topbar-right{display:flex;align-items:center;gap:8px}
 .role-pill{font-family:'JetBrains Mono',monospace;font-size:0.58rem;font-weight:500;text-transform:uppercase;letter-spacing:0.1em;padding:4px 12px;border-radius:20px;background:var(--teal-dim);color:var(--teal);border:1px solid rgba(0,212,170,0.2)}
@@ -60,20 +55,17 @@ html,body{height:100%;font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-
 .view.active{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
-/* STATS */
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:24px}
-.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;transition:border-color var(--transition)}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px}
 .stat-card:hover{border-color:var(--border2)}
 .stat-label{font-family:'JetBrains Mono',monospace;font-size:0.55rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--gray);margin-bottom:8px;font-weight:500}
 .stat-val{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:var(--teal);line-height:1}
 
-/* SECTION HEAD */
 .sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
 .sec-title{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:700;letter-spacing:-0.01em}
 
-/* BUTTONS */
 .btn{font-family:'Inter',sans-serif;font-size:0.7rem;font-weight:600;padding:7px 14px;border-radius:var(--radius-sm);border:none;cursor:pointer;transition:all var(--transition);display:inline-flex;align-items:center;gap:5px;letter-spacing:0.03em;text-transform:uppercase;white-space:nowrap}
-.btn-primary{background:var(--teal);color:#000}.btn-primary:hover{background:var(--teal2);transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,212,170,0.25)}
+.btn-primary{background:var(--teal);color:#000}.btn-primary:hover{background:var(--teal2);transform:translateY(-1px)}
 .btn-ghost{background:transparent;color:var(--gray);border:1.5px solid var(--border2)}.btn-ghost:hover{border-color:var(--teal);color:var(--teal);background:var(--teal-dim)}
 .btn-danger{background:var(--red-dim);color:var(--red);border:1.5px solid rgba(240,86,106,0.18)}.btn-danger:hover{background:var(--red);color:#fff;border-color:var(--red)}
 .btn-success{background:var(--green-dim);color:var(--green);border:1.5px solid rgba(16,212,142,0.2)}.btn-success:hover{background:var(--green);color:#fff;border-color:var(--green)}
@@ -81,7 +73,6 @@ html,body{height:100%;font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-
 .btn-sm{padding:4px 10px;font-size:0.65rem}
 .btn-xs{padding:3px 8px;font-size:0.6rem}
 
-/* CARD / TABLE */
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:16px}
 .card-pad{padding:18px}
 .table-wrap{overflow-x:auto}
@@ -94,7 +85,6 @@ tr:last-child td{border-bottom:none}
 tr:hover td{background:rgba(255,255,255,0.012)}
 .td-max{max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-/* BADGES */
 .badge{font-family:'JetBrains Mono',monospace;font-size:0.56rem;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;padding:3px 8px;border-radius:20px;display:inline-block;white-space:nowrap}
 .b-active{background:var(--green-dim);color:var(--green);border:1px solid rgba(16,212,142,0.2)}
 .b-inactive{background:rgba(107,125,145,0.06);color:var(--gray);border:1px solid var(--border)}
@@ -103,19 +93,13 @@ tr:hover td{background:rgba(255,255,255,0.012)}
 .b-admin{background:var(--teal-dim);color:var(--teal);border:1px solid rgba(0,212,170,0.2)}
 .b-user{background:rgba(107,125,145,0.04);color:var(--gray);border:1px solid var(--border)}
 .b-info{background:var(--teal-dim);color:var(--teal);border:1px solid rgba(0,212,170,0.2)}
-.b-warning{background:var(--orange-dim);color:var(--orange);border:1px solid rgba(245,158,11,0.2)}
-.b-success{background:var(--green-dim);color:var(--green);border:1px solid rgba(16,212,142,0.2)}
-.b-important{background:var(--red-dim);color:var(--red);border:1px solid rgba(240,86,106,0.2)}
 .b-draft{background:rgba(107,125,145,0.06);color:var(--gray);border:1px solid var(--border)}
 
-/* FORMS */
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
 .fg{margin-bottom:14px}
 .fl{display:block;font-family:'JetBrains Mono',monospace;font-size:0.58rem;font-weight:500;text-transform:uppercase;letter-spacing:0.1em;color:var(--gray);margin-bottom:6px}
 .fi,.fs,.fta{width:100%;padding:9px 12px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:0.82rem;color:var(--white);outline:none;transition:all var(--transition)}
 .fi:focus,.fs:focus,.fta:focus{border-color:var(--teal);background:rgba(0,212,170,0.03);box-shadow:0 0 0 3px var(--teal-dim)}
-.fi::placeholder,.fta::placeholder{color:rgba(107,125,145,0.4)}
 .fs{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='%236b7d91'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
 .fta{resize:vertical;min-height:80px;line-height:1.55}
 .toggle-row{display:flex;align-items:center;gap:8px;font-size:0.82rem;cursor:pointer;user-select:none;color:var(--gray2)}
@@ -123,26 +107,23 @@ input[type=checkbox]{accent-color:var(--teal);width:14px;height:14px;cursor:poin
 .hint{font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--gray);margin-top:4px}
 .hint strong{color:var(--teal)}
 
-/* ALERT */
 .alert{padding:10px 14px;border-radius:var(--radius-sm);font-size:0.76rem;margin-bottom:14px;display:none;line-height:1.4}
 .alert.show{display:block}
 .alert-error{background:var(--red-dim);border:1px solid rgba(240,86,106,0.2);color:var(--red)}
 .alert-success{background:var(--green-dim);border:1px solid rgba(16,212,142,0.2);color:var(--green)}
 
-/* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:none;place-items:center;padding:20px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
-.modal-overlay.open{display:grid;animation:fadeIn 0.18s ease}
+.modal-overlay.open{display:grid}
 .modal{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-lg);max-width:620px;width:100%;max-height:85vh;overflow-y:auto;animation:slideUp 0.22s cubic-bezier(0.34,1.3,0.64,1)}
 @keyframes slideUp{from{opacity:0;transform:translateY(14px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 .modal-head{padding:18px 20px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--surface);z-index:1}
 .modal-head h3{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;letter-spacing:-0.01em}
 .modal-close{background:var(--surface2);border:none;width:26px;height:26px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gray);transition:all var(--transition);flex-shrink:0}
 .modal-close:hover{background:var(--border2);color:var(--white)}
-.modal-close svg{width:10px;height:10px;fill:currentColor}
+.modal-close svg{width:10px;height:10px}
 .modal-body{padding:18px 20px}
 .modal-footer{padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px}
 
-/* TREE */
 .tree-section{margin-bottom:18px}
 .tree-course-header{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:3px}
 .tree-course-title{font-family:'Cormorant Garamond',serif;font-size:0.92rem;font-weight:700;flex:1}
@@ -153,65 +134,53 @@ input[type=checkbox]{accent-color:var(--teal);width:14px;height:14px;cursor:poin
 .tree-name{flex:1;font-weight:500;color:var(--white)}
 .tree-actions{display:flex;gap:3px;flex-wrap:wrap}
 
-/* EMPTY */
 .empty-row td{text-align:center;padding:36px!important;color:var(--gray)!important;font-style:italic}
 
-/* TOAST */
 .toast-container{position:fixed;bottom:20px;right:20px;z-index:300;display:flex;flex-direction:column;gap:8px}
-.toast{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius);padding:12px 16px;font-size:0.78rem;color:var(--white);box-shadow:0 8px 32px rgba(0,0,0,0.5);animation:slideInToast 0.3s ease,slideOutToast 0.3s ease 3s forwards;display:flex;align-items:center;gap:8px;min-width:260px}
-.toast-success{border-color:rgba(16,212,142,0.3)}.toast-icon{color:var(--green)}
-.toast-error{border-color:rgba(240,86,106,0.3)}.toast-icon{color:var(--red)}
-@keyframes slideInToast{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
-@keyframes slideOutToast{from{opacity:1}to{opacity:0;transform:translateX(20px)}}
+.toast{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--radius);padding:12px 16px;font-size:0.78rem;color:var(--white);box-shadow:0 8px 32px rgba(0,0,0,0.5);animation:slideIn 0.3s ease,slideOut 0.3s ease 3s forwards;display:flex;align-items:center;gap:8px;min-width:260px}
+.toast-success{border-color:rgba(16,212,142,0.3)}.toast-s{color:var(--green)}
+.toast-error{border-color:rgba(240,86,106,0.3)}.toast-e{color:var(--red)}
+@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideOut{from{opacity:1}to{opacity:0;transform:translateX(20px)}}
 
-/* NOTIFICATION PREVIEW */
-.notif-preview{background:var(--surface3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;margin-top:8px;font-size:0.76rem;color:var(--gray2);line-height:1.5;display:none}
-
-/* FOOTER */
 footer{border-top:1px solid var(--border);background:var(--surface);padding:14px 22px;font-size:0.68rem;color:rgba(255,255,255,0.15);display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;flex-wrap:wrap;gap:8px}
 footer a{color:var(--teal);text-decoration:none}
 
-@media(max-width:960px){
-  .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}
-  .main{margin-left:0}.menu-btn{display:flex}
-  .content{padding:14px 12px}
-  .form-row,.form-row-3{grid-template-columns:1fr}
-  .stats-grid{grid-template-columns:repeat(2,1fr)}
-}
+@media(max-width:960px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.menu-btn{display:flex}.content{padding:14px 12px}.form-row{grid-template-columns:1fr}.stats-grid{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
 
 <aside class="sidebar" id="sidebar">
   <div class="sb-top">
-    <div class="sb-logo"><img src="/images/reallogo.png" height="28" alt="Abhyudoy" class="sb-logo-img"></div>
+    <img src="/images/reallogo.png" height="28" alt="Abhyudoy" class="sb-logo-img">
     <div class="sb-role">Admin Panel</div>
   </div>
-  <div class="nav-section">
-    <div class="nav-group">Overview</div>
-    <button class="nav-item active" onclick="showView('dashboard')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</button>
-  </div>
-  <div class="nav-section">
-    <div class="nav-group">Content</div>
-    <button class="nav-item" onclick="showView('courses')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>Courses</button>
-    <button class="nav-item" onclick="showView('content')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>Content Tree</button>
-    <button class="nav-item" onclick="showView('lectures')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>Lectures</button>
-    <button class="nav-item" onclick="showView('resources')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Resources</button>
-  </div>
-  <div class="nav-section">
-    <div class="nav-group">Communication</div>
-    <button class="nav-item" onclick="showView('notifications')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>Notifications</button>
-    <button class="nav-item" onclick="showView('tickets')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Support Tickets</button>
-  </div>
-  <div class="nav-section">
-    <div class="nav-group">Updates</div>
-    <button class="nav-item" onclick="showView('changelog')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>Changelog</button>
-  </div>
-  <div class="nav-section">
-    <div class="nav-group">Management</div>
-    <button class="nav-item" onclick="showView('users')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>Users</button>
-    <button class="nav-item" onclick="showView('memberships')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Memberships</button>
-  </div>
+  <div class="nav-group" style="padding-top:8px">Overview</div>
+  <button class="nav-item active" data-view="dashboard" onclick="showView('dashboard')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</button>
+  <div class="nav-group">Content</div>
+  <button class="nav-item" data-view="courses" onclick="showView('courses')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>Courses</button>
+  <button class="nav-item" data-view="content" onclick="showView('content')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/></svg>Content Tree</button>
+  <button class="nav-item" data-view="lectures" onclick="showView('lectures')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>Lectures</button>
+  <button class="nav-item" data-view="resources" onclick="showView('resources')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Resources</button>
+  <div class="nav-group">Communication</div>
+  <button class="nav-item" data-view="notifications" onclick="showView('notifications')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>Notifications</button>
+  <button class="nav-item" data-view="tickets" onclick="showView('tickets')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Support Tickets</button>
+  <div class="nav-group">Updates</div>
+  <button class="nav-item" data-view="changelog" onclick="showView('changelog')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>Changelog</button>
+  <div class="nav-group">Management</div>
+  <button class="nav-item" data-view="users" onclick="showView('users')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Users</button>
+  <button class="nav-item" data-view="memberships" onclick="showView('memberships')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/></svg>Memberships</button>
   <div class="sb-footer">
     <div class="sb-email" id="adminEmail"></div>
     <button class="btn-logout" onclick="logout()">Sign Out</button>
@@ -221,11 +190,14 @@ footer a{color:var(--teal);text-decoration:none}
 <main class="main">
   <div class="topbar">
     <div class="topbar-left">
-      <button class="menu-btn" onclick="document.getElementById('sidebar').classList.toggle('open')"><svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></button>
+      <button class="menu-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+      </button>
       <span class="topbar-title" id="topbarTitle">Dashboard</span>
     </div>
     <div class="topbar-right">
-      <a href="/dashboard.html" target="_blank" class="btn-site"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>View Site</a>
+      <a href="/dashboard.html" target="_blank" class="btn-site">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>View Site</a>
       <span class="role-pill">Admin</span>
     </div>
   </div>
@@ -246,7 +218,7 @@ footer a{color:var(--teal);text-decoration:none}
 
 <div class="modal-overlay" id="gModal" onclick="if(event.target===this)closeModal()">
   <div class="modal">
-    <div class="modal-head"><h3 id="gModalTitle">—</h3><button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button></div>
+    <div class="modal-head"><h3 id="gModalTitle">—</h3><button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button></div>
     <div class="modal-body" id="gModalBody"></div>
     <div class="modal-footer" id="gModalFooter"></div>
   </div>
@@ -262,11 +234,11 @@ document.getElementById('adminEmail').textContent=user.email;
 
 let allCourses=[],allSubjects=[],allPapers=[],allChapters=[],allUsers=[];
 
-function showToast(msg,type='success'){
+function showToast(msg,type){
   const c=document.getElementById('toastContainer');
-  const t=document.createElement('div');t.className=`toast toast-${type}`;
-  const icons={success:'<svg style="width:16px;height:16px;color:var(--green)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>',error:'<svg style="width:16px;height:16px;color:var(--red)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>'};
-  t.innerHTML=icons[type]+`<span>${msg}</span>`;c.appendChild(t);setTimeout(()=>t.remove(),3500);
+  const t=document.createElement('div');t.className='toast toast-'+(type==='success'?'success':'error');
+  t.innerHTML=`<span class="toast-${type==='success'?'s':'e'}">${type==='success'?'\u2713':'\u2717'}</span><span>${msg}</span>`;
+  c.appendChild(t);setTimeout(()=>t.remove(),3500);
 }
 
 async function api(method,path,body){
@@ -283,7 +255,7 @@ function showView(id){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
   document.getElementById('view-'+id).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(b=>{if(b.onclick&&b.onclick.toString().includes(id.slice(0,6)))b.classList.add('active')});
+  document.querySelectorAll('.nav-item').forEach(b=>{if(b.getAttribute('data-view')===id)b.classList.add('active')});
   document.getElementById('topbarTitle').textContent=titles[id]||id;
   document.getElementById('sidebar').classList.remove('open');
   loadView(id);
@@ -306,7 +278,6 @@ function loadView(id){
 
 function logout(){localStorage.clear();window.location.href='/index.html'}
 function esc(s){const d=document.createElement('div');d.textContent=String(s||'');return d.innerHTML}
-
 function openModal(title,bodyHtml,footerHtml){
   document.getElementById('gModalTitle').textContent=title;
   document.getElementById('gModalBody').innerHTML=bodyHtml;
@@ -314,18 +285,16 @@ function openModal(title,bodyHtml,footerHtml){
   document.getElementById('gModal').classList.add('open');
 }
 function closeModal(){document.getElementById('gModal').classList.remove('open')}
-function showAlert(msg,type='error'){const el=document.getElementById('_alert');if(el){el.className=`alert alert-${type} show`;el.textContent=msg}}
+function showAlert(msg,type){const el=document.getElementById('_alert');if(el){el.className='alert alert-'+type+' show';el.textContent=msg}}
 
 // ── DASHBOARD ──
 async function loadDashboard(){
   const[cR,sR,pR,chR,uR,mR,notR,tickR]=await Promise.all([
-    api('GET','/admin/courses'),api('GET','/admin/all-subjects'),
-    api('GET','/admin/all-papers'),api('GET','/admin/all-chapters'),
-    api('GET','/admin/users'),api('GET','/admin/memberships'),
+    api('GET','/admin/courses'),api('GET','/admin/all-subjects'),api('GET','/admin/all-papers'),
+    api('GET','/admin/all-chapters'),api('GET','/admin/users'),api('GET','/admin/memberships'),
     api('GET','/admin/notifications'),api('GET','/admin/support-tickets')
   ]);
-  allCourses=cR.ok?cR.data:[];allSubjects=sR.ok?sR.data:[];
-  allPapers=pR.ok?pR.data:[];allChapters=chR.ok?chR.data:[];allUsers=uR.ok?uR.data:[];
+  allCourses=cR.ok?cR.data:[];allSubjects=sR.ok?sR.data:[];allPapers=pR.ok?pR.data:[];allChapters=chR.ok?chR.data:[];allUsers=uR.ok?uR.data:[];
   const mems=mR.ok?mR.data:[];const notifs=notR.ok?notR.data:[];const tickets=tickR.ok?tickR.data:[];
   const active=mems.filter(m=>m.is_active&&new Date(m.expires_at)>new Date()).length;
   const pending=allUsers.filter(u=>!u.is_approved).length;
@@ -336,10 +305,7 @@ async function loadDashboard(){
   document.getElementById('view-dashboard').innerHTML=`
     <div class="stats-grid">
       ${[['Courses',allCourses.length],['Browse Visible',browseCount],['Subjects',allSubjects.length],['Papers',allPapers.length],['Chapters',allChapters.length],['Total Users',allUsers.length],['Pending Approval',pending],['Active Memberships',active],['Unresolved Tickets',unresolvedTickets],['Active Notifications',activeNotifs]].map(([l,v])=>`<div class="stat-card"><div class="stat-label">${l}</div><div class="stat-val">${v}</div></div>`).join('')}
-    </div>
-    ${pending?`<div style="background:var(--orange-dim);border:1px solid rgba(245,158,11,.2);border-radius:var(--radius);padding:12px 16px;font-size:.78rem;color:var(--orange);margin-bottom:16px"><span style="font-weight:700">${pending} user${pending>1?'s':''} awaiting approval.</span> <a href="#" onclick="showView('users');return false;" style="color:var(--orange);text-decoration:underline;font-weight:600">Review now</a></div>`:''}
-    ${unresolvedTickets?`<div style="background:var(--red-dim);border:1px solid rgba(240,86,106,.2);border-radius:var(--radius);padding:12px 16px;font-size:.78rem;color:var(--red);margin-bottom:16px"><span style="font-weight:700">${unresolvedTickets} unresolved support ticket${unresolvedTickets>1?'s':''}.</span> <a href="#" onclick="showView('tickets');return false;" style="color:var(--red);text-decoration:underline;font-weight:600">View now</a></div>`:''}
-  `;
+    </div>`;
 }
 
 // ── COURSES ──
@@ -351,7 +317,7 @@ async function loadCourses(){
       <thead><tr><th>Title</th><th>Slug</th><th>Subject</th><th>Browse</th><th>Status</th><th>Actions</th></tr></thead>
       <tbody>${allCourses.length?allCourses.map(c=>`<tr>
         <td class="strong td-max">${esc(c.title)}</td>
-        <td style="font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--gray)">${esc(c.slug||'—')}</td>
+        <td style="font-family:JetBrains Mono,monospace;font-size:.66rem;color:var(--gray)">${esc(c.slug||'—')}</td>
         <td>${esc(c.subject_area||'—')}</td>
         <td><span class="badge ${c.show_in_browse?'b-active':'b-inactive'}">${c.show_in_browse?'Visible':'Hidden'}</span></td>
         <td><span class="badge ${c.is_active?'b-active':'b-inactive'}">${c.is_active?'Active':'Inactive'}</span></td>
@@ -368,32 +334,26 @@ function openCourseModal(id){
   openModal(c?'Edit Course':'New Course',`
     <div class="alert" id="_alert"></div>
     <input type="hidden" id="_id" value="${c?.id||''}">
-    <div class="form-row">
-      <div class="fg"><label class="fl">Title *</label><input class="fi" id="_title" value="${esc(c?.title||'')}" placeholder="Course title"></div>
-      <div class="fg"><label class="fl">Custom Slug (optional)</label><input class="fi" id="_slug" value="${esc(c?.slug||'')}" placeholder="Auto-generated if empty"></div>
-    </div>
+    <div class="form-row"><div class="fg"><label class="fl">Title *</label><input class="fi" id="_title" value="${esc(c?.title||'')}" placeholder="Course title"></div>
+    <div class="fg"><label class="fl">Slug (optional)</label><input class="fi" id="_slug" value="${esc(c?.slug||'')}" placeholder="Auto-generated"><div class="hint">Leave empty to auto-generate from title</div></div></div>
     <div class="fg"><label class="fl">Description</label><textarea class="fta" id="_desc">${esc(c?.description||'')}</textarea></div>
-    <div class="form-row">
-      <div class="fg"><label class="fl">Thumbnail URL</label><input class="fi" id="_thumb" value="${esc(c?.thumbnail||'')}" placeholder="https://..."></div>
-      <div class="fg"><label class="fl">Subject Area</label><input class="fi" id="_subject" value="${esc(c?.subject_area||'')}" placeholder="e.g. Mathematics"></div>
-    </div>
-    <div class="form-row">
-      <div class="fg"><label class="fl">Difficulty Level</label><select class="fs" id="_diff">
-        <option value="all" ${c?.difficulty_level==='all'?'selected':''}>All Levels</option>
-        <option value="beginner" ${c?.difficulty_level==='beginner'?'selected':''}>Beginner</option>
-        <option value="intermediate" ${c?.difficulty_level==='intermediate'?'selected':''}>Intermediate</option>
-        <option value="advanced" ${c?.difficulty_level==='advanced'?'selected':''}>Advanced</option>
-      </select></div>
-      <div class="fg"><label class="fl">Enrollment Type</label><select class="fs" id="_enroll">
-        <option value="open" ${c?.enrollment_type==='open'?'selected':''}>Open (Anyone can enroll)</option>
-        <option value="approval" ${c?.enrollment_type==='approval'?'selected':''}>Approval Required</option>
-      </select></div>
-    </div>
+    <div class="form-row"><div class="fg"><label class="fl">Thumbnail URL</label><input class="fi" id="_thumb" value="${esc(c?.thumbnail||'')}" placeholder="https://..."></div>
+    <div class="fg"><label class="fl">Subject Area</label><input class="fi" id="_subject" value="${esc(c?.subject_area||'')}" placeholder="e.g. Mathematics"></div></div>
+    <div class="form-row"><div class="fg"><label class="fl">Difficulty</label><select class="fs" id="_diff">
+      <option value="all" ${c?.difficulty_level==='all'?'selected':''}>All Levels</option>
+      <option value="beginner" ${c?.difficulty_level==='beginner'?'selected':''}>Beginner</option>
+      <option value="intermediate" ${c?.difficulty_level==='intermediate'?'selected':''}>Intermediate</option>
+      <option value="advanced" ${c?.difficulty_level==='advanced'?'selected':''}>Advanced</option>
+    </select></div>
+    <div class="fg"><label class="fl">Enrollment</label><select class="fs" id="_enroll">
+      <option value="open" ${c?.enrollment_type==='open'?'selected':''}>Open</option>
+      <option value="approval" ${c?.enrollment_type==='approval'?'selected':''}>Approval Required</option>
+    </select></div></div>
     <div style="display:flex;gap:20px;flex-wrap:wrap">
-      <label class="toggle-row"><input type="checkbox" id="_active" ${!c||c.is_active?'checked':''}><span>Active (course is live)</span></label>
-      <label class="toggle-row"><input type="checkbox" id="_browse" ${c?.show_in_browse?'checked':''}><span>Show in Browse Catalog</span></label>
+      <label class="toggle-row"><input type="checkbox" id="_active" ${!c||c.is_active?'checked':''}> Active</label>
+      <label class="toggle-row"><input type="checkbox" id="_browse" ${c?.show_in_browse?'checked':''}> Show in Browse</label>
     </div>
-  `,`<button class="btn btn-primary" onclick="saveCourse()">Save Course</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);
+  `,`<button class="btn btn-primary" onclick="saveCourse()">Save</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);
 }
 
 async function saveCourse(){
@@ -409,12 +369,12 @@ async function saveCourse(){
     is_active:document.getElementById('_active').checked?1:0,
     show_in_browse:document.getElementById('_browse').checked?1:0
   };
-  if(!payload.title){showAlert('Title is required.');return}
+  if(!payload.title){showAlert('Title required.');return}
   const{ok,data}=await api(id?'PUT':'POST',id?`/admin/courses/${id}`:'/admin/courses',payload);
-  if(!ok){showAlert(data.error||'Error saving.');return}
-  closeModal();loadCourses();loadDashboard();showToast('Course saved!','success');
+  if(!ok){showAlert(data.error||'Error.');return}
+  closeModal();loadCourses();loadDashboard();showToast('Course saved','success');
 }
-async function deleteCourse(id){if(!confirm('Delete this course and ALL its content permanently?'))return;await api('DELETE',`/admin/courses/${id}`);loadCourses();loadDashboard();showToast('Course deleted','success')}
+async function deleteCourse(id){if(!confirm('Delete this course and ALL content?'))return;await api('DELETE',`/admin/courses/${id}`);loadCourses();loadDashboard()}
 
 // ── CONTENT TREE ──
 async function loadContent(){
@@ -434,51 +394,29 @@ async function loadContent(){
         const chapters=allChapters.filter(c=>c.paper_id===paper.id);
         chapters.forEach(ch=>{
           html+=`<div class="tree-indent-3"><div class="tree-row"><span class="tree-label">Ch</span><span class="tree-name">${esc(ch.title)}</span><div class="tree-actions"><button class="btn btn-ghost btn-xs" onclick="openLectureModal(null,${ch.id},'${esc(ch.title)}')">+ Lecture</button><button class="btn btn-danger btn-xs" onclick="deleteChapter(${ch.id})">Del</button></div></div></div>`;
-        });
-        html+=`</div>`;
-      });
-      html+=`</div>`;
-    });
-    html+=`</div>`;
+        });html+=`</div>`;
+      });html+=`</div>`;
+    });html+=`</div>`;
   });
   document.getElementById('view-content').innerHTML=html;
 }
 
 function openSubjectModal(courseId,courseTitle){
-  openModal('New Subject — '+courseTitle,`<div class="alert" id="_alert"></div><input type="hidden" id="_cid" value="${courseId}"><div class="fg"><label class="fl">Subject Name *</label><input class="fi" id="_name" placeholder="e.g. Mathematics"></div><label class="toggle-row"><input type="checkbox" id="_hasPapers" checked><span>Has Papers</span></label>`,`<button class="btn btn-primary" onclick="saveSubject()">Add Subject</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);
+  openModal('New Subject — '+courseTitle,`<div class="alert" id="_alert"></div><input type="hidden" id="_cid" value="${courseId}"><div class="fg"><label class="fl">Name *</label><input class="fi" id="_name" placeholder="Subject name"></div><label class="toggle-row"><input type="checkbox" id="_hasPapers" checked> Has Papers</label>`,`<button class="btn btn-primary" onclick="saveSubject()">Add</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);
 }
 async function saveSubject(){
   const name=document.getElementById('_name').value.trim();
-  if(!name){showAlert('Subject name required.');return}
-  const{ok,data}=await api('POST','/admin/subjects',{course_id:parseInt(document.getElementById('_cid').value),name,has_papers:document.getElementById('_hasPapers').checked?1:0});
-  if(!ok){showAlert(data.error||'Error.');return}
-  closeModal();loadContent();loadDashboard();showToast('Subject created','success');
+  if(!name){showAlert('Name required.');return}
+  const{ok}=await api('POST','/admin/subjects',{course_id:parseInt(document.getElementById('_cid').value),name,has_papers:document.getElementById('_hasPapers').checked?1:0});
+  if(!ok)return;closeModal();loadContent();loadDashboard();showToast('Subject created','success');
 }
-async function deleteSubject(id){if(!confirm('Delete this subject and all its content?'))return;await api('DELETE',`/admin/subjects/${id}`);loadContent();loadDashboard()}
-
-function openPaperModal(subjId,subjName){
-  openModal('New Paper — '+subjName,`<div class="alert" id="_alert"></div><input type="hidden" id="_sid" value="${subjId}"><div class="fg"><label class="fl">Paper Name *</label><input class="fi" id="_name" placeholder="e.g. Paper 1"></div>`,`<button class="btn btn-primary" onclick="savePaper()">Add Paper</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);
-}
-async function savePaper(){
-  const name=document.getElementById('_name').value.trim();
-  if(!name){showAlert('Paper name required.');return}
-  const{ok,data}=await api('POST','/admin/papers',{subject_id:parseInt(document.getElementById('_sid').value),name});
-  if(!ok){showAlert(data.error||'Error.');return}
-  closeModal();loadContent();loadDashboard();showToast('Paper created','success');
-}
-async function deletePaper(id){if(!confirm('Delete this paper and all chapters/lectures?'))return;await api('DELETE',`/admin/papers/${id}`);loadContent();loadDashboard()}
-
-function openChapterModal(paperId,paperName){
-  openModal('New Chapter — '+paperName,`<div class="alert" id="_alert"></div><input type="hidden" id="_pid" value="${paperId}"><div class="fg"><label class="fl">Chapter Title *</label><input class="fi" id="_title" placeholder="e.g. Introduction"></div><div class="fg"><label class="fl">Sort Order</label><input class="fi" type="number" id="_order" value="0"></div>`,`<button class="btn btn-primary" onclick="saveChapter()">Add Chapter</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);
-}
-async function saveChapter(){
-  const title=document.getElementById('_title').value.trim();
-  if(!title){showAlert('Chapter title required.');return}
-  const{ok,data}=await api('POST','/admin/chapters',{paper_id:parseInt(document.getElementById('_pid').value),title,sort_order:parseInt(document.getElementById('_order').value)||0});
-  if(!ok){showAlert(data.error||'Error.');return}
-  closeModal();loadContent();loadDashboard();showToast('Chapter created','success');
-}
-async function deleteChapter(id){if(!confirm('Delete this chapter and all lectures?'))return;await api('DELETE',`/admin/chapters/${id}`);loadContent();loadDashboard()}
+async function deleteSubject(id){if(!confirm('Delete subject and all content?'))return;await api('DELETE',`/admin/subjects/${id}`);loadContent();loadDashboard()}
+function openPaperModal(subjId,subjName){openModal('New Paper — '+subjName,`<div class="alert" id="_alert"></div><input type="hidden" id="_sid" value="${subjId}"><div class="fg"><label class="fl">Name *</label><input class="fi" id="_name" placeholder="Paper name"></div>`,`<button class="btn btn-primary" onclick="savePaper()">Add</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);}
+async function savePaper(){const name=document.getElementById('_name').value.trim();if(!name){showAlert('Name required.');return}const{ok}=await api('POST','/admin/papers',{subject_id:parseInt(document.getElementById('_sid').value),name});if(!ok)return;closeModal();loadContent();loadDashboard();showToast('Paper created','success');}
+async function deletePaper(id){if(!confirm('Delete paper and all chapters?'))return;await api('DELETE',`/admin/papers/${id}`);loadContent();loadDashboard()}
+function openChapterModal(paperId,paperName){openModal('New Chapter — '+paperName,`<div class="alert" id="_alert"></div><input type="hidden" id="_pid" value="${paperId}"><div class="fg"><label class="fl">Title *</label><input class="fi" id="_title" placeholder="Chapter title"></div><div class="fg"><label class="fl">Sort Order</label><input class="fi" type="number" id="_order" value="0"></div>`,`<button class="btn btn-primary" onclick="saveChapter()">Add</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);}
+async function saveChapter(){const title=document.getElementById('_title').value.trim();if(!title){showAlert('Title required.');return}const{ok}=await api('POST','/admin/chapters',{paper_id:parseInt(document.getElementById('_pid').value),title,sort_order:parseInt(document.getElementById('_order').value)||0});if(!ok)return;closeModal();loadContent();loadDashboard();showToast('Chapter created','success');}
+async function deleteChapter(id){if(!confirm('Delete chapter and all lectures?'))return;await api('DELETE',`/admin/chapters/${id}`);loadContent();loadDashboard()}
 
 // ── LECTURES ──
 async function loadLectures(){
@@ -488,29 +426,24 @@ async function loadLectures(){
 }
 
 function openLectureModal(id,preChapterId,preChapterName){
-  const chOptions=allChapters.map(c=>`<option value="${c.id}" ${id&&id===c.id||preChapterId===c.id?'selected':''}>${esc(c.title)}</option>`).join('');
-  const l=id?allCourses:null;
-  openModal(id?'Edit Lecture':'New Lecture',`<div class="alert" id="_alert"></div><input type="hidden" id="_id" value="${l?.id||''}"><div class="fg"><label class="fl">Chapter *</label><select class="fs" id="_chap"><option value="">— Select —</option>${chOptions}</select></div><div class="fg"><label class="fl">Title *</label><input class="fi" id="_title" value="${esc(l?.title||'')}" placeholder="Lecture title"></div><div class="fg"><label class="fl">YouTube Video ID *</label><input class="fi" id="_ytid" value="${esc(l?.yt_video_id||'')}" placeholder="e.g. dQw4w9WgXcQ"><div class="hint">From youtube.com/watch?v=<strong>ID</strong></div></div><div class="form-row"><div class="fg"><label class="fl">Sort Order</label><input class="fi" type="number" id="_order" value="${l?.sort_order||0}"></div></div><div class="fg"><label class="fl">Description</label><textarea class="fta" id="_desc">${esc(l?.description||'')}</textarea></div>`,`<button class="btn btn-primary" onclick="saveLecture()">Save</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);
+  const chOptions=allChapters.map(c=>`<option value="${c.id}" ${preChapterId===c.id?'selected':''}>${esc(c.title)}</option>`).join('');
+  openModal(id?'Edit Lecture':'New Lecture',`<div class="alert" id="_alert"></div><input type="hidden" id="_id" value="${id||''}"><div class="fg"><label class="fl">Chapter *</label><select class="fs" id="_chap"><option value="">— Select —</option>${chOptions}</select></div><div class="fg"><label class="fl">Title *</label><input class="fi" id="_title" placeholder="Lecture title"></div><div class="fg"><label class="fl">YouTube Video ID *</label><input class="fi" id="_ytid" placeholder="dQw4w9WgXcQ"><div class="hint">From youtube.com/watch?v=<strong>ID</strong></div></div><div class="fg"><label class="fl">Sort Order</label><input class="fi" type="number" id="_order" value="0"></div><div class="fg"><label class="fl">Description</label><textarea class="fta" id="_desc"></textarea></div>`,`<button class="btn btn-primary" onclick="saveLecture()">Save</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);
 }
-
 async function saveLecture(){
   const id=document.getElementById('_id').value;
   const chapter_id=document.getElementById('_chap').value;
   const title=document.getElementById('_title').value.trim();
   const yt_video_id=document.getElementById('_ytid').value.trim();
-  if(!chapter_id||!title||!yt_video_id){showAlert('Chapter, title, and YouTube ID required.');return}
-  const payload={chapter_id:parseInt(chapter_id),title,yt_video_id,sort_order:parseInt(document.getElementById('_order').value)||0,description:document.getElementById('_desc').value.trim()};
-  const{ok,data}=await api(id?'PUT':'POST',id?`/admin/lectures/${id}`:'/admin/lectures',payload);
-  if(!ok){showAlert(data.error||'Error.');return}
-  closeModal();loadLectures();loadDashboard();showToast('Lecture saved','success');
+  if(!chapter_id||!title||!yt_video_id){showAlert('All required fields needed.');return}
+  const{ok}=await api(id?'PUT':'POST',id?`/admin/lectures/${id}`:'/admin/lectures',{chapter_id:parseInt(chapter_id),title,yt_video_id,sort_order:parseInt(document.getElementById('_order').value)||0,description:document.getElementById('_desc').value.trim()});
+  if(!ok)return;closeModal();loadLectures();loadDashboard();showToast('Lecture saved','success');
 }
-async function deleteLecture(id){if(!confirm('Delete this lecture?'))return;await api('DELETE',`/admin/lectures/${id}`);loadLectures();loadDashboard()}
+async function deleteLecture(id){if(!confirm('Delete lecture?'))return;await api('DELETE',`/admin/lectures/${id}`);loadLectures();loadDashboard()}
 
 async function openPdfModal(lectureId,lecTitle){
-  const pdfRes=await fetch(`/api/user/lecture/${lectureId}`,{headers:{Authorization:'Bearer '+token}});
-  let existingPdfs=[];
-  if(pdfRes.ok){const pd=await pdfRes.json();existingPdfs=pd.pdfs||[]}
-  openModal(`PDFs — ${lecTitle}`,`<div class="alert" id="_alert"></div><input type="hidden" id="_lid" value="${lectureId}"><div style="margin-bottom:14px"><h4 style="font-size:.76rem;color:var(--gray2);margin-bottom:8px;font-family:JetBrains Mono,monospace;text-transform:uppercase;letter-spacing:.08em">Existing PDFs</h4><div id="_existPdfs">${existingPdfs.length?existingPdfs.map(p=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)"><span style="flex:1;font-size:.76rem;color:var(--gray2)">${esc(p.title)}</span><button class="btn btn-danger btn-xs" onclick="deletePdf(${p.id})">Remove</button></div>`).join(''):`<p style="color:var(--gray);font-size:.74rem;font-style:italic">No PDFs yet.</p>`}</div></div><hr style="border-color:var(--border);margin-bottom:14px"><h4 style="font-size:.76rem;color:var(--gray2);margin-bottom:8px;font-family:JetBrains Mono,monospace;text-transform:uppercase;letter-spacing:.08em">Add New PDF</h4><div class="fg"><label class="fl">PDF Title *</label><input class="fi" id="_pTitle" placeholder="e.g. Chapter Notes"></div><div class="fg"><label class="fl">PDF URL *</label><input class="fi" id="_pUrl" placeholder="https://...pdf"></div>`,`<button class="btn btn-primary" onclick="addPdf()">Add PDF</button><button class="btn btn-ghost" onclick="closeModal()">Done</button>`);
+  const pdfRes=await fetch(`/api/user/lecture-by-id/${lectureId}`,{headers:{Authorization:'Bearer '+token}});
+  let existingPdfs=[];if(pdfRes.ok){const pd=await pdfRes.json();existingPdfs=pd.pdfs||[]}
+  openModal(`PDFs — ${lecTitle}`,`<div class="alert" id="_alert"></div><input type="hidden" id="_lid" value="${lectureId}"><h4 style="font-size:.76rem;color:var(--gray2);margin-bottom:8px;font-family:JetBrains Mono,monospace;text-transform:uppercase;letter-spacing:.08em">Existing PDFs</h4><div id="_existPdfs">${existingPdfs.length?existingPdfs.map(p=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)"><span style="flex:1;font-size:.76rem;color:var(--gray2)">${esc(p.title)}</span><button class="btn btn-danger btn-xs" onclick="deletePdf(${p.id})">Remove</button></div>`).join(''):`<p style="color:var(--gray);font-size:.74rem;font-style:italic">No PDFs yet.</p>`}</div><hr style="border-color:var(--border);margin:14px 0"><h4 style="font-size:.76rem;color:var(--gray2);margin-bottom:8px;font-family:JetBrains Mono,monospace;text-transform:uppercase;letter-spacing:.08em">Add New PDF</h4><div class="fg"><label class="fl">Title *</label><input class="fi" id="_pTitle" placeholder="PDF title"></div><div class="fg"><label class="fl">URL *</label><input class="fi" id="_pUrl" placeholder="https://...pdf"></div>`,`<button class="btn btn-primary" onclick="addPdf()">Add PDF</button><button class="btn btn-ghost" onclick="closeModal()">Done</button>`);
 }
 async function addPdf(){
   const lecture_id=parseInt(document.getElementById('_lid').value);
@@ -518,12 +451,11 @@ async function addPdf(){
   const pdf_url=document.getElementById('_pUrl').value.trim();
   if(!title||!pdf_url){showAlert('Title and URL required.');return}
   const{ok}=await api('POST','/admin/lecture-pdfs',{lecture_id,title,pdf_url});
-  if(!ok)return;
-  document.getElementById('_pTitle').value='';document.getElementById('_pUrl').value='';
-  const pdfRes=await fetch(`/api/user/lecture/${lecture_id}`,{headers:{Authorization:'Bearer '+token}});
+  if(!ok)return;document.getElementById('_pTitle').value='';document.getElementById('_pUrl').value='';
+  const pdfRes=await fetch(`/api/user/lecture-by-id/${lecture_id}`,{headers:{Authorization:'Bearer '+token}});
   if(pdfRes.ok){const pd=await pdfRes.json();const ep=document.getElementById('_existPdfs');if(ep&&pd.pdfs){ep.innerHTML=pd.pdfs.map(p=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)"><span style="flex:1;font-size:.76rem;color:var(--gray2)">${esc(p.title)}</span><button class="btn btn-danger btn-xs" onclick="deletePdf(${p.id})">Remove</button></div>`).join('')}}
 }
-async function deletePdf(id){if(!confirm('Remove this PDF?'))return;await api('DELETE',`/admin/lecture-pdfs/${id}`)}
+async function deletePdf(id){if(!confirm('Remove PDF?'))return;await api('DELETE',`/admin/lecture-pdfs/${id}`)}
 
 // ── RESOURCES ──
 async function loadResources(){
@@ -535,117 +467,46 @@ async function loadResources(){
   }
   document.getElementById('view-resources').innerHTML=html;
 }
-function openResourceModal(courseId,courseTitle){
-  openModal('Add Resource — '+courseTitle,`<div class="alert" id="_alert"></div><input type="hidden" id="_cid" value="${courseId}"><div class="fg"><label class="fl">Title *</label><input class="fi" id="_title" placeholder="e.g. Formula Sheet"></div><div class="fg"><label class="fl">PDF URL *</label><input class="fi" id="_url" placeholder="https://..."></div>`,`<button class="btn btn-primary" onclick="saveResource()">Add</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);
-}
-async function saveResource(){
-  const course_id=parseInt(document.getElementById('_cid').value);
-  const title=document.getElementById('_title').value.trim();
-  const pdf_url=document.getElementById('_url').value.trim();
-  if(!title||!pdf_url){showAlert('Title and URL required.');return}
-  const{ok}=await api('POST','/admin/resources',{course_id,title,pdf_url});
-  if(!ok)return;
-  closeModal();loadResources();showToast('Resource added','success');
-}
+function openResourceModal(courseId,courseTitle){openModal('Add Resource — '+courseTitle,`<div class="alert" id="_alert"></div><input type="hidden" id="_cid" value="${courseId}"><div class="fg"><label class="fl">Title *</label><input class="fi" id="_title" placeholder="Resource title"></div><div class="fg"><label class="fl">URL *</label><input class="fi" id="_url" placeholder="https://..."></div>`,`<button class="btn btn-primary" onclick="saveResource()">Add</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);}
+async function saveResource(){const course_id=parseInt(document.getElementById('_cid').value);const title=document.getElementById('_title').value.trim();const pdf_url=document.getElementById('_url').value.trim();if(!title||!pdf_url){showAlert('Title and URL required.');return}const{ok}=await api('POST','/admin/resources',{course_id,title,pdf_url});if(!ok)return;closeModal();loadResources();showToast('Resource added','success');}
 async function deleteResource(id){if(!confirm('Delete?'))return;await api('DELETE',`/admin/resources/${id}`);loadResources()}
 
 // ── NOTIFICATIONS ──
 async function loadNotifications(){
-  const{ok,data}=await api('GET','/admin/notifications');
-  const notifs=ok?data:[];
-  document.getElementById('view-notifications').innerHTML=`<div class="sec-head"><h2 class="sec-title">Notifications</h2><button class="btn btn-primary" onclick="openNotifModal()">+ Create</button></div><div class="card"><div class="table-wrap"><table><thead><tr><th>Title</th><th>Type</th><th>Target</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody>${notifs.length?notifs.map(n=>`<tr><td class="strong td-max">${esc(n.title)}</td><td><span class="badge b-${n.type||'info'}">${esc(n.type||'info')}</span></td><td>${n.target_type==='all'?'All Users':n.target_type==='user'?'Specific User':'Specific Course'}</td><td><span class="badge ${n.is_active?'b-active':'b-inactive'}">${n.is_active?'Active':'Inactive'}</span></td><td style="font-family:JetBrains Mono,monospace;font-size:.66rem">${new Date(n.created_at).toLocaleDateString()}</td><td><div style="display:flex;gap:3px"><button class="btn btn-ghost btn-xs" onclick="openNotifModal(${n.id})">Edit</button><button class="btn btn-danger btn-xs" onclick="deleteNotif(${n.id})">Del</button></div></td></tr>`).join(''):`<tr class="empty-row"><td colspan="6">No notifications yet.</td></tr>`}</tbody></table></div></div>`;
+  const{ok,data}=await api('GET','/admin/notifications');const notifs=ok?data:[];
+  document.getElementById('view-notifications').innerHTML=`<div class="sec-head"><h2 class="sec-title">Notifications</h2><button class="btn btn-primary" onclick="openNotifModal()">+ Create</button></div><div class="card"><div class="table-wrap"><table><thead><tr><th>Title</th><th>Type</th><th>Target</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody>${notifs.length?notifs.map(n=>`<tr><td class="strong td-max">${esc(n.title)}</td><td><span class="badge b-${n.type||'info'}">${esc(n.type||'info')}</span></td><td>${n.target_type==='all'?'All Users':n.target_type==='user'?'User #'+n.target_id:'Course #'+n.target_id}</td><td><span class="badge ${n.is_active?'b-active':'b-inactive'}">${n.is_active?'Active':'Inactive'}</span></td><td style="font-family:JetBrains Mono,monospace;font-size:.66rem">${new Date(n.created_at).toLocaleDateString()}</td><td><div style="display:flex;gap:3px"><button class="btn btn-danger btn-xs" onclick="deleteNotif(${n.id})">Del</button></div></td></tr>`).join(''):`<tr class="empty-row"><td colspan="6">No notifications yet.</td></tr>`}</tbody></table></div></div>`;
 }
-
-function openNotifModal(id){
-  const n=id?null:null;
-  openModal(id?'Edit Notification':'Create Notification',`<div class="alert" id="_alert"></div><input type="hidden" id="_nid" value="${id||''}"><div class="fg"><label class="fl">Title *</label><input class="fi" id="_ntitle" placeholder="Notification title"></div><div class="form-row"><div class="fg"><label class="fl">Type</label><select class="fs" id="_ntype"><option value="info">Information</option><option value="warning">Warning</option><option value="success">Success</option><option value="important">Important</option></select></div><div class="fg"><label class="fl">Target</label><select class="fs" id="_ntarget"><option value="all">All Users</option><option value="course">Specific Course</option><option value="user">Specific User</option></select></div></div><div class="fg"><label class="fl">Message *</label><textarea class="fta" id="_nmsg" placeholder="Notification message"></textarea></div><div class="form-row"><div class="fg"><label class="fl">Action URL (optional)</label><input class="fi" id="_naction" placeholder="/courses or /learn/slug"></div><div class="fg"><label class="fl">Action Label</label><input class="fi" id="_nactionLabel" placeholder="View Course"></div></div>`,`<button class="btn btn-primary" onclick="saveNotif()">Save</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);
-}
-async function saveNotif(){
-  const title=document.getElementById('_ntitle').value.trim();
-  const message=document.getElementById('_nmsg').value.trim();
-  if(!title||!message){showAlert('Title and message required.');return}
-  const{ok}=await api('POST','/admin/notifications',{title,message,type:document.getElementById('_ntype').value,target_type:document.getElementById('_ntarget').value,action_url:document.getElementById('_naction').value||null,action_label:document.getElementById('_nactionLabel').value||null});
-  if(!ok)return;
-  closeModal();loadNotifications();showToast('Notification created','success');
-}
-async function deleteNotif(id){if(!confirm('Delete this notification?'))return;await api('DELETE',`/admin/notifications/${id}`);loadNotifications()}
+function openNotifModal(){openModal('Create Notification',`<div class="alert" id="_alert"></div><div class="fg"><label class="fl">Title *</label><input class="fi" id="_ntitle" placeholder="Notification title"></div><div class="form-row"><div class="fg"><label class="fl">Type</label><select class="fs" id="_ntype"><option value="info">Information</option><option value="warning">Warning</option><option value="success">Success</option><option value="important">Important</option></select></div><div class="fg"><label class="fl">Target</label><select class="fs" id="_ntarget"><option value="all">All Users</option><option value="course">Course</option><option value="user">User</option></select></div></div><div class="fg"><label class="fl">Message *</label><textarea class="fta" id="_nmsg" placeholder="Notification message"></textarea></div><div class="form-row"><div class="fg"><label class="fl">Action URL (optional)</label><input class="fi" id="_naction" placeholder="/browse.html"></div><div class="fg"><label class="fl">Action Label</label><input class="fi" id="_nactionLabel" placeholder="View"></div></div>`,`<button class="btn btn-primary" onclick="saveNotif()">Create</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);}
+async function saveNotif(){const title=document.getElementById('_ntitle').value.trim();const message=document.getElementById('_nmsg').value.trim();if(!title||!message){showAlert('Title and message required.');return}const{ok}=await api('POST','/admin/notifications',{title,message,type:document.getElementById('_ntype').value,target_type:document.getElementById('_ntarget').value,action_url:document.getElementById('_naction').value||null,action_label:document.getElementById('_nactionLabel').value||null});if(!ok)return;closeModal();loadNotifications();showToast('Notification created','success');}
+async function deleteNotif(id){if(!confirm('Delete?'))return;await api('DELETE',`/admin/notifications/${id}`);loadNotifications()}
 
 // ── SUPPORT TICKETS ──
-async function loadTickets(){
-  const{ok,data}=await api('GET','/admin/support-tickets');
-  const tickets=ok?data:[];
-  document.getElementById('view-tickets').innerHTML=`<div class="sec-head"><h2 class="sec-title">Support Tickets</h2></div><div class="card"><div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead><tbody>${tickets.length?tickets.map(t=>`<tr><td class="strong">${esc(t.name)}</td><td style="font-family:JetBrains Mono,monospace;font-size:.66rem">${esc(t.email)}</td><td>${esc(t.subject)}</td><td style="font-family:JetBrains Mono,monospace;font-size:.66rem">${new Date(t.created_at).toLocaleDateString()}</td><td><span class="badge ${t.is_resolved?'b-active':'b-pending'}">${t.is_resolved?'Resolved':'Open'}</span></td><td><div style="display:flex;gap:3px"><button class="btn btn-ghost btn-xs" onclick="viewTicket(${t.id},'${esc(t.name)}','${esc(t.subject)}','${esc(t.message)}')">View</button>${!t.is_resolved?`<button class="btn btn-success btn-xs" onclick="resolveTicket(${t.id})">Resolve</button>`:''}</div></td></tr>`).join(''):`<tr class="empty-row"><td colspan="6">No tickets yet.</td></tr>`}</tbody></table></div></div>`;
-}
-function viewTicket(id,name,subject,message){
-  openModal(`${subject} — ${name}`,`<div style="font-size:.82rem;color:var(--gray2);line-height:1.7;white-space:pre-wrap">${esc(message)}</div>`,`<button class="btn btn-ghost" onclick="closeModal()">Close</button>`);
-}
+async function loadTickets(){const{ok,data}=await api('GET','/admin/support-tickets');const tickets=ok?data:[];document.getElementById('view-tickets').innerHTML=`<div class="sec-head"><h2 class="sec-title">Support Tickets</h2></div><div class="card"><div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead><tbody>${tickets.length?tickets.map(t=>`<tr><td class="strong">${esc(t.name)}</td><td style="font-family:JetBrains Mono,monospace;font-size:.66rem">${esc(t.email)}</td><td>${esc(t.subject)}</td><td style="font-family:JetBrains Mono,monospace;font-size:.66rem">${new Date(t.created_at).toLocaleDateString()}</td><td><span class="badge ${t.is_resolved?'b-active':'b-pending'}">${t.is_resolved?'Resolved':'Open'}</span></td><td><div style="display:flex;gap:3px"><button class="btn btn-ghost btn-xs" onclick="viewTicket('${esc(t.name)}','${esc(t.subject)}','${esc(t.message.replace(/'/g,"\\'"))}')">View</button>${!t.is_resolved?`<button class="btn btn-success btn-xs" onclick="resolveTicket(${t.id})">Resolve</button>`:''}</div></td></tr>`).join(''):`<tr class="empty-row"><td colspan="6">No tickets yet.</td></tr>`}</tbody></table></div></div>`;}
+function viewTicket(name,subject,message){openModal(`${subject} — ${name}`,`<div style="font-size:.82rem;color:var(--gray2);line-height:1.7;white-space:pre-wrap">${esc(message)}</div>`,`<button class="btn btn-ghost" onclick="closeModal()">Close</button>`)}
 async function resolveTicket(id){await api('PUT',`/admin/support-tickets/${id}/resolve`,{});loadTickets();loadDashboard();showToast('Ticket resolved','success')}
 
 // ── CHANGELOG ──
-async function loadChangelog(){
-  const{ok,data}=await api('GET','/admin/updates');
-  const updates=ok?data:[];
-  document.getElementById('view-changelog').innerHTML=`<div class="sec-head"><h2 class="sec-title">Changelog</h2><button class="btn btn-primary" onclick="openChangelogModal()">+ Post Update</button></div><div class="card"><div class="table-wrap"><table><thead><tr><th>Version</th><th>Title</th><th>Type</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead><tbody>${updates.length?updates.map(u=>`<tr><td style="font-family:JetBrains Mono,monospace;font-size:.66rem;color:var(--teal)">v${esc(u.version)}</td><td class="strong">${esc(u.title)}</td><td><span class="badge b-info">${esc(u.type)}</span></td><td style="font-family:JetBrains Mono,monospace;font-size:.66rem">${new Date(u.release_date).toLocaleDateString()}</td><td><span class="badge ${u.is_draft?'b-draft':'b-active'}">${u.is_draft?'Draft':'Published'}</span></td><td><div style="display:flex;gap:3px"><button class="btn btn-ghost btn-xs" onclick="openChangelogModal(${u.id})">Edit</button><button class="btn btn-danger btn-xs" onclick="deleteUpdate(${u.id})">Del</button></div></td></tr>`).join(''):`<tr class="empty-row"><td colspan="6">No updates yet.</td></tr>`}</tbody></table></div></div>`;
-}
-function openChangelogModal(id){
-  const u=id?null:null;
-  openModal(id?'Edit Update':'Post Update',`<div class="alert" id="_alert"></div><input type="hidden" id="_uid" value="${id||''}"><div class="form-row"><div class="fg"><label class="fl">Version *</label><input class="fi" id="_ver" placeholder="2.1.4"></div><div class="fg"><label class="fl">Release Date *</label><input class="fi" type="date" id="_rdate"></div></div><div class="form-row"><div class="fg"><label class="fl">Title *</label><input class="fi" id="_utitle" placeholder="Update title"></div><div class="fg"><label class="fl">Type</label><select class="fs" id="_utype"><option value="feature">Feature Update</option><option value="bug">Bug Fix</option><option value="maintenance">Maintenance</option><option value="announcement">Announcement</option></select></div></div><div class="fg"><label class="fl">Changelog * (one item per line)</label><textarea class="fta" id="_ulog" placeholder="- New feature added&#10;- Bug fixed&#10;- Performance improved"></textarea></div><div style="display:flex;gap:16px"><label class="toggle-row"><input type="checkbox" id="_ushow" checked><span>Show popup to users</span></label><label class="toggle-row"><input type="checkbox" id="_udismiss" checked><span>Dismissible</span></label></div>`,`<button class="btn btn-primary" onclick="saveUpdate()">Save</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);
-}
-async function saveUpdate(){
-  const version=document.getElementById('_ver').value.trim();
-  const title=document.getElementById('_utitle').value.trim();
-  const changelog=document.getElementById('_ulog').value.trim();
-  const release_date=document.getElementById('_rdate').value;
-  if(!version||!title||!changelog||!release_date){showAlert('All fields required.');return}
-  const{ok}=await api('POST','/admin/updates',{version,title,changelog,type:document.getElementById('_utype').value,release_date,show_popup:document.getElementById('_ushow').checked?1:0,dismissible:document.getElementById('_udismiss').checked?1:0});
-  if(!ok)return;
-  closeModal();loadChangelog();showToast('Update posted','success');
-}
-async function deleteUpdate(id){if(!confirm('Delete this update?'))return;await api('DELETE',`/admin/updates/${id}`);loadChangelog()}
+async function loadChangelog(){const{ok,data}=await api('GET','/admin/updates');const updates=ok?data:[];document.getElementById('view-changelog').innerHTML=`<div class="sec-head"><h2 class="sec-title">Changelog</h2><button class="btn btn-primary" onclick="openChangelogModal()">+ Post Update</button></div><div class="card"><div class="table-wrap"><table><thead><tr><th>Version</th><th>Title</th><th>Type</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead><tbody>${updates.length?updates.map(u=>`<tr><td style="font-family:JetBrains Mono,monospace;font-size:.66rem;color:var(--teal)">v${esc(u.version)}</td><td class="strong">${esc(u.title)}</td><td><span class="badge b-info">${esc(u.type)}</span></td><td style="font-family:JetBrains Mono,monospace;font-size:.66rem">${new Date(u.release_date).toLocaleDateString()}</td><td><span class="badge ${u.is_draft?'b-draft':'b-active'}">${u.is_draft?'Draft':'Published'}</span></td><td><div style="display:flex;gap:3px"><button class="btn btn-danger btn-xs" onclick="deleteUpdate(${u.id})">Del</button></div></td></tr>`).join(''):`<tr class="empty-row"><td colspan="6">No updates yet.</td></tr>`}</tbody></table></div></div>`;}
+function openChangelogModal(){openModal('Post Update',`<div class="alert" id="_alert"></div><div class="form-row"><div class="fg"><label class="fl">Version *</label><input class="fi" id="_ver" placeholder="2.1.4"></div><div class="fg"><label class="fl">Date *</label><input class="fi" type="date" id="_rdate"></div></div><div class="form-row"><div class="fg"><label class="fl">Title *</label><input class="fi" id="_utitle" placeholder="Update title"></div><div class="fg"><label class="fl">Type</label><select class="fs" id="_utype"><option value="feature">Feature Update</option><option value="bug">Bug Fix</option><option value="maintenance">Maintenance</option><option value="announcement">Announcement</option></select></div></div><div class="fg"><label class="fl">Changelog * (one per line)</label><textarea class="fta" id="_ulog" placeholder="- New feature added&#10;- Bug fixed"></textarea></div><div style="display:flex;gap:16px"><label class="toggle-row"><input type="checkbox" id="_ushow" checked> Show popup</label><label class="toggle-row"><input type="checkbox" id="_udismiss" checked> Dismissible</label></div>`,`<button class="btn btn-primary" onclick="saveUpdate()">Post</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);}
+async function saveUpdate(){const version=document.getElementById('_ver').value.trim();const title=document.getElementById('_utitle').value.trim();const changelog=document.getElementById('_ulog').value.trim();const release_date=document.getElementById('_rdate').value;if(!version||!title||!changelog||!release_date){showAlert('All fields required.');return}const{ok}=await api('POST','/admin/updates',{version,title,changelog,type:document.getElementById('_utype').value,release_date,show_popup:document.getElementById('_ushow').checked?1:0,dismissible:document.getElementById('_udismiss').checked?1:0});if(!ok)return;closeModal();loadChangelog();showToast('Update posted','success');}
+async function deleteUpdate(id){if(!confirm('Delete?'))return;await api('DELETE',`/admin/updates/${id}`);loadChangelog()}
 
 // ── USERS ──
-async function loadUsers(){
-  const{ok,data}=await api('GET','/admin/users');allUsers=ok?data:[];
-  document.getElementById('view-users').innerHTML=`<div class="sec-head"><h2 class="sec-title">Users</h2></div><div class="card"><div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead><tbody>${allUsers.length?allUsers.map(u=>`<tr><td class="strong">${esc(u.name)}</td><td style="font-family:JetBrains Mono,monospace;font-size:.66rem">${esc(u.email)}</td><td><span class="badge ${u.role==='admin'?'b-admin':'b-user'}">${u.role}</span></td><td>${u.is_blocked?'<span class="badge b-blocked">Blocked</span>':u.is_approved?'<span class="badge b-active">Approved</span>':'<span class="badge b-pending">Pending</span>'}</td><td style="font-family:JetBrains Mono,monospace;font-size:.64rem">${new Date(u.created_at).toLocaleDateString()}</td><td><div style="display:flex;gap:3px;flex-wrap:wrap">${!u.is_approved&&u.role!=='admin'?`<button class="btn btn-success btn-xs" onclick="approveUser(${u.id})">Approve</button>`:''}${u.role!=='admin'?`<button class="btn ${u.is_blocked?'btn-success':'btn-danger'} btn-xs" onclick="toggleBlock(${u.id},${u.is_blocked})">${u.is_blocked?'Unblock':'Block'}</button>`:''}${u.role!=='admin'?`<button class="btn btn-orange btn-xs" onclick="overrideRestriction(${u.id})">Override Lock</button>`:''}${u.role!=='admin'?`<button class="btn btn-danger btn-xs" onclick="deleteUser(${u.id})">Del</button>`:''}</div></td></tr>`).join(''):`<tr class="empty-row"><td colspan="6">No users yet.</td></tr>`}</tbody></table></div></div>`;
-}
+async function loadUsers(){const{ok,data}=await api('GET','/admin/users');allUsers=ok?data:[];document.getElementById('view-users').innerHTML=`<div class="sec-head"><h2 class="sec-title">Users</h2></div><div class="card"><div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead><tbody>${allUsers.length?allUsers.map(u=>`<tr><td class="strong">${esc(u.name)}</td><td style="font-family:JetBrains Mono,monospace;font-size:.66rem">${esc(u.email)}</td><td><span class="badge ${u.role==='admin'?'b-admin':'b-user'}">${u.role}</span></td><td>${u.is_blocked?'<span class="badge b-blocked">Blocked</span>':u.is_approved?'<span class="badge b-active">Approved</span>':'<span class="badge b-pending">Pending</span>'}</td><td style="font-family:JetBrains Mono,monospace;font-size:.64rem">${new Date(u.created_at).toLocaleDateString()}</td><td><div style="display:flex;gap:3px;flex-wrap:wrap">${!u.is_approved&&u.role!=='admin'?`<button class="btn btn-success btn-xs" onclick="approveUser(${u.id})">Approve</button>`:''}${u.role!=='admin'?`<button class="btn ${u.is_blocked?'btn-success':'btn-danger'} btn-xs" onclick="toggleBlock(${u.id},${u.is_blocked})">${u.is_blocked?'Unblock':'Block'}</button>`:''}${u.role!=='admin'?`<button class="btn btn-orange btn-xs" onclick="overrideRestriction(${u.id})">Unlock</button>`:''}${u.role!=='admin'?`<button class="btn btn-danger btn-xs" onclick="deleteUser(${u.id})">Del</button>`:''}</div></td></tr>`).join(''):`<tr class="empty-row"><td colspan="6">No users yet.</td></tr>`}</tbody></table></div></div>`;}
 async function approveUser(id){await api('PUT',`/admin/users/${id}/approve`,{});loadUsers();loadDashboard();showToast('User approved','success')}
 async function toggleBlock(id,current){await api('PUT',`/admin/users/${id}/block`,{is_blocked:current?0:1});loadUsers()}
-async function overrideRestriction(id){if(!confirm('Override 90-day restriction? This user will be able to change name/email/password immediately.'))return;await api('PUT',`/admin/users/${id}/override-restriction`,{});showToast('Restrictions overridden','success')}
+async function overrideRestriction(id){if(!confirm('Override 90-day restriction for this user?'))return;await api('PUT',`/admin/users/${id}/override-restriction`,{});showToast('Restrictions overridden','success')}
 async function deleteUser(id){if(!confirm('Permanently delete this user?'))return;await api('DELETE',`/admin/users/${id}`);loadUsers();loadDashboard()}
 
 // ── MEMBERSHIPS ──
-async function loadMemberships(){
-  const[mR,cR,uR]=await Promise.all([api('GET','/admin/memberships'),api('GET','/admin/courses'),api('GET','/admin/users')]);
-  const mems=mR.ok?mR.data:[];allCourses=cR.ok?cR.data:[];allUsers=uR.ok?uR.data:[];
-  document.getElementById('view-memberships').innerHTML=`<div class="sec-head"><h2 class="sec-title">Memberships</h2><button class="btn btn-primary" onclick="openMembershipModal()">+ Grant</button></div><div class="card"><div class="table-wrap"><table><thead><tr><th>User</th><th>Course</th><th>Status</th><th>Expires</th><th>Actions</th></tr></thead><tbody>${mems.length?mems.map(m=>{const exp=new Date(m.expires_at),now=new Date();const active=m.is_active&&exp>now;const days=Math.ceil((exp-now)/86400000);return`<tr><td><div class="strong">${esc(m.user_name)}</div><div style="font-family:JetBrains Mono,monospace;font-size:.64rem;color:var(--gray)">${esc(m.user_email)}</div></td><td>${esc(m.course_title)}</td><td><span class="badge ${active?'b-active':'b-inactive'}">${active?'Active':'Expired'}</span></td><td style="font-family:JetBrains Mono,monospace;font-size:.66rem">${exp.toLocaleDateString()}<div style="font-size:.62rem;color:${days>0&&active?'var(--teal)':'var(--red)'}">${days>0?days+'d left':'Expired'}</div></td><td><div style="display:flex;gap:3px"><button class="btn btn-ghost btn-xs" onclick="openExtendModal(${m.id})">Extend</button>${active?`<button class="btn btn-danger btn-xs" onclick="cancelMembership(${m.id})">Cancel</button>`:''}</div></td></tr>`}).join(''):`<tr class="empty-row"><td colspan="5">No memberships.</td></tr>`}</tbody></table></div></div>`;
-}
-function openMembershipModal(){
-  const uOpts=allUsers.filter(u=>u.role!=='admin'&&u.is_approved).map(u=>`<option value="${u.id}">${esc(u.name)} (${esc(u.email)})</option>`).join('');
-  const cOpts=allCourses.map(c=>`<option value="${c.id}">${esc(c.title)}</option>`).join('');
-  openModal('Grant Membership',`<div class="alert" id="_alert"></div><div class="fg"><label class="fl">User *</label><select class="fs" id="_uid"><option value="">— Select —</option>${uOpts}</select></div><div class="fg"><label class="fl">Course *</label><select class="fs" id="_cid"><option value="">— Select —</option>${cOpts}</select></div><div class="fg"><label class="fl">Duration (days) *</label><input class="fi" type="number" id="_days" value="30" min="1"></div><div id="_expPrev" style="font-family:JetBrains Mono,monospace;font-size:.66rem;color:var(--teal);margin-top:4px"></div>`,`<button class="btn btn-primary" onclick="grantMembership()">Grant</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);
-  document.getElementById('_days').addEventListener('input',()=>{const d=parseInt(document.getElementById('_days').value)||0;if(d>0){const e=new Date(Date.now()+d*86400000);document.getElementById('_expPrev').textContent='Expires: '+e.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})}});
-}
-async function grantMembership(){
-  const user_id=document.getElementById('_uid').value;
-  const course_id=document.getElementById('_cid').value;
-  const days=parseInt(document.getElementById('_days').value)||0;
-  if(!user_id||!course_id||!days){showAlert('All fields required.');return}
-  const{ok,data}=await api('POST','/admin/memberships',{user_id:parseInt(user_id),course_id:parseInt(course_id),days});
-  if(!ok){showAlert(data.error||'Error.');return}
-  closeModal();loadMemberships();loadDashboard();showToast('Membership granted','success');
-}
-function openExtendModal(memId){
-  openModal('Extend Membership',`<div class="alert" id="_alert"></div><input type="hidden" id="_mid" value="${memId}"><div class="fg"><label class="fl">Extend by (days) *</label><input class="fi" type="number" id="_days" value="30" min="1"></div>`,`<button class="btn btn-primary" onclick="extendMembership()">Extend</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);
-}
-async function extendMembership(){
-  const days=parseInt(document.getElementById('_days').value)||0;
-  if(!days){showAlert('Days required.');return}
-  const{ok}=await api('PUT',`/admin/memberships/${document.getElementById('_mid').value}/extend`,{days});
-  if(!ok)return;
-  closeModal();loadMemberships();showToast('Extended','success');
-}
+async function loadMemberships(){const[mR,cR,uR]=await Promise.all([api('GET','/admin/memberships'),api('GET','/admin/courses'),api('GET','/admin/users')]);const mems=mR.ok?mR.data:[];allCourses=cR.ok?cR.data:[];allUsers=uR.ok?uR.data:[];document.getElementById('view-memberships').innerHTML=`<div class="sec-head"><h2 class="sec-title">Memberships</h2><button class="btn btn-primary" onclick="openMembershipModal()">+ Grant</button></div><div class="card"><div class="table-wrap"><table><thead><tr><th>User</th><th>Course</th><th>Status</th><th>Expires</th><th>Actions</th></tr></thead><tbody>${mems.length?mems.map(m=>{const exp=new Date(m.expires_at),now=new Date();const active=m.is_active&&exp>now;const days=Math.ceil((exp-now)/86400000);return`<tr><td><div class="strong">${esc(m.user_name)}</div><div style="font-family:JetBrains Mono,monospace;font-size:.64rem;color:var(--gray)">${esc(m.user_email)}</div></td><td>${esc(m.course_title)}</td><td><span class="badge ${active?'b-active':'b-inactive'}">${active?'Active':'Expired'}</span></td><td style="font-family:JetBrains Mono,monospace;font-size:.66rem">${exp.toLocaleDateString()}<div style="font-size:.62rem;color:${days>0&&active?'var(--teal)':'var(--red)'}">${days>0?days+'d left':'Expired'}</div></td><td><div style="display:flex;gap:3px"><button class="btn btn-ghost btn-xs" onclick="openExtendModal(${m.id})">Extend</button>${active?`<button class="btn btn-danger btn-xs" onclick="cancelMembership(${m.id})">Cancel</button>`:''}</div></td></tr>`}).join(''):`<tr class="empty-row"><td colspan="5">No memberships.</td></tr>`}</tbody></table></div></div>`;}
+function openMembershipModal(){const uOpts=allUsers.filter(u=>u.role!=='admin'&&u.is_approved).map(u=>`<option value="${u.id}">${esc(u.name)} (${esc(u.email)})</option>`).join('');const cOpts=allCourses.map(c=>`<option value="${c.id}">${esc(c.title)}</option>`).join('');openModal('Grant Membership',`<div class="alert" id="_alert"></div><div class="fg"><label class="fl">User *</label><select class="fs" id="_uid"><option value="">— Select —</option>${uOpts}</select></div><div class="fg"><label class="fl">Course *</label><select class="fs" id="_cid"><option value="">— Select —</option>${cOpts}</select></div><div class="fg"><label class="fl">Duration (days) *</label><input class="fi" type="number" id="_days" value="30" min="1"><div id="_expPrev" style="font-family:JetBrains Mono,monospace;font-size:.66rem;color:var(--teal);margin-top:4px"></div></div>`,`<button class="btn btn-primary" onclick="grantMembership()">Grant</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);document.getElementById('_days').addEventListener('input',()=>{const d=parseInt(document.getElementById('_days').value)||0;if(d>0){const e=new Date(Date.now()+d*86400000);document.getElementById('_expPrev').textContent='Expires: '+e.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})}})}
+async function grantMembership(){const user_id=document.getElementById('_uid').value;const course_id=document.getElementById('_cid').value;const days=parseInt(document.getElementById('_days').value)||0;if(!user_id||!course_id||!days){showAlert('All fields required.');return}const{ok}=await api('POST','/admin/memberships',{user_id:parseInt(user_id),course_id:parseInt(course_id),days});if(!ok)return;closeModal();loadMemberships();loadDashboard();showToast('Membership granted','success')}
+function openExtendModal(memId){openModal('Extend Membership',`<div class="alert" id="_alert"></div><input type="hidden" id="_mid" value="${memId}"><div class="fg"><label class="fl">Extend by (days) *</label><input class="fi" type="number" id="_days" value="30" min="1"></div>`,`<button class="btn btn-primary" onclick="extendMembership()">Extend</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`)}
+async function extendMembership(){const days=parseInt(document.getElementById('_days').value)||0;if(!days){showAlert('Days required.');return}const{ok}=await api('PUT',`/admin/memberships/${document.getElementById('_mid').value}/extend`,{days});if(!ok)return;closeModal();loadMemberships();showToast('Extended','success')}
 async function cancelMembership(id){if(!confirm('Cancel this membership?'))return;await api('PUT',`/admin/memberships/${id}/cancel`,{});loadMemberships()}
 
+// Init
 loadView('dashboard');
 </script>
 </body>
