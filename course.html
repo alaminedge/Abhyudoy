@@ -5,335 +5,773 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Course — Abhyudoy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cabinet+Grotesk:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#05080f;--surface:#0b0f1a;--surface2:#111827;--surface3:#161e2e;
-  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.11);
-  --teal:#00d4aa;--teal2:#00b894;--teal-dim:rgba(0,212,170,0.08);
-  --white:#f0f4f8;--gray:#7a8899;--gray2:#a0adb8;
-  --red:#f0566a;--orange:#f59e0b;--green:#10d48e;
-  --radius:10px;--radius-lg:14px;--transition:.18s cubic-bezier(.4,0,.2,1);
+:root {
+  --bg: #03050a;
+  --surface: #080c17;
+  --surface2: #0d1321;
+  --surface3: #111827;
+  --border: rgba(255,255,255,0.05);
+  --border2: rgba(255,255,255,0.09);
+  --border3: rgba(255,255,255,0.13);
+  --teal: #00d4aa;
+  --teal2: #00b894;
+  --teal-dim: rgba(0,212,170,0.07);
+  --teal-glow: rgba(0,212,170,0.14);
+  --white: #f1f5f9;
+  --gray: #6b7d91;
+  --gray2: #94a3b8;
+  --gray3: #cbd5e1;
+  --red: #f0566a;
+  --red-dim: rgba(240,86,106,0.08);
+  --green: #10d48e;
+  --orange: #f59e0b;
+  --orange-dim: rgba(245,158,11,0.08);
+  --radius: 10px;
+  --radius-sm: 6px;
+  --radius-lg: 16px;
+  --sidebar-width: 260px;
+  --header-height: 64px;
+  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{font-family:'Cabinet Grotesk',sans-serif;background:var(--bg);color:var(--white);min-height:100vh}
-::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:10px}
 
-/* NAV */
-nav{background:rgba(11,15,26,0.96);backdrop-filter:blur(22px);border-bottom:1px solid var(--border);padding:0 28px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.nav-left{display:flex;align-items:center;gap:14px}
-.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:700;letter-spacing:-0.02em;text-decoration:none;color:var(--white)}
-.nav-logo em{font-style:italic;color:var(--teal)}
-.btn-back{padding:7px 16px;background:transparent;border:1.5px solid var(--border2);color:var(--gray);border-radius:20px;cursor:pointer;font-size:0.72rem;font-weight:600;font-family:'Cabinet Grotesk',sans-serif;transition:all var(--transition);letter-spacing:0.04em;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
-.btn-back:hover{border-color:var(--teal);color:var(--teal)}
-.btn-back svg{width:12px;height:12px;fill:currentColor}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* LAYOUT */
-.page{max-width:1060px;margin:0 auto;padding:40px 28px 100px}
+html, body {
+  height: 100%;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
 
-/* COURSE HEADER */
-.course-head{margin-bottom:40px}
-.course-eyebrow{font-family:'DM Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.16em;color:var(--teal);margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.course-eyebrow::before{content:'';display:block;width:20px;height:1.5px;background:var(--teal)}
-.course-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:700;letter-spacing:-0.025em;margin-bottom:12px;line-height:1.15}
-.course-desc{font-size:.85rem;color:var(--gray);line-height:1.65;max-width:600px;font-weight:300;margin-bottom:18px}
-.course-meta-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.meta-chip{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--gray2);display:flex;align-items:center;gap:5px;background:var(--surface);border:1px solid var(--border);padding:5px 11px;border-radius:20px}
-.expiry-tag{font-family:'DM Mono',monospace;font-size:0.64rem;padding:5px 12px;border-radius:20px;border:1px solid rgba(0,212,170,0.2)}
-.expiry-ok{background:var(--teal-dim);color:var(--teal)}
-.expiry-warn{background:rgba(245,158,11,0.09);color:var(--orange);border-color:rgba(245,158,11,0.2)}
-.expiry-exp{background:rgba(240,86,106,0.09);color:var(--red);border-color:rgba(240,86,106,0.2)}
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.06); border-radius: 4px; }
 
-/* PROGRESS BAR */
-.progress-bar-wrap{height:3px;background:var(--border);border-radius:3px;margin-top:20px;overflow:hidden}
-.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--teal2));border-radius:3px;transition:width .5s ease;width:0%}
+/* ── SIDEBAR ── */
+.sidebar-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+  z-index: 90; opacity: 0; pointer-events: none;
+  transition: opacity var(--transition);
+  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+}
+.sidebar-overlay.open { opacity: 1; pointer-events: auto; }
 
-/* SUBJECTS */
-.subjects-wrap{display:flex;flex-direction:column;gap:12px}
+.sidebar {
+  position: fixed; top: 0; left: 0; bottom: 0;
+  width: var(--sidebar-width); background: var(--surface);
+  border-right: 1px solid var(--border); z-index: 100;
+  display: flex; flex-direction: column;
+  transform: translateX(-100%);
+  transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+  overflow-y: auto;
+}
+.sidebar.open { transform: translateX(0); }
 
-.subject-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:border-color .25s}
-.subject-block.open{border-color:rgba(0,212,170,0.2)}
+.sidebar-top {
+  padding: 20px 18px 16px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.sidebar-logo { height: 28px; flex-shrink: 0; }
+.sidebar-brand {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.35rem;
+  font-weight: 700; letter-spacing: -0.01em; color: var(--white);
+  text-decoration: none; line-height: 1;
+}
 
-.subject-toggle{width:100%;background:transparent;border:none;padding:16px 20px;display:flex;align-items:center;gap:14px;cursor:pointer;text-align:left;transition:background .18s}
-.subject-toggle:hover{background:rgba(255,255,255,0.025)}
-.subject-num{font-family:'DM Mono',monospace;font-size:0.64rem;font-weight:500;color:var(--teal);width:28px;flex-shrink:0;opacity:0.65}
-.subject-icon{width:32px;height:32px;border-radius:8px;background:var(--teal-dim);border:1px solid rgba(0,212,170,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
-.subject-block.open .subject-icon{background:var(--teal);border-color:var(--teal)}
-.subject-icon svg{width:13px;height:13px;fill:var(--teal);transition:fill .2s}
-.subject-block.open .subject-icon svg{fill:#000}
-.subject-info{flex:1;min-width:0}
-.subject-name{font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-weight:700;color:var(--white);letter-spacing:-0.01em;line-height:1.2}
-.subject-sub{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--gray);margin-top:3px}
-.subject-chevron{color:var(--gray);transition:transform .25s;flex-shrink:0;width:16px;height:16px;fill:currentColor}
-.subject-block.open .subject-chevron{transform:rotate(180deg);color:var(--teal)}
+.sidebar-nav { padding: 10px 10px; flex: 1; }
+.sidebar-section-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.54rem;
+  font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.18); padding: 14px 12px 8px;
+}
+.sidebar-nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: var(--radius-sm);
+  color: rgba(255,255,255,0.45); text-decoration: none;
+  font-size: 0.8rem; font-weight: 500;
+  transition: all var(--transition); cursor: pointer;
+  border: none; background: transparent; width: 100%;
+  text-align: left; font-family: 'Inter', sans-serif;
+  letter-spacing: 0.01em; margin-bottom: 1px;
+}
+.sidebar-nav-item:hover { background: rgba(255,255,255,0.03); color: rgba(255,255,255,0.75); }
+.sidebar-nav-item.active { background: var(--teal-dim); color: var(--teal); font-weight: 600; }
+.sidebar-nav-item svg { width: 17px; height: 17px; flex-shrink: 0; opacity: 0.65; }
+.sidebar-nav-item.active svg { opacity: 1; }
 
-.subject-content{display:none;border-top:1px solid var(--border)}
-.subject-block.open .subject-content{display:block}
+.sidebar-footer {
+  padding: 14px 16px; border-top: 1px solid var(--border);
+}
+.sidebar-user { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.sidebar-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--teal), #00e6c0);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.8rem; color: #000; flex-shrink: 0;
+}
+.sidebar-user-info { flex: 1; min-width: 0; }
+.sidebar-user-name {
+  font-size: 0.8rem; font-weight: 600; color: var(--white);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.sidebar-user-email {
+  font-size: 0.64rem; color: var(--gray);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-family: 'JetBrains Mono', monospace;
+}
 
-/* PAPERS */
-.paper-block{padding:0}
-.paper-label-row{display:flex;align-items:center;gap:8px;padding:12px 20px 8px;border-bottom:1px solid var(--border)}
-.paper-dot{width:4px;height:4px;border-radius:50%;background:var(--teal);flex-shrink:0}
-.paper-label{font-family:'DM Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--gray);font-weight:500}
+.btn-signout {
+  width: 100%; padding: 8px 14px; background: transparent;
+  border: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.38);
+  border-radius: var(--radius-sm); cursor: pointer;
+  font-family: 'Inter', sans-serif; font-size: 0.7rem;
+  font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  transition: all var(--transition);
+}
+.btn-signout:hover { border-color: var(--red); color: var(--red); background: var(--red-dim); }
 
-/* CHAPTERS */
-.chapter-block{padding:4px 0}
-.chapter-header{display:flex;align-items:center;gap:8px;padding:8px 20px 4px}
-.chapter-marker{font-size:0.75rem;color:var(--teal);opacity:0.7;font-family:'DM Mono',monospace}
-.chapter-label{font-size:0.74rem;font-weight:600;color:var(--gray2);letter-spacing:0.01em}
+/* ── MAIN ── */
+.main { min-height: 100vh; display: flex; flex-direction: column; }
 
-/* LECTURES */
-.lecture-item{display:flex;align-items:center;gap:12px;padding:9px 20px 9px 32px;cursor:pointer;transition:all .15s;border-bottom:1px solid transparent;position:relative}
-.lecture-item:hover{background:var(--surface2)}
-.lecture-item:hover .lec-play{background:var(--teal);border-color:var(--teal)}
-.lecture-item:hover .lec-play svg{fill:#000}
-.lecture-item:hover .lec-title{color:var(--white)}
-.lecture-item:last-child{border-bottom:none}
-.lec-play{width:28px;height:28px;border-radius:50%;background:var(--teal-dim);border:1px solid rgba(0,212,170,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
-.lec-play svg{width:10px;height:10px;fill:var(--teal);margin-left:1.5px;transition:fill .2s}
-.lec-title{font-size:0.8rem;color:var(--gray2);flex:1;line-height:1.4;transition:color .15s}
-.lec-badges{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.lec-pdf-badge{font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--orange);background:rgba(245,158,11,0.09);border:1px solid rgba(245,158,11,0.18);padding:2px 7px;border-radius:10px;display:flex;align-items:center;gap:3px}
-.lec-num{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--gray);opacity:0.5;min-width:24px;text-align:right}
+/* ── HEADER ── */
+.header {
+  height: var(--header-height);
+  background: rgba(8,12,23,0.88); backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 20px; position: sticky; top: 0; z-index: 50; gap: 16px;
+}
+.header-left { display: flex; align-items: center; gap: 14px; }
 
-/* RESOURCES */
-.resources-section{margin-top:42px;padding-top:32px;border-top:1px solid var(--border)}
-.res-eyebrow{font-family:'DM Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--teal);margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.res-eyebrow::before{content:'';display:block;width:16px;height:1.5px;background:var(--teal)}
-.res-title{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:700;margin-bottom:16px;letter-spacing:-0.01em}
-.res-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
-.res-item{display:flex;align-items:center;gap:12px;padding:13px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);text-decoration:none;color:var(--gray2);transition:all .2s;font-size:0.8rem}
-.res-item:hover{border-color:rgba(0,212,170,0.2);color:var(--white);background:var(--surface2);transform:translateY(-1px)}
-.res-ico{width:34px;height:34px;background:var(--teal-dim);border:1px solid rgba(0,212,170,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.res-ico svg{width:15px;height:15px;fill:var(--teal)}
-.res-info{flex:1;min-width:0}
-.res-name{font-weight:600;color:var(--white);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:2px}
-.res-type{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--gray)}
-.res-arrow{color:var(--teal);opacity:0.5;transition:opacity .15s;flex-shrink:0}
-.res-item:hover .res-arrow{opacity:1}
+.hamburger-btn {
+  background: transparent; border: none; cursor: pointer;
+  padding: 6px; display: flex; align-items: center; justify-content: center;
+  color: var(--gray2); border-radius: var(--radius-sm);
+  transition: all var(--transition);
+}
+.hamburger-btn:hover { color: var(--white); background: rgba(255,255,255,0.04); }
 
-/* LOADING / EMPTY / ERROR */
-.state-wrap{text-align:center;padding:80px 20px}
-.ring{width:32px;height:32px;border:2.5px solid var(--border2);border-top-color:var(--teal);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 16px}
-@keyframes spin{to{transform:rotate(360deg)}}
-.state-wrap p{font-size:.82rem;color:var(--gray);line-height:1.6}
-.state-wrap h3{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;margin-bottom:8px}
-.state-icon{width:52px;height:52px;margin:0 auto 16px;background:var(--surface2);border-radius:50%;display:flex;align-items:center;justify-content:center}
-.state-icon svg{width:22px;height:22px;fill:var(--gray)}
+.header-logo { height: 26px; display: none; }
 
-/* START BANNER */
-.start-banner{background:linear-gradient(135deg,rgba(0,212,170,0.08),rgba(0,184,148,0.04));border:1px solid rgba(0,212,170,0.15);border-radius:var(--radius-lg);padding:20px 24px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.start-banner-text h3{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;margin-bottom:4px}
-.start-banner-text p{font-size:.78rem;color:var(--gray);line-height:1.5}
-.btn-start{padding:10px 22px;background:var(--teal);color:#000;border:none;border-radius:var(--radius);font-family:'Cabinet Grotesk',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;transition:all var(--transition);text-decoration:none;display:inline-flex;align-items:center;gap:7px}
-.btn-start:hover{background:var(--teal2);transform:translateY(-1px);box-shadow:0 5px 18px rgba(0,212,170,.28)}
-.btn-start svg{width:13px;height:13px;fill:currentColor}
+.breadcrumb {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.78rem; color: var(--gray); flex-wrap: wrap;
+}
+.breadcrumb a { color: var(--gray2); text-decoration: none; transition: color var(--transition); }
+.breadcrumb a:hover { color: var(--teal); }
+.breadcrumb svg { width: 12px; height: 12px; flex-shrink: 0; }
+.breadcrumb span { color: var(--gray3); }
 
-@media(max-width:700px){.page{padding:24px 16px 60px}nav{padding:0 16px}}
+.header-right { display: flex; align-items: center; gap: 6px; }
+
+.icon-btn {
+  position: relative; background: transparent; border: 1px solid transparent;
+  cursor: pointer; padding: 7px; display: flex; align-items: center;
+  justify-content: center; color: var(--gray2); border-radius: var(--radius-sm);
+  transition: all var(--transition); text-decoration: none;
+}
+.icon-btn:hover { background: rgba(255,255,255,0.04); color: var(--white); border-color: var(--border2); }
+.icon-btn svg { width: 19px; height: 19px; flex-shrink: 0; }
+
+.notif-badge {
+  position: absolute; top: 4px; right: 4px;
+  width: 8px; height: 8px; background: var(--red);
+  border-radius: 50%; border: 2px solid rgba(8,12,23,0.88);
+  display: none;
+}
+.notif-badge.show { display: block; }
+
+.profile-dropdown { position: relative; }
+.profile-trigger {
+  display: flex; align-items: center; gap: 8px;
+  padding: 4px 10px 4px 4px; background: transparent;
+  border: 1px solid var(--border2); border-radius: 24px;
+  cursor: pointer; transition: all var(--transition);
+  color: var(--gray2); font-family: 'Inter', sans-serif;
+}
+.profile-trigger:hover { border-color: var(--border3); background: rgba(255,255,255,0.02); }
+.profile-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--teal), #00e6c0);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.68rem; color: #000; flex-shrink: 0;
+}
+.profile-name {
+  font-size: 0.78rem; font-weight: 600; color: var(--white);
+  max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.profile-chevron { width: 14px; height: 14px; flex-shrink: 0; transition: transform var(--transition); }
+
+.profile-menu {
+  position: absolute; top: calc(100% + 8px); right: 0;
+  width: 200px; background: var(--surface2);
+  border: 1px solid var(--border2); border-radius: var(--radius-lg);
+  padding: 4px; box-shadow: 0 16px 48px rgba(0,0,0,0.6);
+  opacity: 0; pointer-events: none;
+  transform: translateY(-6px); transition: all var(--transition); z-index: 60;
+}
+.profile-menu.open { opacity: 1; pointer-events: auto; transform: translateY(0); }
+
+.profile-menu-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: var(--radius-sm);
+  color: var(--gray2); text-decoration: none;
+  font-size: 0.78rem; font-weight: 500;
+  transition: all var(--transition); border: none;
+  background: transparent; width: 100%; cursor: pointer;
+  font-family: 'Inter', sans-serif;
+}
+.profile-menu-item:hover { background: rgba(255,255,255,0.04); color: var(--white); }
+.profile-menu-item svg { width: 15px; height: 15px; flex-shrink: 0; }
+.profile-menu-divider { height: 1px; background: var(--border); margin: 4px 0; }
+.profile-menu-item.logout { color: var(--red); }
+.profile-menu-item.logout:hover { background: var(--red-dim); }
+
+/* ── CONTENT ── */
+.content { flex: 1; padding: 40px 24px 80px; max-width: 1100px; margin: 0 auto; width: 100%; }
+
+/* ── COURSE HEADER ── */
+.course-head { margin-bottom: 36px; padding-bottom: 28px; border-bottom: 1px solid var(--border); }
+.course-eyebrow {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+  font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em;
+  color: var(--teal); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.course-eyebrow::before {
+  content: ''; display: block; width: 16px; height: 1.5px;
+  background: var(--teal); border-radius: 1px;
+}
+.course-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  font-weight: 700; letter-spacing: -0.02em;
+  margin-bottom: 10px; line-height: 1.2;
+}
+.course-meta-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.meta-chip {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.62rem;
+  color: var(--gray); display: flex; align-items: center; gap: 5px;
+}
+.meta-chip svg { width: 13px; height: 13px; flex-shrink: 0; }
+.expiry-tag {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+  padding: 4px 10px; border-radius: 20px;
+  background: var(--teal-dim); color: var(--teal);
+  border: 1px solid rgba(0,212,170,0.2);
+}
+
+/* ── SUBJECTS ── */
+.subjects { display: flex; flex-direction: column; gap: 12px; }
+
+.subject-block {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); overflow: hidden;
+  transition: border-color var(--transition);
+}
+.subject-block.open { border-color: rgba(0,212,170,0.2); }
+
+.subject-toggle {
+  width: 100%; background: transparent; border: none;
+  padding: 16px 20px; display: flex; align-items: center;
+  gap: 14px; cursor: pointer; text-align: left;
+  transition: background var(--transition);
+  color: var(--white); font-family: 'Inter', sans-serif;
+}
+.subject-toggle:hover { background: rgba(255,255,255,0.02); }
+.subject-num {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.62rem;
+  font-weight: 500; color: var(--teal); width: 26px;
+  flex-shrink: 0; opacity: 0.7;
+}
+.subject-name {
+  font-family: 'Cormorant Garamond', serif; font-size: 1rem;
+  font-weight: 600; color: var(--white); flex: 1; letter-spacing: -0.01em;
+}
+.subject-count {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+  color: var(--gray); margin-right: 8px;
+}
+.subject-chevron {
+  color: var(--gray); transition: transform 0.25s; flex-shrink: 0;
+}
+.subject-chevron svg { width: 12px; height: 12px; }
+.subject-block.open .subject-chevron { transform: rotate(180deg); color: var(--teal); }
+.subject-content { display: none; padding: 0 0 12px; }
+.subject-block.open .subject-content { display: block; }
+
+.paper-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.56rem;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--gray); padding: 8px 20px 4px;
+  display: flex; align-items: center; gap: 8px;
+}
+.paper-label::before {
+  content: ''; display: block; width: 4px; height: 4px;
+  border-radius: 50%; background: var(--teal); flex-shrink: 0;
+}
+
+.chapter-label {
+  font-size: 0.72rem; font-weight: 600; color: var(--gray2);
+  padding: 8px 20px 4px; display: flex; align-items: center; gap: 8px;
+}
+.chapter-label::before {
+  content: '\00A7'; color: var(--teal); font-size: 0.72rem;
+  opacity: 0.6; font-weight: 400;
+}
+
+.lecture-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 9px 16px; margin: 1px 8px;
+  border-radius: var(--radius-sm); cursor: pointer;
+  transition: all 0.15s; border: 1px solid transparent;
+}
+.lecture-item:hover { background: var(--surface2); border-color: var(--border); }
+.lec-play {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--teal-dim); border: 1px solid rgba(0,212,170,0.15);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all var(--transition);
+}
+.lecture-item:hover .lec-play { background: var(--teal); border-color: var(--teal); }
+.lec-play svg { width: 10px; height: 10px; fill: var(--teal); margin-left: 1px; transition: fill 0.15s; }
+.lecture-item:hover .lec-play svg { fill: #000; }
+.lec-title {
+  font-size: 0.78rem; color: var(--gray2); flex: 1;
+  line-height: 1.4; transition: color 0.15s;
+}
+.lecture-item:hover .lec-title { color: var(--white); }
+
+.lec-attachments {
+  display: flex; gap: 4px; flex-shrink: 0; flex-wrap: wrap;
+}
+.lec-pdf-badge {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.56rem;
+  font-weight: 500; padding: 3px 8px; border-radius: 12px;
+  display: flex; align-items: center; gap: 4px;
+  background: var(--teal-dim); color: var(--teal);
+  border: 1px solid rgba(0,212,170,0.18);
+  text-decoration: none; transition: all var(--transition);
+}
+.lec-pdf-badge:hover { background: var(--teal); color: #000; border-color: var(--teal); }
+.lec-link-badge {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.56rem;
+  font-weight: 500; padding: 3px 8px; border-radius: 12px;
+  display: flex; align-items: center; gap: 4px;
+  background: rgba(148,163,184,0.08); color: var(--gray2);
+  border: 1px solid rgba(148,163,184,0.15);
+  text-decoration: none; transition: all var(--transition);
+}
+.lec-link-badge:hover { background: var(--teal-dim); color: var(--teal); border-color: rgba(0,212,170,0.18); }
+.lec-pdf-badge svg, .lec-link-badge svg { width: 10px; height: 10px; flex-shrink: 0; }
+
+/* ── RESOURCES ── */
+.resources-section { margin-top: 36px; padding-top: 28px; border-top: 1px solid var(--border); }
+.res-title {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.25rem;
+  font-weight: 700; margin-bottom: 14px; letter-spacing: -0.01em;
+}
+.res-grid { display: flex; flex-direction: column; gap: 8px; }
+.res-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  text-decoration: none; color: var(--gray2);
+  transition: all var(--transition); font-size: 0.78rem;
+}
+.res-item:hover { border-color: rgba(0,212,170,0.2); color: var(--white); background: var(--surface2); }
+.res-ico {
+  width: 30px; height: 30px; background: var(--teal-dim);
+  border-radius: var(--radius-sm); display: flex;
+  align-items: center; justify-content: center; flex-shrink: 0;
+}
+.res-ico svg { width: 15px; height: 15px; stroke: var(--teal); stroke-width: 2; fill: none; }
+
+/* ── LOADING / EMPTY ── */
+.loading-wrap { text-align: center; padding: 80px 20px; }
+.loading-ring {
+  width: 28px; height: 28px; border: 2.5px solid var(--border2);
+  border-top-color: var(--teal); border-radius: 50%;
+  animation: spin 0.7s linear infinite; margin: 0 auto 14px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.empty-state { text-align: center; padding: 60px 20px; }
+.empty-state h3 {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.3rem;
+  font-weight: 700; margin-bottom: 8px;
+}
+.empty-state p { color: var(--gray); font-size: 0.82rem; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 10px 20px; font-family: 'Inter', sans-serif;
+  font-size: 0.78rem; font-weight: 600; border-radius: var(--radius-sm);
+  border: none; cursor: pointer; transition: all var(--transition);
+  letter-spacing: 0.02em; text-decoration: none;
+  background: var(--teal); color: #000;
+}
+.btn:hover { background: var(--teal2); }
+
+/* ── TOAST ── */
+.toast-container {
+  position: fixed; bottom: 20px; right: 20px; z-index: 300;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.toast {
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: var(--radius); padding: 12px 16px;
+  font-size: 0.78rem; color: var(--white);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  animation: slideIn 0.3s ease, slideOut 0.3s ease 3s forwards;
+  display: flex; align-items: center; gap: 8px; min-width: 260px;
+}
+.toast-success { border-color: rgba(16,212,142,0.3); }
+.toast-error { border-color: rgba(240,86,106,0.3); }
+@keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes slideOut { from { opacity: 1; } to { opacity: 0; transform: translateX(20px); } }
+
+/* ── FOOTER ── */
+.footer {
+  background: var(--surface); border-top: 1px solid var(--border);
+  padding: 40px 24px 20px; margin-top: auto;
+}
+.footer-grid {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 36px;
+}
+.footer-brand p { color: var(--gray); font-size: 0.76rem; line-height: 1.7; margin-top: 10px; max-width: 240px; }
+.footer-logo { height: 22px; }
+.footer-social { display: flex; gap: 8px; margin-top: 14px; }
+.footer-social a {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gray); transition: all var(--transition); text-decoration: none;
+}
+.footer-social a:hover { background: var(--teal-dim); border-color: var(--teal); color: var(--teal); }
+.footer-social a svg { width: 13px; height: 13px; fill: currentColor; }
+.footer-col h4 {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.56rem;
+  font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.22); margin-bottom: 12px;
+}
+.footer-col a {
+  display: block; color: var(--gray); text-decoration: none;
+  font-size: 0.78rem; padding: 3px 0; transition: color var(--transition);
+}
+.footer-col a:hover { color: var(--teal); }
+.footer-bottom {
+  max-width: 1200px; margin: 32px auto 0; padding-top: 16px;
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 0.64rem; color: rgba(255,255,255,0.14);
+  font-family: 'JetBrains Mono', monospace; flex-wrap: wrap; gap: 8px;
+}
+.footer-status { display: flex; align-items: center; gap: 5px; }
+.footer-status-dot {
+  width: 5px; height: 5px; background: var(--green);
+  border-radius: 50%; animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* ── RESPONSIVE ── */
+@media (min-width: 861px) {
+  .sidebar { transform: translateX(0); }
+  .sidebar-overlay { display: none; }
+  .main { margin-left: var(--sidebar-width); }
+  .hamburger-btn { display: none; }
+}
+
+@media (max-width: 860px) {
+  .header { padding: 0 14px; }
+  .content { padding: 28px 14px 60px; }
+  .header-logo { display: block; }
+  .profile-name { display: none; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+  .subject-toggle { padding: 14px 16px; }
+  .lec-attachments { flex-direction: column; }
+}
+
+@media (max-width: 480px) {
+  .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+  .course-title { font-size: 1.4rem; }
+}
 </style>
 </head>
 <body>
 
-<nav>
-  <div class="nav-left">
-    <a href="/dashboard.html" class="nav-logo">Abhy<em>udoy</em></a>
-  </div>
-  <a href="/dashboard.html" class="btn-back">
-    <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
-    My Courses
-  </a>
-</nav>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
-<div class="page" id="page">
-  <div class="state-wrap"><div class="ring"></div><p>Loading course…</p></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-top">
+    <img src="/images/reallogo.png" height="28" alt="Abhyudoy" class="sidebar-logo">
+    <span class="sidebar-brand">Abhyudoy</span>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Main</div>
+    <a href="/dashboard.html" class="sidebar-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard
+    </a>
+    <a href="/browse.html" class="sidebar-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="20" y1="20" x2="16.65" y2="16.65"/></svg>Browse Courses
+    </a>
+    <a href="/dashboard.html" class="sidebar-nav-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>My Courses
+    </a>
+    <a href="/notifications.html" class="sidebar-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>Notifications
+    </a>
+    <a href="/settings.html" class="sidebar-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Settings
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="sidebar-avatar" id="sidebarAvatar">U</div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name" id="sidebarName">User</div>
+        <div class="sidebar-user-email" id="sidebarEmail">user@email.com</div>
+      </div>
+    </div>
+    <button class="btn-signout" onclick="logout()">Sign Out</button>
+  </div>
+</aside>
+
+<div class="main">
+  <header class="header">
+    <div class="header-left">
+      <button class="hamburger-btn" onclick="openSidebar()" aria-label="Menu">
+        <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><rect width="18" height="1.5" rx="0.75" fill="currentColor"/><rect y="5.25" width="18" height="1.5" rx="0.75" fill="currentColor"/><rect y="10.5" width="18" height="1.5" rx="0.75" fill="currentColor"/></svg>
+      </button>
+      <img src="/images/reallogo.png" height="26" alt="Abhyudoy" class="header-logo">
+      <nav class="breadcrumb">
+        <a href="/dashboard.html">My Courses</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        <span id="breadcrumbCourse">Course</span>
+      </nav>
+    </div>
+    <div class="header-right">
+      <a href="/notifications.html" class="icon-btn" title="Notifications">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        <span class="notif-badge" id="notifBadge"></span>
+      </a>
+      <div class="profile-dropdown" id="profileDropdown">
+        <button class="profile-trigger" onclick="toggleProfileMenu()">
+          <div class="profile-avatar" id="headerAvatar">U</div>
+          <span class="profile-name" id="headerName">User</span>
+          <svg class="profile-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="profile-menu" id="profileMenu">
+          <a href="/settings.html" class="profile-menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>Settings</a>
+          <div class="profile-menu-divider"></div>
+          <button class="profile-menu-item logout" onclick="logout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sign Out</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="content" id="page">
+    <div class="loading-wrap"><div class="loading-ring"></div><p style="color:var(--gray);font-size:0.82rem">Loading course...</p></div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="/images/reallogo.png" height="22" alt="Abhyudoy" class="footer-logo">
+        <p>Structured academic excellence through expert-designed video lectures and comprehensive study materials.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.852L1.745 2.25H8.2l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+          <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M21.593 7.203a2.506 2.506 0 00-1.762-1.766C18.265 5.007 12 5 12 5s-6.264-.007-7.831.404a2.56 2.56 0 00-1.766 1.778c-.413 1.566-.417 4.814-.417 4.814s-.004 3.264.406 4.814c.23.857.905 1.534 1.763 1.765 1.582.43 7.83.437 7.83.437s6.265.007 7.831-.403a2.515 2.515 0 001.767-1.763c.414-1.565.417-4.812.417-4.812s.02-3.265-.407-4.831zM9.996 15.005l.005-6 5.207 3.005-5.212 2.995z"/></svg></a>
+          <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Platform</h4><a href="/browse.html">Browse Courses</a><a href="/dashboard.html">My Courses</a></div>
+      <div class="footer-col"><h4>Support</h4><a href="/contact.html">Contact Us</a><a href="/notifications.html">Notifications</a></div>
+      <div class="footer-col"><h4>Legal</h4><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2024 Abhyudoy. All rights reserved.</span>
+      <span class="footer-status"><span class="footer-status-dot"></span>All Systems Operational</span>
+      <span>v2.0.0</span>
+    </div>
+  </footer>
 </div>
 
+<div class="toast-container" id="toastContainer"></div>
+
 <script>
-const token = localStorage.getItem('abhyudoy_token');
-const user = JSON.parse(localStorage.getItem('abhyudoy_user') || 'null');
+var token = localStorage.getItem('abhyudoy_token');
+var user = JSON.parse(localStorage.getItem('abhyudoy_user') || 'null');
 if (!token || !user) { window.location.href = '/index.html'; }
 
-const courseId = new URLSearchParams(location.search).get('id');
-if (!courseId) window.location.href = '/dashboard.html';
+var courseId = new URLSearchParams(location.search).get('id');
+if (!courseId) { window.location.href = '/dashboard.html'; }
 
-function esc(s) { const d = document.createElement('div'); d.textContent = String(s || ''); return d.innerHTML; }
+var initial = user.name.charAt(0).toUpperCase();
+document.getElementById('sidebarAvatar').textContent = initial;
+document.getElementById('sidebarName').textContent = user.name;
+document.getElementById('sidebarEmail').textContent = user.email;
+document.getElementById('headerAvatar').textContent = initial;
+document.getElementById('headerName').textContent = user.name;
 
-let globalData = null;
+function openSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('open'); }
+function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('open'); }
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { closeSidebar(); closeProfileMenu(); } });
+function toggleProfileMenu() { document.getElementById('profileMenu').classList.toggle('open'); }
+function closeProfileMenu() { document.getElementById('profileMenu').classList.remove('open'); }
+document.addEventListener('click', function(e) { if (!e.target.closest('.profile-dropdown')) closeProfileMenu(); });
+
+function showToast(msg, type) {
+  var container = document.getElementById('toastContainer');
+  var toast = document.createElement('div');
+  toast.className = 'toast toast-' + (type || 'success');
+  toast.innerHTML = '<span style="font-weight:700;color:' + (type === 'success' ? 'var(--green)' : 'var(--red)') + '">' + (type === 'success' ? '\u2713' : '\u2717') + '</span><span>' + msg + '</span>';
+  container.appendChild(toast);
+  setTimeout(function() { toast.remove(); }, 3500);
+}
+
+function esc(s) { var d = document.createElement('div'); d.textContent = String(s || ''); return d.innerHTML; }
+function logout() { localStorage.clear(); window.location.href = '/index.html'; }
 
 async function load() {
   try {
-    const res = await fetch(`/api/user/course/${courseId}`, {
-      headers: { Authorization: 'Bearer ' + token }
+    var res = await fetch('/api/user/course/' + courseId, {
+      headers: { 'Authorization': 'Bearer ' + token }
     });
+
     if (res.status === 401) { window.location.href = '/index.html'; return; }
     if (res.status === 403) { window.location.href = '/dashboard.html'; return; }
-    const d = await res.json();
+
+    var d = await res.json();
     if (d.error) { window.location.href = '/dashboard.html'; return; }
-    globalData = d;
-    render(d);
-  } catch (e) {
-    document.getElementById('page').innerHTML = `
-      <div class="state-wrap">
-        <div class="state-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
-        <h3>Failed to Load</h3>
-        <p>Could not load course. <a href="#" onclick="location.reload()" style="color:var(--teal)">Try again</a></p>
-      </div>`;
-  }
-}
 
-function render(d) {
-  document.title = d.course.title + ' — Abhyudoy';
+    document.title = d.course.title + ' — Abhyudoy';
+    document.getElementById('breadcrumbCourse').textContent = d.course.title;
 
-  let totalLec = 0;
-  d.subjects.forEach(s => s.papers.forEach(p => p.chapters.forEach(ch => totalLec += ch.lectures.length)));
-
-  const exp = d.membership?.expires_at ? new Date(d.membership.expires_at) : null;
-  const daysLeft = exp ? Math.ceil((exp - new Date()) / 86400000) : null;
-  let expiryTag = '';
-  if (exp) {
-    let cls = 'expiry-ok';
-    if (daysLeft < 0) cls = 'expiry-exp';
-    else if (daysLeft <= 7) cls = 'expiry-warn';
-    const text = daysLeft < 0 ? 'Expired' : daysLeft <= 7 ? `${daysLeft}d left` : `Expires ${exp.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
-    expiryTag = `<span class="expiry-tag ${cls}">${text}</span>`;
-  }
-
-  // Find first lecture for start button
-  let firstLecId = null;
-  for (const s of d.subjects) {
-    for (const p of s.papers) {
-      for (const ch of p.chapters) {
-        if (ch.lectures.length) { firstLecId = ch.lectures[0].id; break; }
+    var totalLec = 0;
+    for (var si = 0; si < d.subjects.length; si++) {
+      var subj = d.subjects[si];
+      for (var pi = 0; pi < subj.papers.length; pi++) {
+        var paper = subj.papers[pi];
+        for (var ci = 0; ci < paper.chapters.length; ci++) {
+          totalLec += paper.chapters[ci].lectures.length;
+        }
       }
-      if (firstLecId) break;
     }
-    if (firstLecId) break;
-  }
 
-  let html = `
-    <div class="course-head">
-      <div class="course-eyebrow">Course Content</div>
-      <h1 class="course-title">${esc(d.course.title)}</h1>
-      ${d.course.description ? `<p class="course-desc">${esc(d.course.description)}</p>` : ''}
-      <div class="course-meta-row">
-        <span class="meta-chip">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1z"/></svg>
-          ${d.subjects.length} Subject${d.subjects.length !== 1 ? 's' : ''}
-        </span>
-        <span class="meta-chip">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zM8 15c0 .55.45 1 1 1h1v2h2v-2h1c.55 0 1-.45 1-1v-4c0-.55-.45-1-1-1h-4c-.55 0-1 .45-1 1v4z"/></svg>
-          ${totalLec} Lecture${totalLec !== 1 ? 's' : ''}
-        </span>
-        ${d.resources?.length ? `<span class="meta-chip">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-          ${d.resources.length} Resource${d.resources.length !== 1 ? 's' : ''}
-        </span>` : ''}
-        ${expiryTag}
-      </div>
-    </div>
+    var exp = d.membership && d.membership.expires_at ? new Date(d.membership.expires_at) : null;
+    var expText = exp ? 'Expires ' + exp.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
 
-    ${firstLecId ? `
-    <div class="start-banner">
-      <div class="start-banner-text">
-        <h3>Ready to learn?</h3>
-        <p>Pick up from where you left off or start from the beginning.</p>
-      </div>
-      <a href="/player.html?lecture=${firstLecId}&course=${courseId}" class="btn-start">
-        <svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg>
-        Start Watching
-      </a>
-    </div>` : ''}
+    var html = '';
+    html += '<div class="course-head">';
+    html += '<div class="course-eyebrow">Course Content</div>';
+    html += '<h1 class="course-title">' + esc(d.course.title) + '</h1>';
+    html += '<div class="course-meta-row">';
+    html += '<span class="meta-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>' + d.subjects.length + ' Subject' + (d.subjects.length !== 1 ? 's' : '') + '</span>';
+    html += '<span class="meta-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>' + totalLec + ' Lecture' + (totalLec !== 1 ? 's' : '') + '</span>';
+    if (expText) html += '<span class="expiry-tag">' + expText + '</span>';
+    html += '</div></div>';
 
-    <div class="subjects-wrap" id="subjectsWrap">`;
+    html += '<div class="subjects">';
 
-  let globalLecNum = 0;
-  d.subjects.forEach((subj, si) => {
-    let lecCount = 0;
-    subj.papers.forEach(p => p.chapters.forEach(ch => lecCount += ch.lectures.length));
-
-    html += `
-      <div class="subject-block" id="subj-${si}">
-        <button class="subject-toggle" onclick="toggleSubject(${si})">
-          <span class="subject-num">${String(si + 1).padStart(2, '0')}</span>
-          <div class="subject-icon">
-            <svg viewBox="0 0 24 24"><path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1z"/></svg>
-          </div>
-          <div class="subject-info">
-            <div class="subject-name">${esc(subj.name)}</div>
-            <div class="subject-sub">${lecCount} lecture${lecCount !== 1 ? 's' : ''} · ${subj.papers.length} paper${subj.papers.length !== 1 ? 's' : ''}</div>
-          </div>
-          <svg class="subject-chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-        </button>
-        <div class="subject-content">`;
-
-    subj.papers.forEach((paper, pi) => {
-      const showPaperLabel = subj.papers.length > 1 || paper.name !== 'Full Course';
-      html += `<div class="paper-block">`;
-      if (showPaperLabel) {
-        html += `<div class="paper-label-row"><div class="paper-dot"></div><span class="paper-label">${esc(paper.name)}</span></div>`;
+    for (var si = 0; si < d.subjects.length; si++) {
+      var subj = d.subjects[si];
+      var lecCount = 0;
+      for (var pi = 0; pi < subj.papers.length; pi++) {
+        for (var ci = 0; ci < subj.papers[pi].chapters.length; ci++) {
+          lecCount += subj.papers[pi].chapters[ci].lectures.length;
+        }
       }
-      paper.chapters.forEach(ch => {
-        html += `<div class="chapter-block">
-          <div class="chapter-header">
-            <span class="chapter-marker">§</span>
-            <span class="chapter-label">${esc(ch.title)}</span>
-          </div>`;
-        ch.lectures.forEach(lec => {
-          globalLecNum++;
-          const hasPdf = lec.pdfs && lec.pdfs.length > 0;
-          html += `
-            <div class="lecture-item" onclick="window.location.href='/player.html?lecture=${lec.id}&course=${courseId}'">
-              <span class="lec-num">${String(globalLecNum).padStart(2, '0')}</span>
-              <div class="lec-play"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></div>
-              <span class="lec-title">${esc(lec.title)}</span>
-              <div class="lec-badges">
-                ${hasPdf ? `<span class="lec-pdf-badge">
-                  <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-                  ${lec.pdfs.length}
-                </span>` : ''}
-              </div>
-            </div>`;
-        });
-        html += `</div>`;
-      });
-      html += `</div>`;
-    });
 
-    html += `</div></div>`;
-  });
+      html += '<div class="subject-block" id="subj-' + si + '">';
+      html += '<button class="subject-toggle" onclick="toggleSubject(' + si + ')">';
+      html += '<span class="subject-num">' + String(si + 1).padStart(2, '0') + '</span>';
+      html += '<span class="subject-name">' + esc(subj.name) + '</span>';
+      html += '<span class="subject-count">' + lecCount + ' lec</span>';
+      html += '<span class="subject-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>';
+      html += '</button>';
+      html += '<div class="subject-content">';
 
-  html += `</div>`;
+      for (var pi = 0; pi < subj.papers.length; pi++) {
+        var paper = subj.papers[pi];
+        var showPaperLabel = subj.papers.length > 1 || paper.name !== 'Full Course';
 
-  if (d.resources && d.resources.length) {
-    html += `
-      <div class="resources-section">
-        <div class="res-eyebrow">Downloads</div>
-        <h2 class="res-title">Course Resources</h2>
-        <div class="res-grid">
-          ${d.resources.map(r => `
-            <a href="${esc(r.pdf_url)}" target="_blank" rel="noopener" class="res-item">
-              <div class="res-ico"><svg viewBox="0 0 24 24"><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8.5 7.5c0 .83-.67 1.5-1.5 1.5H9v2H7.5V7H10c.83 0 1.5.67 1.5 1.5v1zm5 2c0 .83-.67 1.5-1.5 1.5h-2.5V7H15c.83 0 1.5.67 1.5 1.5v3zm4-3H19v1h1.5V11H19v2h-1.5V7h3v1.5zM9 9.5h1v-1H9v1zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm10 5.5h1v-3h-1v3z"/></svg></div>
-              <div class="res-info">
-                <div class="res-name">${esc(r.title)}</div>
-                <div class="res-type">PDF Resource</div>
-              </div>
-              <svg class="res-arrow" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
-            </a>`).join('')}
-        </div>
-      </div>`;
+        if (showPaperLabel) {
+          html += '<div class="paper-label">' + esc(paper.name) + '</div>';
+        }
+
+        for (var ci = 0; ci < paper.chapters.length; ci++) {
+          var ch = paper.chapters[ci];
+          html += '<div class="chapter-label">' + esc(ch.title) + '</div>';
+
+          for (var li = 0; li < ch.lectures.length; li++) {
+            var lec = ch.lectures[li];
+            var attachmentsHtml = '';
+
+            if (lec.pdfs && lec.pdfs.length > 0) {
+              for (var ai = 0; ai < lec.pdfs.length; ai++) {
+                var pdf = lec.pdfs[ai];
+                attachmentsHtml += '<a href="' + esc(pdf.pdf_url) + '" target="_blank" rel="noopener" class="lec-pdf-badge" onclick="event.stopPropagation()" title="' + esc(pdf.title) + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>' + esc(pdf.title) + '</a>';
+              }
+            }
+
+            if (lec.links && lec.links.length > 0) {
+              for (var al = 0; al < lec.links.length; al++) {
+                var link = lec.links[al];
+                attachmentsHtml += '<a href="' + esc(link.url) + '" target="_blank" rel="noopener" class="lec-link-badge" onclick="event.stopPropagation()" title="' + esc(link.title) + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>' + esc(link.title) + '</a>';
+              }
+            }
+
+            html += '<div class="lecture-item" onclick="window.location.href=\'/player.html?lecture=' + lec.id + '&course=' + courseId + '\'">';
+            html += '<div class="lec-play"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></div>';
+            html += '<span class="lec-title">' + esc(lec.title) + '</span>';
+            if (attachmentsHtml) {
+              html += '<div class="lec-attachments">' + attachmentsHtml + '</div>';
+            }
+            html += '</div>';
+          }
+        }
+      }
+
+      html += '</div></div>';
+    }
+
+    html += '</div>';
+
+    if (d.resources && d.resources.length) {
+      html += '<div class="resources-section">';
+      html += '<h2 class="res-title">Course Resources</h2>';
+      html += '<div class="res-grid">';
+      for (var ri = 0; ri < d.resources.length; ri++) {
+        var resource = d.resources[ri];
+        html += '<a href="' + esc(resource.pdf_url) + '" target="_blank" rel="noopener" class="res-item">';
+        html += '<div class="res-ico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>';
+        html += '<span>' + esc(resource.title) + '</span>';
+        html += '</a>';
+      }
+      html += '</div></div>';
+    }
+
+    document.getElementById('page').innerHTML = html;
+
+    if (d.subjects.length) toggleSubject(0);
+
+  } catch (e) {
+    document.getElementById('page').innerHTML = '<div class="empty-state"><h3>Error Loading</h3><p>Failed to load course. Please refresh.</p><button class="btn" onclick="load()">Retry</button></div>';
   }
-
-  document.getElementById('page').innerHTML = html;
-
-  // Open first subject by default
-  if (d.subjects.length) toggleSubject(0);
 }
 
 function toggleSubject(i) {
-  const el = document.getElementById('subj-' + i);
-  if (!el) return;
-  el.classList.toggle('open');
+  var el = document.getElementById('subj-' + i);
+  if (el) el.classList.toggle('open');
 }
 
 load();
