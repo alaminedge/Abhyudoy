@@ -12,184 +12,330 @@
   --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.11);
   --teal:#00d4aa;--teal2:#00b894;--teal-dim:rgba(0,212,170,0.08);
   --white:#f0f4f8;--gray:#7a8899;--gray2:#a0adb8;
-  --red:#f0566a;--orange:#f59e0b;--radius:10px;
+  --red:#f0566a;--orange:#f59e0b;--green:#10d48e;
+  --radius:10px;--radius-lg:14px;--transition:.18s cubic-bezier(.4,0,.2,1);
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{font-family:'Cabinet Grotesk',sans-serif;background:var(--bg);color:var(--white);min-height:100vh}
 ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:10px}
 
 /* NAV */
-nav{background:rgba(11,15,26,0.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 28px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;letter-spacing:-0.02em;text-decoration:none;color:var(--white)}
+nav{background:rgba(11,15,26,0.96);backdrop-filter:blur(22px);border-bottom:1px solid var(--border);padding:0 28px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.nav-left{display:flex;align-items:center;gap:14px}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:700;letter-spacing:-0.02em;text-decoration:none;color:var(--white)}
 .nav-logo em{font-style:italic;color:var(--teal)}
-.btn-back{padding:7px 16px;background:transparent;border:1.5px solid var(--border2);color:var(--gray);border-radius:20px;cursor:pointer;font-size:0.72rem;font-weight:600;font-family:'Cabinet Grotesk',sans-serif;transition:all .2s;letter-spacing:0.04em;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.btn-back{padding:7px 16px;background:transparent;border:1.5px solid var(--border2);color:var(--gray);border-radius:20px;cursor:pointer;font-size:0.72rem;font-weight:600;font-family:'Cabinet Grotesk',sans-serif;transition:all var(--transition);letter-spacing:0.04em;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
 .btn-back:hover{border-color:var(--teal);color:var(--teal)}
+.btn-back svg{width:12px;height:12px;fill:currentColor}
 
 /* LAYOUT */
-.page{max-width:1000px;margin:0 auto;padding:36px 28px 80px}
+.page{max-width:1060px;margin:0 auto;padding:40px 28px 100px}
 
 /* COURSE HEADER */
-.course-head{margin-bottom:36px;padding-bottom:28px;border-bottom:1px solid var(--border)}
-.course-eyebrow{font-family:'DM Mono',monospace;font-size:0.63rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--teal);margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.course-eyebrow::before{content:'';display:block;width:18px;height:1.5px;background:var(--teal)}
-.course-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,3vw,2.4rem);font-weight:700;letter-spacing:-0.02em;margin-bottom:10px;line-height:1.2}
-.course-meta-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.meta-chip{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--gray);display:flex;align-items:center;gap:5px}
-.expiry-tag{font-family:'DM Mono',monospace;font-size:0.64rem;padding:4px 10px;border-radius:20px;background:var(--teal-dim);color:var(--teal);border:1px solid rgba(0,212,170,0.2)}
+.course-head{margin-bottom:40px}
+.course-eyebrow{font-family:'DM Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.16em;color:var(--teal);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.course-eyebrow::before{content:'';display:block;width:20px;height:1.5px;background:var(--teal)}
+.course-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:700;letter-spacing:-0.025em;margin-bottom:12px;line-height:1.15}
+.course-desc{font-size:.85rem;color:var(--gray);line-height:1.65;max-width:600px;font-weight:300;margin-bottom:18px}
+.course-meta-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.meta-chip{font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--gray2);display:flex;align-items:center;gap:5px;background:var(--surface);border:1px solid var(--border);padding:5px 11px;border-radius:20px}
+.expiry-tag{font-family:'DM Mono',monospace;font-size:0.64rem;padding:5px 12px;border-radius:20px;border:1px solid rgba(0,212,170,0.2)}
+.expiry-ok{background:var(--teal-dim);color:var(--teal)}
+.expiry-warn{background:rgba(245,158,11,0.09);color:var(--orange);border-color:rgba(245,158,11,0.2)}
+.expiry-exp{background:rgba(240,86,106,0.09);color:var(--red);border-color:rgba(240,86,106,0.2)}
+
+/* PROGRESS BAR */
+.progress-bar-wrap{height:3px;background:var(--border);border-radius:3px;margin-top:20px;overflow:hidden}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--teal2));border-radius:3px;transition:width .5s ease;width:0%}
 
 /* SUBJECTS */
-.subjects{display:flex;flex-direction:column;gap:14px}
+.subjects-wrap{display:flex;flex-direction:column;gap:12px}
 
-.subject-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:border-color .2s}
-.subject-block.open{border-color:rgba(0,212,170,0.18)}
+.subject-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:border-color .25s}
+.subject-block.open{border-color:rgba(0,212,170,0.2)}
 
-.subject-toggle{width:100%;background:transparent;border:none;padding:16px 20px;display:flex;align-items:center;gap:14px;cursor:pointer;text-align:left;transition:background .2s}
-.subject-toggle:hover{background:rgba(255,255,255,0.02)}
-.subject-num{font-family:'DM Mono',monospace;font-size:0.65rem;font-weight:500;color:var(--teal);width:26px;flex-shrink:0;opacity:0.7}
-.subject-name{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;color:var(--white);flex:1;letter-spacing:-0.01em}
-.subject-count{font-family:'DM Mono',monospace;font-size:0.63rem;color:var(--gray);margin-right:8px}
-.subject-chevron{color:var(--gray);font-size:0.7rem;transition:transform .25s;flex-shrink:0}
+.subject-toggle{width:100%;background:transparent;border:none;padding:16px 20px;display:flex;align-items:center;gap:14px;cursor:pointer;text-align:left;transition:background .18s}
+.subject-toggle:hover{background:rgba(255,255,255,0.025)}
+.subject-num{font-family:'DM Mono',monospace;font-size:0.64rem;font-weight:500;color:var(--teal);width:28px;flex-shrink:0;opacity:0.65}
+.subject-icon{width:32px;height:32px;border-radius:8px;background:var(--teal-dim);border:1px solid rgba(0,212,170,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.subject-block.open .subject-icon{background:var(--teal);border-color:var(--teal)}
+.subject-icon svg{width:13px;height:13px;fill:var(--teal);transition:fill .2s}
+.subject-block.open .subject-icon svg{fill:#000}
+.subject-info{flex:1;min-width:0}
+.subject-name{font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-weight:700;color:var(--white);letter-spacing:-0.01em;line-height:1.2}
+.subject-sub{font-family:'DM Mono',monospace;font-size:0.62rem;color:var(--gray);margin-top:3px}
+.subject-chevron{color:var(--gray);transition:transform .25s;flex-shrink:0;width:16px;height:16px;fill:currentColor}
 .subject-block.open .subject-chevron{transform:rotate(180deg);color:var(--teal)}
 
-.subject-content{display:none;padding:0 0 12px}
+.subject-content{display:none;border-top:1px solid var(--border)}
 .subject-block.open .subject-content{display:block}
 
 /* PAPERS */
-.paper-block{margin:0 16px 10px;border-radius:8px;overflow:hidden}
-.paper-label{font-family:'DM Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--gray);padding:10px 14px 6px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
-.paper-label::before{content:'';display:block;width:4px;height:4px;border-radius:50%;background:var(--teal);flex-shrink:0}
+.paper-block{padding:0}
+.paper-label-row{display:flex;align-items:center;gap:8px;padding:12px 20px 8px;border-bottom:1px solid var(--border)}
+.paper-dot{width:4px;height:4px;border-radius:50%;background:var(--teal);flex-shrink:0}
+.paper-label{font-family:'DM Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--gray);font-weight:500}
 
 /* CHAPTERS */
-.chapter-block{padding:0 4px}
-.chapter-label{font-size:0.72rem;font-weight:600;color:var(--gray2);padding:8px 14px 4px;display:flex;align-items:center;gap:8px}
-.chapter-label::before{content:'§';color:var(--teal);font-size:0.75rem;opacity:0.7}
+.chapter-block{padding:4px 0}
+.chapter-header{display:flex;align-items:center;gap:8px;padding:8px 20px 4px}
+.chapter-marker{font-size:0.75rem;color:var(--teal);opacity:0.7;font-family:'DM Mono',monospace}
+.chapter-label{font-size:0.74rem;font-weight:600;color:var(--gray2);letter-spacing:0.01em}
 
 /* LECTURES */
-.lecture-item{display:flex;align-items:center;gap:12px;padding:9px 14px;border-radius:8px;cursor:pointer;transition:all .15s;margin:2px 4px;border:1px solid transparent}
-.lecture-item:hover{background:var(--surface2);border-color:var(--border)}
-.lec-play{width:28px;height:28px;border-radius:50%;background:var(--teal-dim);border:1px solid rgba(0,212,170,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.lecture-item{display:flex;align-items:center;gap:12px;padding:9px 20px 9px 32px;cursor:pointer;transition:all .15s;border-bottom:1px solid transparent;position:relative}
+.lecture-item:hover{background:var(--surface2)}
 .lecture-item:hover .lec-play{background:var(--teal);border-color:var(--teal)}
-.lec-play svg{width:10px;height:10px;fill:var(--teal);margin-left:1px;transition:fill .2s}
 .lecture-item:hover .lec-play svg{fill:#000}
-.lec-title{font-size:0.8rem;color:var(--gray2);flex:1;line-height:1.4;transition:color .15s}
 .lecture-item:hover .lec-title{color:var(--white)}
-.lec-pdf{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--teal);background:var(--teal-dim);padding:2px 8px;border-radius:10px;flex-shrink:0}
+.lecture-item:last-child{border-bottom:none}
+.lec-play{width:28px;height:28px;border-radius:50%;background:var(--teal-dim);border:1px solid rgba(0,212,170,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.lec-play svg{width:10px;height:10px;fill:var(--teal);margin-left:1.5px;transition:fill .2s}
+.lec-title{font-size:0.8rem;color:var(--gray2);flex:1;line-height:1.4;transition:color .15s}
+.lec-badges{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.lec-pdf-badge{font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--orange);background:rgba(245,158,11,0.09);border:1px solid rgba(245,158,11,0.18);padding:2px 7px;border-radius:10px;display:flex;align-items:center;gap:3px}
+.lec-num{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--gray);opacity:0.5;min-width:24px;text-align:right}
 
 /* RESOURCES */
-.resources-section{margin-top:36px;padding-top:28px;border-top:1px solid var(--border)}
-.res-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;margin-bottom:14px;letter-spacing:-0.01em}
-.res-grid{display:flex;flex-direction:column;gap:8px}
-.res-item{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);text-decoration:none;color:var(--gray2);transition:all .2s;font-size:0.8rem}
-.res-item:hover{border-color:rgba(0,212,170,0.2);color:var(--white);background:var(--surface2)}
-.res-ico{width:30px;height:30px;background:var(--teal-dim);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0}
+.resources-section{margin-top:42px;padding-top:32px;border-top:1px solid var(--border)}
+.res-eyebrow{font-family:'DM Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--teal);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.res-eyebrow::before{content:'';display:block;width:16px;height:1.5px;background:var(--teal)}
+.res-title{font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:700;margin-bottom:16px;letter-spacing:-0.01em}
+.res-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.res-item{display:flex;align-items:center;gap:12px;padding:13px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);text-decoration:none;color:var(--gray2);transition:all .2s;font-size:0.8rem}
+.res-item:hover{border-color:rgba(0,212,170,0.2);color:var(--white);background:var(--surface2);transform:translateY(-1px)}
+.res-ico{width:34px;height:34px;background:var(--teal-dim);border:1px solid rgba(0,212,170,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.res-ico svg{width:15px;height:15px;fill:var(--teal)}
+.res-info{flex:1;min-width:0}
+.res-name{font-weight:600;color:var(--white);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:2px}
+.res-type{font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--gray)}
+.res-arrow{color:var(--teal);opacity:0.5;transition:opacity .15s;flex-shrink:0}
+.res-item:hover .res-arrow{opacity:1}
 
-/* LOADING/EMPTY */
-.loading{text-align:center;padding:80px;color:var(--gray)}
-.ring{width:32px;height:32px;border:2.5px solid var(--border2);border-top-color:var(--teal);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 14px}
+/* LOADING / EMPTY / ERROR */
+.state-wrap{text-align:center;padding:80px 20px}
+.ring{width:32px;height:32px;border:2.5px solid var(--border2);border-top-color:var(--teal);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 16px}
 @keyframes spin{to{transform:rotate(360deg)}}
+.state-wrap p{font-size:.82rem;color:var(--gray);line-height:1.6}
+.state-wrap h3{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;margin-bottom:8px}
+.state-icon{width:52px;height:52px;margin:0 auto 16px;background:var(--surface2);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.state-icon svg{width:22px;height:22px;fill:var(--gray)}
+
+/* START BANNER */
+.start-banner{background:linear-gradient(135deg,rgba(0,212,170,0.08),rgba(0,184,148,0.04));border:1px solid rgba(0,212,170,0.15);border-radius:var(--radius-lg);padding:20px 24px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.start-banner-text h3{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;margin-bottom:4px}
+.start-banner-text p{font-size:.78rem;color:var(--gray);line-height:1.5}
+.btn-start{padding:10px 22px;background:var(--teal);color:#000;border:none;border-radius:var(--radius);font-family:'Cabinet Grotesk',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;transition:all var(--transition);text-decoration:none;display:inline-flex;align-items:center;gap:7px}
+.btn-start:hover{background:var(--teal2);transform:translateY(-1px);box-shadow:0 5px 18px rgba(0,212,170,.28)}
+.btn-start svg{width:13px;height:13px;fill:currentColor}
 
 @media(max-width:700px){.page{padding:24px 16px 60px}nav{padding:0 16px}}
 </style>
 </head>
 <body>
+
 <nav>
-  <a href="/dashboard.html" class="nav-logo">Abhy<em>udoy</em></a>
-  <a href="/dashboard.html" class="btn-back">← My Courses</a>
+  <div class="nav-left">
+    <a href="/dashboard.html" class="nav-logo">Abhy<em>udoy</em></a>
+  </div>
+  <a href="/dashboard.html" class="btn-back">
+    <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+    My Courses
+  </a>
 </nav>
 
 <div class="page" id="page">
-  <div class="loading"><div class="ring"></div><p style="font-size:.82rem">Loading course…</p></div>
+  <div class="state-wrap"><div class="ring"></div><p>Loading course…</p></div>
 </div>
 
 <script>
-const token=localStorage.getItem('abhyudoy_token');
-const user=JSON.parse(localStorage.getItem('abhyudoy_user')||'null');
-if(!token||!user){window.location.href='/index.html';}
-const courseId=new URLSearchParams(location.search).get('id');
-if(!courseId)window.location.href='/dashboard.html';
+const token = localStorage.getItem('abhyudoy_token');
+const user = JSON.parse(localStorage.getItem('abhyudoy_user') || 'null');
+if (!token || !user) { window.location.href = '/index.html'; }
 
-async function load(){
-  try{
-    const res=await fetch(`/api/user/course/${courseId}`,{headers:{Authorization:'Bearer '+token}});
-    if(res.status===401){window.location.href='/index.html';return}
-    if(res.status===403){window.location.href='/dashboard.html';return}
-    const d=await res.json();
-    if(d.error){window.location.href='/dashboard.html';return}
-    document.title=d.course.title+' — Abhyudoy';
+const courseId = new URLSearchParams(location.search).get('id');
+if (!courseId) window.location.href = '/dashboard.html';
 
-    // Count totals
-    let totalLec=0;
-    d.subjects.forEach(s=>s.papers.forEach(p=>p.chapters.forEach(ch=>totalLec+=ch.lectures.length)));
+function esc(s) { const d = document.createElement('div'); d.textContent = String(s || ''); return d.innerHTML; }
 
-    const exp=d.membership?.expires_at?new Date(d.membership.expires_at):null;
-    const expText=exp?`Expires ${exp.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}`:'';
+let globalData = null;
 
-    let html=`<div class="course-head">
+async function load() {
+  try {
+    const res = await fetch(`/api/user/course/${courseId}`, {
+      headers: { Authorization: 'Bearer ' + token }
+    });
+    if (res.status === 401) { window.location.href = '/index.html'; return; }
+    if (res.status === 403) { window.location.href = '/dashboard.html'; return; }
+    const d = await res.json();
+    if (d.error) { window.location.href = '/dashboard.html'; return; }
+    globalData = d;
+    render(d);
+  } catch (e) {
+    document.getElementById('page').innerHTML = `
+      <div class="state-wrap">
+        <div class="state-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
+        <h3>Failed to Load</h3>
+        <p>Could not load course. <a href="#" onclick="location.reload()" style="color:var(--teal)">Try again</a></p>
+      </div>`;
+  }
+}
+
+function render(d) {
+  document.title = d.course.title + ' — Abhyudoy';
+
+  let totalLec = 0;
+  d.subjects.forEach(s => s.papers.forEach(p => p.chapters.forEach(ch => totalLec += ch.lectures.length)));
+
+  const exp = d.membership?.expires_at ? new Date(d.membership.expires_at) : null;
+  const daysLeft = exp ? Math.ceil((exp - new Date()) / 86400000) : null;
+  let expiryTag = '';
+  if (exp) {
+    let cls = 'expiry-ok';
+    if (daysLeft < 0) cls = 'expiry-exp';
+    else if (daysLeft <= 7) cls = 'expiry-warn';
+    const text = daysLeft < 0 ? 'Expired' : daysLeft <= 7 ? `${daysLeft}d left` : `Expires ${exp.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+    expiryTag = `<span class="expiry-tag ${cls}">${text}</span>`;
+  }
+
+  // Find first lecture for start button
+  let firstLecId = null;
+  for (const s of d.subjects) {
+    for (const p of s.papers) {
+      for (const ch of p.chapters) {
+        if (ch.lectures.length) { firstLecId = ch.lectures[0].id; break; }
+      }
+      if (firstLecId) break;
+    }
+    if (firstLecId) break;
+  }
+
+  let html = `
+    <div class="course-head">
       <div class="course-eyebrow">Course Content</div>
       <h1 class="course-title">${esc(d.course.title)}</h1>
+      ${d.course.description ? `<p class="course-desc">${esc(d.course.description)}</p>` : ''}
       <div class="course-meta-row">
-        <span class="meta-chip">📚 ${d.subjects.length} Subject${d.subjects.length!==1?'s':''}</span>
-        <span class="meta-chip">🎬 ${totalLec} Lecture${totalLec!==1?'s':''}</span>
-        ${expText?`<span class="expiry-tag">${expText}</span>`:''}
+        <span class="meta-chip">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1z"/></svg>
+          ${d.subjects.length} Subject${d.subjects.length !== 1 ? 's' : ''}
+        </span>
+        <span class="meta-chip">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zM8 15c0 .55.45 1 1 1h1v2h2v-2h1c.55 0 1-.45 1-1v-4c0-.55-.45-1-1-1h-4c-.55 0-1 .45-1 1v4z"/></svg>
+          ${totalLec} Lecture${totalLec !== 1 ? 's' : ''}
+        </span>
+        ${d.resources?.length ? `<span class="meta-chip">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+          ${d.resources.length} Resource${d.resources.length !== 1 ? 's' : ''}
+        </span>` : ''}
+        ${expiryTag}
       </div>
     </div>
-    <div class="subjects">`;
 
-    d.subjects.forEach((subj,si)=>{
-      let lecCount=0;subj.papers.forEach(p=>p.chapters.forEach(ch=>lecCount+=ch.lectures.length));
-      html+=`<div class="subject-block" id="subj-${si}">
+    ${firstLecId ? `
+    <div class="start-banner">
+      <div class="start-banner-text">
+        <h3>Ready to learn?</h3>
+        <p>Pick up from where you left off or start from the beginning.</p>
+      </div>
+      <a href="/player.html?lecture=${firstLecId}&course=${courseId}" class="btn-start">
+        <svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg>
+        Start Watching
+      </a>
+    </div>` : ''}
+
+    <div class="subjects-wrap" id="subjectsWrap">`;
+
+  let globalLecNum = 0;
+  d.subjects.forEach((subj, si) => {
+    let lecCount = 0;
+    subj.papers.forEach(p => p.chapters.forEach(ch => lecCount += ch.lectures.length));
+
+    html += `
+      <div class="subject-block" id="subj-${si}">
         <button class="subject-toggle" onclick="toggleSubject(${si})">
-          <span class="subject-num">${String(si+1).padStart(2,'0')}</span>
-          <span class="subject-name">${esc(subj.name)}</span>
-          <span class="subject-count">${lecCount} lec</span>
-          <span class="subject-chevron">▼</span>
+          <span class="subject-num">${String(si + 1).padStart(2, '0')}</span>
+          <div class="subject-icon">
+            <svg viewBox="0 0 24 24"><path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1z"/></svg>
+          </div>
+          <div class="subject-info">
+            <div class="subject-name">${esc(subj.name)}</div>
+            <div class="subject-sub">${lecCount} lecture${lecCount !== 1 ? 's' : ''} · ${subj.papers.length} paper${subj.papers.length !== 1 ? 's' : ''}</div>
+          </div>
+          <svg class="subject-chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
         </button>
         <div class="subject-content">`;
 
-      subj.papers.forEach((paper,pi)=>{
-        const showPaperLabel=subj.papers.length>1||paper.name!=='Full Course';
-        html+=`<div class="paper-block">`;
-        if(showPaperLabel)html+=`<div class="paper-label">${esc(paper.name)}</div>`;
-        html+=`<div class="chapter-block">`;
-        paper.chapters.forEach(ch=>{
-          html+=`<div class="chapter-label">${esc(ch.title)}</div>`;
-          ch.lectures.forEach(lec=>{
-            const hasPdf=lec.pdfs&&lec.pdfs.length>0;
-            html+=`<div class="lecture-item" onclick="window.location.href='/player.html?lecture=${lec.id}&course=${courseId}'">
+    subj.papers.forEach((paper, pi) => {
+      const showPaperLabel = subj.papers.length > 1 || paper.name !== 'Full Course';
+      html += `<div class="paper-block">`;
+      if (showPaperLabel) {
+        html += `<div class="paper-label-row"><div class="paper-dot"></div><span class="paper-label">${esc(paper.name)}</span></div>`;
+      }
+      paper.chapters.forEach(ch => {
+        html += `<div class="chapter-block">
+          <div class="chapter-header">
+            <span class="chapter-marker">§</span>
+            <span class="chapter-label">${esc(ch.title)}</span>
+          </div>`;
+        ch.lectures.forEach(lec => {
+          globalLecNum++;
+          const hasPdf = lec.pdfs && lec.pdfs.length > 0;
+          html += `
+            <div class="lecture-item" onclick="window.location.href='/player.html?lecture=${lec.id}&course=${courseId}'">
+              <span class="lec-num">${String(globalLecNum).padStart(2, '0')}</span>
               <div class="lec-play"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></div>
               <span class="lec-title">${esc(lec.title)}</span>
-              ${hasPdf?`<span class="lec-pdf">📎 ${lec.pdfs.length}</span>`:''}
+              <div class="lec-badges">
+                ${hasPdf ? `<span class="lec-pdf-badge">
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                  ${lec.pdfs.length}
+                </span>` : ''}
+              </div>
             </div>`;
-          });
         });
-        html+=`</div></div>`;
+        html += `</div>`;
       });
-
-      html+=`</div></div>`;
+      html += `</div>`;
     });
 
-    html+=`</div>`;
+    html += `</div></div>`;
+  });
 
-    if(d.resources&&d.resources.length){
-      html+=`<div class="resources-section">
+  html += `</div>`;
+
+  if (d.resources && d.resources.length) {
+    html += `
+      <div class="resources-section">
+        <div class="res-eyebrow">Downloads</div>
         <h2 class="res-title">Course Resources</h2>
-        <div class="res-grid">${d.resources.map(r=>`<a href="${esc(r.pdf_url)}" target="_blank" rel="noopener" class="res-item"><div class="res-ico">📄</div><span>${esc(r.title)}</span></a>`).join('')}</div>
+        <div class="res-grid">
+          ${d.resources.map(r => `
+            <a href="${esc(r.pdf_url)}" target="_blank" rel="noopener" class="res-item">
+              <div class="res-ico"><svg viewBox="0 0 24 24"><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8.5 7.5c0 .83-.67 1.5-1.5 1.5H9v2H7.5V7H10c.83 0 1.5.67 1.5 1.5v1zm5 2c0 .83-.67 1.5-1.5 1.5h-2.5V7H15c.83 0 1.5.67 1.5 1.5v3zm4-3H19v1h1.5V11H19v2h-1.5V7h3v1.5zM9 9.5h1v-1H9v1zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm10 5.5h1v-3h-1v3z"/></svg></div>
+              <div class="res-info">
+                <div class="res-name">${esc(r.title)}</div>
+                <div class="res-type">PDF Resource</div>
+              </div>
+              <svg class="res-arrow" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+            </a>`).join('')}
+        </div>
       </div>`;
-    }
+  }
 
-    document.getElementById('page').innerHTML=html;
-    // Open first subject by default
-    if(d.subjects.length)toggleSubject(0);
-  }catch(e){document.getElementById('page').innerHTML='<div class="loading"><p style="color:#f0566a">Failed to load course. Please refresh.</p></div>'}
+  document.getElementById('page').innerHTML = html;
+
+  // Open first subject by default
+  if (d.subjects.length) toggleSubject(0);
 }
 
-function toggleSubject(i){
-  const el=document.getElementById('subj-'+i);
-  if(!el)return;
+function toggleSubject(i) {
+  const el = document.getElementById('subj-' + i);
+  if (!el) return;
   el.classList.toggle('open');
 }
 
-function esc(s){const d=document.createElement('div');d.textContent=String(s||'');return d.innerHTML}
 load();
 </script>
 </body>
