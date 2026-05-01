@@ -1,5 +1,5 @@
 // functions/api/[[route]].js
-// Abhyudoy EdTech Platform — Complete API v2
+// Abhyudoy EdTech Platform — Complete API v2 (FIXED)
 
 async function sha256(text) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
@@ -255,21 +255,6 @@ async function handleAuth(method, path, body, db) {
 }
 
 // ─────────────────────────────────────────────
-// CONTACT
-// ─────────────────────────────────────────────
-async function handleContact(method, path, body, db, user) {
-  if (method === 'POST' && path === '/contact') {
-    const { name, email, subject, message } = body;
-    if (!name || !email || !message) return err('Name, email and message required');
-    await db.prepare(
-      'INSERT INTO support_tickets (name, email, subject, message, user_id) VALUES (?, ?, ?, ?, ?)'
-    ).bind(name, email, subject || 'General Inquiry', message, user?.id || null).run();
-    return json({ message: 'Message received. We will respond within 24 hours.' }, 201);
-  }
-  return err('Not found', 404);
-}
-
-// ─────────────────────────────────────────────
 // USER
 // ─────────────────────────────────────────────
 async function handleUser(method, path, body, db, user) {
@@ -326,18 +311,6 @@ async function handleUser(method, path, body, db, user) {
       'INSERT OR REPLACE INTO memberships (user_id, course_id, expires_at, is_active, granted_by) VALUES (?, ?, ?, 1, ?)'
     ).bind(user.id, course_id, expires_at, null).run();
     return json({ message: 'Enrolled successfully', expires_at }, 201);
-  }
-
-  // GET /api/user/enrollment-status/:courseId
-  if (method === 'GET' && path.match(/^\/enrollment-status\/\d+$/)) {
-    const courseId = parseInt(path.split('/')[2]);
-    const membership = await db.prepare(
-      `SELECT * FROM memberships WHERE user_id = ? AND course_id = ? AND is_active = 1 AND expires_at > datetime('now')`
-    ).bind(user.id, courseId).first();
-    const request = await db.prepare(
-      'SELECT * FROM enrollment_requests WHERE user_id = ? AND course_id = ?'
-    ).bind(user.id, courseId).first();
-    return json({ enrolled: !!membership, request_status: request?.status || null });
   }
 
   // GET /api/user/course/:id
@@ -455,9 +428,7 @@ async function handleUser(method, path, body, db, user) {
   // PUT /api/user/profile
   if (method === 'PUT' && path === '/profile') {
     const { name, email, phone, institution } = body;
-    const u = await db.prepare(
-      'SELECT * FROM users WHERE id=?'
-    ).bind(user.id).first();
+    const u = await db.prepare('SELECT * FROM users WHERE id=?').bind(user.id).first();
     if (!u) return err('User not found', 404);
 
     const updates = []; const values = [];
@@ -536,9 +507,7 @@ async function handleUser(method, path, body, db, user) {
 
   // PUT /api/user/notifications/mark-all-read
   if (method === 'PUT' && path === '/notifications/mark-all-read') {
-    const notifs = await db.prepare(
-      'SELECT id FROM notifications WHERE is_active=1'
-    ).all();
+    const notifs = await db.prepare('SELECT id FROM notifications WHERE is_active=1').all();
     for (const n of notifs.results) {
       await db.prepare('INSERT OR IGNORE INTO notification_reads (notification_id, user_id) VALUES (?,?)')
         .bind(n.id, user.id).run();
@@ -635,15 +604,11 @@ async function handleAdmin(method, path, body, db, user) {
     const r = await db.prepare('SELECT * FROM subjects ORDER BY course_id ASC, sort_order ASC').all();
     return json(r.results);
   }
-  if (method === 'GET' && path.match(/^\/subjects\/course\/\d+$/)) {
-    const r = await db.prepare('SELECT * FROM subjects WHERE course_id=? ORDER BY sort_order ASC').bind(parseInt(path.split('/')[3])).all();
-    return json(r.results);
-  }
   if (method === 'POST' && path === '/subjects') {
-    const { course_id, name, has_papers, sort_order } = body;
+    const { course_id, name, has_papers } = body;
     if (!course_id || !name) return err('Course and name required');
-    const r = await db.prepare('INSERT INTO subjects (course_id,name,has_papers,sort_order) VALUES (?,?,?,?)')
-      .bind(course_id, name, has_papers!==undefined?has_papers:1, sort_order||0).run();
+    const r = await db.prepare('INSERT INTO subjects (course_id,name,has_papers,sort_order) VALUES (?,?,?,0)')
+      .bind(course_id, name, has_papers!==undefined?has_papers:1).run();
     const subjId = r.meta.last_row_id;
     if (!has_papers || has_papers===0) {
       await db.prepare('INSERT INTO papers (subject_id,name,sort_order) VALUES (?,?,0)').bind(subjId,'Full Course').run();
@@ -672,10 +637,10 @@ async function handleAdmin(method, path, body, db, user) {
     return json(r.results);
   }
   if (method === 'POST' && path === '/papers') {
-    const { subject_id, name, sort_order } = body;
+    const { subject_id, name } = body;
     if (!subject_id || !name) return err('Subject and name required');
-    const r = await db.prepare('INSERT INTO papers (subject_id,name,sort_order) VALUES (?,?,?)')
-      .bind(subject_id, name, sort_order||0).run();
+    const r = await db.prepare('INSERT INTO papers (subject_id,name,sort_order) VALUES (?,?,0)')
+      .bind(subject_id, name).run();
     return json({ id: r.meta.last_row_id, message: 'Paper created' }, 201);
   }
   if (method === 'DELETE' && path.match(/^\/papers\/\d+$/)) {
@@ -870,12 +835,12 @@ async function handleAdmin(method, path, body, db, user) {
     return json(r.results);
   }
   if (method === 'POST' && path === '/notifications') {
-    const { title, message, type, target_type, target_id, action_url, scheduled_at, expires_at } = body;
+    const { title, message, type, target_type, target_id, action_url, scheduled_at, expires_at, is_active } = body;
     if (!title) return err('Title required');
     const r = await db.prepare(
-      'INSERT INTO notifications (title,message,type,target_type,target_id,action_url,scheduled_at,expires_at,created_by) VALUES (?,?,?,?,?,?,?,?,?)'
+      'INSERT INTO notifications (title,message,type,target_type,target_id,action_url,scheduled_at,expires_at,is_active,created_by) VALUES (?,?,?,?,?,?,?,?,?,?)'
     ).bind(title, message||'', type||'info', target_type||'all', target_id||null,
-           action_url||null, scheduled_at||null, expires_at||null, user.id).run();
+           action_url||null, scheduled_at||null, expires_at||null, is_active!==undefined?is_active:1, user.id).run();
     return json({ id: r.meta.last_row_id, message: 'Notification created' }, 201);
   }
   if (method === 'PUT' && path.match(/^\/notifications\/\d+$/)) {
@@ -961,7 +926,13 @@ async function handleAdmin(method, path, body, db, user) {
 export async function onRequest(context) {
   const { request, env } = context;
   const db = env.ABHYUDOY_DB;
-  if (request.method === 'OPTIONS') return new Response(null, { headers: CORS });
+  
+  // Handle CORS preflight
+  if (request.method === 'OPTIONS') {
+    return new Response(null, { headers: CORS });
+  }
+  
+  // Ensure tables exist
   await ensureTables(db);
 
   const url = new URL(request.url);
@@ -974,14 +945,32 @@ export async function onRequest(context) {
 
   const authUser = await getUser(request);
 
-  if (fullPath === '/contact' && request.method === 'POST')
+  // Route to appropriate handler
+  if (fullPath === '/contact' && request.method === 'POST') {
     return handleContact(request.method, fullPath, body, db, authUser);
-  if (fullPath.startsWith('/auth/'))
+  }
+  if (fullPath.startsWith('/auth/')) {
     return handleAuth(request.method, fullPath.replace('/auth',''), body, db);
-  if (fullPath.startsWith('/user/'))
+  }
+  if (fullPath.startsWith('/user/')) {
     return handleUser(request.method, fullPath.replace('/user',''), body, db, authUser);
-  if (fullPath.startsWith('/admin/'))
+  }
+  if (fullPath.startsWith('/admin/')) {
     return handleAdmin(request.method, fullPath.replace('/admin',''), body, db, authUser);
+  }
 
   return err('API route not found', 404);
+}
+
+// Separate contact handler
+async function handleContact(method, path, body, db, user) {
+  if (method === 'POST' && path === '/contact') {
+    const { name, email, subject, message } = body;
+    if (!name || !email || !message) return err('Name, email and message required');
+    await db.prepare(
+      'INSERT INTO support_tickets (name, email, subject, message, user_id) VALUES (?, ?, ?, ?, ?)'
+    ).bind(name, email, subject || 'General Inquiry', message, user?.id || null).run();
+    return json({ message: 'Message received. We will respond within 24 hours.' }, 201);
+  }
+  return err('Not found', 404);
 }
