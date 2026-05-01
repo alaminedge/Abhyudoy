@@ -1,5 +1,5 @@
 // functions/api/[[route]].js
-// Abhyudoy EdTech Platform — Complete API
+// Abhyudoy EdTech Platform — Complete API v2
 
 async function sha256(text) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
@@ -150,10 +150,12 @@ async function ensureTables(db) {
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL, message TEXT,
     type TEXT DEFAULT 'info',
-    target_type TEXT DEFAULT 'all', target_id INTEGER,
+    target_type TEXT DEFAULT 'all',
+    target_id INTEGER,
     action_url TEXT,
     is_active INTEGER DEFAULT 1,
-    scheduled_at DATETIME, expires_at DATETIME,
+    scheduled_at DATETIME,
+    expires_at DATETIME,
     created_by INTEGER,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )`).run();
@@ -195,6 +197,7 @@ async function ensureTables(db) {
     UNIQUE(update_id, user_id)
   )`).run();
 
+  // Default admin password: admin123
   const adminHash = await sha256('admin123');
   await db.prepare(`INSERT OR IGNORE INTO users (name, email, password, role, is_approved)
     VALUES ('Admin', 'cnct.nx@gmail.com', ?, 'admin', 1)`).bind(adminHash).run();
@@ -208,14 +211,12 @@ async function handleAuth(method, path, body, db) {
     const { name, email, password, device_fingerprint } = body;
     if (!name || !email || !password) return err('All fields required');
     if (password.length < 6) return err('Password must be 6+ characters');
-
     if (device_fingerprint) {
       const existing = await db.prepare(
         'SELECT COUNT(*) as cnt FROM device_registrations WHERE device_fingerprint = ?'
       ).bind(device_fingerprint).first();
       if (existing.cnt > 0) return err('An account already exists on this device', 403);
     }
-
     const hashed = await sha256(password);
     try {
       const result = await db.prepare(
@@ -241,7 +242,7 @@ async function handleAuth(method, path, body, db) {
       'SELECT * FROM users WHERE email = ? AND password = ?'
     ).bind(email.toLowerCase().trim(), hashed).first();
     if (!user) return err('Invalid email or password', 401);
-    if (user.is_blocked) return err('Your account has been suspended.', 403);
+    if (user.is_blocked) return err('Your account has been suspended. Contact support.', 403);
     if (!user.is_approved) return err('Your account is pending admin approval.', 403);
     const token = await signToken({
       id: user.id, email: user.email, role: user.role,
@@ -257,7 +258,7 @@ async function handleAuth(method, path, body, db) {
 // CONTACT
 // ─────────────────────────────────────────────
 async function handleContact(method, path, body, db, user) {
-  if (method === 'POST' && path === '/submit') {
+  if (method === 'POST' && path === '/contact') {
     const { name, email, subject, message } = body;
     if (!name || !email || !message) return err('Name, email and message required');
     await db.prepare(
@@ -269,10 +270,10 @@ async function handleContact(method, path, body, db, user) {
 }
 
 // ─────────────────────────────────────────────
-// USER ROUTES
+// USER
 // ─────────────────────────────────────────────
-async function handleUser(method, path, body, db, user, request) {
-  if (!user) return err('Unauthorized', 401);
+async function handleUser(method, path, body, db, user) {
+  if (!user) return err('Unauthorized — please sign in', 401);
 
   // GET /api/user/my-courses
   if (method === 'GET' && path === '/my-courses') {
@@ -290,6 +291,7 @@ async function handleUser(method, path, body, db, user, request) {
   if (method === 'GET' && path === '/browse-courses') {
     const courses = await db.prepare(`
       SELECT c.*,
+        (SELECT COUNT(*) FROM subjects s WHERE s.course_id = c.id) as subject_count,
         (SELECT COUNT(*) FROM lectures l
           JOIN chapters ch ON l.chapter_id = ch.id
           JOIN papers p ON ch.paper_id = p.id
@@ -315,14 +317,27 @@ async function handleUser(method, path, body, db, user, request) {
         await db.prepare('INSERT INTO enrollment_requests (user_id, course_id) VALUES (?, ?)')
           .bind(user.id, course_id).run();
         return json({ message: 'Enrollment request submitted. Awaiting admin approval.' }, 201);
-      } catch { return err('You already have a pending request'); }
+      } catch { return err('You already have a pending request for this course'); }
     }
 
+    // Open enrollment — grant 365-day membership
     const expires_at = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString();
     await db.prepare(
       'INSERT OR REPLACE INTO memberships (user_id, course_id, expires_at, is_active, granted_by) VALUES (?, ?, ?, 1, ?)'
     ).bind(user.id, course_id, expires_at, null).run();
     return json({ message: 'Enrolled successfully', expires_at }, 201);
+  }
+
+  // GET /api/user/enrollment-status/:courseId
+  if (method === 'GET' && path.match(/^\/enrollment-status\/\d+$/)) {
+    const courseId = parseInt(path.split('/')[2]);
+    const membership = await db.prepare(
+      `SELECT * FROM memberships WHERE user_id = ? AND course_id = ? AND is_active = 1 AND expires_at > datetime('now')`
+    ).bind(user.id, courseId).first();
+    const request = await db.prepare(
+      'SELECT * FROM enrollment_requests WHERE user_id = ? AND course_id = ?'
+    ).bind(user.id, courseId).first();
+    return json({ enrolled: !!membership, request_status: request?.status || null });
   }
 
   // GET /api/user/course/:id
@@ -332,29 +347,41 @@ async function handleUser(method, path, body, db, user, request) {
       const membership = await db.prepare(
         `SELECT * FROM memberships WHERE user_id = ? AND course_id = ? AND is_active = 1 AND expires_at > datetime('now')`
       ).bind(user.id, courseId).first();
-      if (!membership) return err('No active membership', 403);
+      if (!membership) return err('No active membership for this course', 403);
     }
     const course = await db.prepare('SELECT * FROM courses WHERE id = ? AND is_active = 1').bind(courseId).first();
     if (!course) return err('Course not found', 404);
-
-    const subjects = await db.prepare('SELECT * FROM subjects WHERE course_id = ? ORDER BY sort_order ASC, id ASC').bind(courseId).all();
+    const subjects = await db.prepare(
+      'SELECT * FROM subjects WHERE course_id = ? ORDER BY sort_order ASC, id ASC'
+    ).bind(courseId).all();
     for (const subj of subjects.results) {
-      subj.papers = (await db.prepare('SELECT * FROM papers WHERE subject_id = ? ORDER BY sort_order ASC, id ASC').bind(subj.id).all()).results;
+      subj.papers = (await db.prepare(
+        'SELECT * FROM papers WHERE subject_id = ? ORDER BY sort_order ASC, id ASC'
+      ).bind(subj.id).all()).results;
       for (const paper of subj.papers) {
-        paper.chapters = (await db.prepare('SELECT * FROM chapters WHERE paper_id = ? ORDER BY sort_order ASC, id ASC').bind(paper.id).all()).results;
+        paper.chapters = (await db.prepare(
+          'SELECT * FROM chapters WHERE paper_id = ? ORDER BY sort_order ASC, id ASC'
+        ).bind(paper.id).all()).results;
         for (const ch of paper.chapters) {
-          ch.lectures = (await db.prepare('SELECT * FROM lectures WHERE chapter_id = ? ORDER BY sort_order ASC, id ASC').bind(ch.id).all()).results;
+          ch.lectures = (await db.prepare(
+            'SELECT * FROM lectures WHERE chapter_id = ? ORDER BY sort_order ASC, id ASC'
+          ).bind(ch.id).all()).results;
           for (const lec of ch.lectures) {
-            lec.pdfs = (await db.prepare('SELECT * FROM lecture_pdfs WHERE lecture_id = ?').bind(lec.id).all()).results;
+            lec.pdfs = (await db.prepare(
+              'SELECT * FROM lecture_pdfs WHERE lecture_id = ?'
+            ).bind(lec.id).all()).results;
           }
         }
       }
     }
-    const resources = await db.prepare('SELECT * FROM resources WHERE course_id = ? ORDER BY created_at DESC').bind(courseId).all();
+    const resources = await db.prepare(
+      'SELECT * FROM resources WHERE course_id = ? ORDER BY created_at DESC'
+    ).bind(courseId).all();
     const membership = user.role === 'admin' ? null : await db.prepare(
       `SELECT * FROM memberships WHERE user_id = ? AND course_id = ? AND is_active = 1 LIMIT 1`
     ).bind(user.id, courseId).first();
-    return json({ course, subjects: subjects.results, resources: resources.results, membership: membership ? { expires_at: membership.expires_at } : { expires_at: null } });
+    return json({ course, subjects: subjects.results, resources: resources.results,
+      membership: membership ? { expires_at: membership.expires_at } : { expires_at: null } });
   }
 
   // GET /api/user/lecture/:id
@@ -388,7 +415,9 @@ async function handleUser(method, path, body, db, user, request) {
       ORDER BY s.sort_order ASC, s.id ASC, p.sort_order ASC, p.id ASC,
                ch.sort_order ASC, ch.id ASC, l.sort_order ASC, l.id ASC
     `).bind(lecture.course_id).all();
-    const pdfs = await db.prepare('SELECT * FROM lecture_pdfs WHERE lecture_id = ? ORDER BY created_at ASC').bind(lectureId).all();
+    const pdfs = await db.prepare(
+      'SELECT * FROM lecture_pdfs WHERE lecture_id = ? ORDER BY created_at ASC'
+    ).bind(lectureId).all();
     return json({ lecture, allLectures: allLectures.results, pdfs: pdfs.results });
   }
 
@@ -426,8 +455,11 @@ async function handleUser(method, path, body, db, user, request) {
   // PUT /api/user/profile
   if (method === 'PUT' && path === '/profile') {
     const { name, email, phone, institution } = body;
-    const u = await db.prepare('SELECT * FROM users WHERE id=?').bind(user.id).first();
+    const u = await db.prepare(
+      'SELECT * FROM users WHERE id=?'
+    ).bind(user.id).first();
     if (!u) return err('User not found', 404);
+
     const updates = []; const values = [];
     const now = new Date().toISOString();
 
@@ -444,7 +476,8 @@ async function handleUser(method, path, body, db, user, request) {
         const next = new Date(u.email_last_changed); next.setDate(next.getDate()+90);
         if (new Date() < next) return err('Email can only be changed once every 90 days', 403);
       }
-      const existing = await db.prepare('SELECT id FROM users WHERE email=? AND id!=?').bind(email.toLowerCase(), user.id).first();
+      const existing = await db.prepare('SELECT id FROM users WHERE email=? AND id!=?')
+        .bind(email.toLowerCase(), user.id).first();
       if (existing) return err('Email already in use');
       updates.push('email = ?', 'email_last_changed = ?');
       values.push(email.toLowerCase(), now);
@@ -503,7 +536,9 @@ async function handleUser(method, path, body, db, user, request) {
 
   // PUT /api/user/notifications/mark-all-read
   if (method === 'PUT' && path === '/notifications/mark-all-read') {
-    const notifs = await db.prepare('SELECT id FROM notifications WHERE is_active=1').all();
+    const notifs = await db.prepare(
+      'SELECT id FROM notifications WHERE is_active=1'
+    ).all();
     for (const n of notifs.results) {
       await db.prepare('INSERT OR IGNORE INTO notification_reads (notification_id, user_id) VALUES (?,?)')
         .bind(n.id, user.id).run();
@@ -535,7 +570,7 @@ async function handleUser(method, path, body, db, user, request) {
 }
 
 // ─────────────────────────────────────────────
-// ADMIN ROUTES
+// ADMIN
 // ─────────────────────────────────────────────
 async function handleAdmin(method, path, body, db, user) {
   if (!user) return err('Unauthorized', 401);
@@ -598,6 +633,10 @@ async function handleAdmin(method, path, body, db, user) {
   // ── SUBJECTS ──
   if (method === 'GET' && path === '/all-subjects') {
     const r = await db.prepare('SELECT * FROM subjects ORDER BY course_id ASC, sort_order ASC').all();
+    return json(r.results);
+  }
+  if (method === 'GET' && path.match(/^\/subjects\/course\/\d+$/)) {
+    const r = await db.prepare('SELECT * FROM subjects WHERE course_id=? ORDER BY sort_order ASC').bind(parseInt(path.split('/')[3])).all();
     return json(r.results);
   }
   if (method === 'POST' && path === '/subjects') {
@@ -675,15 +714,17 @@ async function handleAdmin(method, path, body, db, user) {
   if (method === 'GET' && path === '/all-lectures') {
     const r = await db.prepare(`
       SELECT l.*, ch.title as chapter_title, p.name as paper_name, s.name as subject_name, s.course_id
-      FROM lectures l JOIN chapters ch ON l.chapter_id=ch.id
-      JOIN papers p ON ch.paper_id=p.id JOIN subjects s ON p.subject_id=s.id
+      FROM lectures l
+      JOIN chapters ch ON l.chapter_id=ch.id
+      JOIN papers p ON ch.paper_id=p.id
+      JOIN subjects s ON p.subject_id=s.id
       ORDER BY l.created_at DESC
     `).all();
     return json(r.results);
   }
   if (method === 'POST' && path === '/lectures') {
     const { chapter_id, title, yt_video_id, sort_order, description } = body;
-    if (!chapter_id||!title||!yt_video_id) return err('Chapter, title, YouTube ID required');
+    if (!chapter_id||!title||!yt_video_id) return err('Chapter, title, and YouTube ID required');
     const r = await db.prepare('INSERT INTO lectures (chapter_id,title,yt_video_id,sort_order,description) VALUES (?,?,?,?,?)')
       .bind(chapter_id, title, yt_video_id, sort_order||0, description||'').run();
     return json({ id: r.meta.last_row_id, message: 'Lecture created' }, 201);
@@ -780,7 +821,7 @@ async function handleAdmin(method, path, body, db, user) {
   }
   if (method === 'POST' && path === '/memberships') {
     const { user_id, course_id, days } = body;
-    if (!user_id||!course_id||!days) return err('user_id, course_id, days required');
+    if (!user_id||!course_id||!days) return err('user_id, course_id, and days required');
     const expires_at = new Date(Date.now() + days*24*60*60*1000).toISOString();
     await db.prepare('INSERT OR REPLACE INTO memberships (user_id,course_id,expires_at,is_active,granted_by) VALUES (?,?,?,1,?)')
       .bind(user_id, course_id, expires_at, user.id).run();
@@ -798,6 +839,31 @@ async function handleAdmin(method, path, body, db, user) {
     return json({ message: 'Membership cancelled' });
   }
 
+  // ── ENROLLMENT REQUESTS ──
+  if (method === 'GET' && path === '/enrollment-requests') {
+    const r = await db.prepare(`
+      SELECT er.*, u.name as user_name, u.email as user_email, c.title as course_title
+      FROM enrollment_requests er
+      JOIN users u ON er.user_id=u.id JOIN courses c ON er.course_id=c.id
+      ORDER BY er.created_at DESC
+    `).all();
+    return json(r.results);
+  }
+  if (method === 'PUT' && path.match(/^\/enrollment-requests\/\d+\/approve$/)) {
+    const reqId = parseInt(path.split('/')[2]);
+    const req = await db.prepare('SELECT * FROM enrollment_requests WHERE id=?').bind(reqId).first();
+    if (!req) return err('Request not found', 404);
+    const expires_at = new Date(Date.now() + 365*24*60*60*1000).toISOString();
+    await db.prepare('INSERT OR REPLACE INTO memberships (user_id,course_id,expires_at,is_active,granted_by) VALUES (?,?,?,1,?)')
+      .bind(req.user_id, req.course_id, expires_at, user.id).run();
+    await db.prepare("UPDATE enrollment_requests SET status='approved' WHERE id=?").bind(reqId).run();
+    return json({ message: 'Request approved, membership granted' });
+  }
+  if (method === 'PUT' && path.match(/^\/enrollment-requests\/\d+\/reject$/)) {
+    await db.prepare("UPDATE enrollment_requests SET status='rejected' WHERE id=?").bind(parseInt(path.split('/')[2])).run();
+    return json({ message: 'Request rejected' });
+  }
+
   // ── NOTIFICATIONS ──
   if (method === 'GET' && path === '/notifications') {
     const r = await db.prepare('SELECT * FROM notifications ORDER BY created_at DESC').all();
@@ -811,6 +877,21 @@ async function handleAdmin(method, path, body, db, user) {
     ).bind(title, message||'', type||'info', target_type||'all', target_id||null,
            action_url||null, scheduled_at||null, expires_at||null, user.id).run();
     return json({ id: r.meta.last_row_id, message: 'Notification created' }, 201);
+  }
+  if (method === 'PUT' && path.match(/^\/notifications\/\d+$/)) {
+    const nId = parseInt(path.split('/')[2]);
+    const { title, message, type, is_active, action_url, expires_at } = body;
+    const u=[],v=[];
+    if (title!==undefined){u.push('title=?');v.push(title);}
+    if (message!==undefined){u.push('message=?');v.push(message);}
+    if (type!==undefined){u.push('type=?');v.push(type);}
+    if (is_active!==undefined){u.push('is_active=?');v.push(is_active);}
+    if (action_url!==undefined){u.push('action_url=?');v.push(action_url);}
+    if (expires_at!==undefined){u.push('expires_at=?');v.push(expires_at);}
+    if (!u.length) return err('Nothing to update');
+    v.push(nId);
+    await db.prepare(`UPDATE notifications SET ${u.join(',')} WHERE id=?`).bind(...v).run();
+    return json({ message: 'Notification updated' });
   }
   if (method === 'DELETE' && path.match(/^\/notifications\/\d+$/)) {
     const nId = parseInt(path.split('/')[2]);
@@ -846,6 +927,24 @@ async function handleAdmin(method, path, body, db, user) {
            status||'draft', release_date||null).run();
     return json({ id: r.meta.last_row_id, message: 'Update created' }, 201);
   }
+  if (method === 'PUT' && path.match(/^\/updates\/\d+$/)) {
+    const updId = parseInt(path.split('/')[2]);
+    const { version, title, type, changelog, show_popup, dismissible, status, release_date } = body;
+    const u=[],v=[];
+    if (version!==undefined){u.push('version=?');v.push(version);}
+    if (title!==undefined){u.push('title=?');v.push(title);}
+    if (type!==undefined){u.push('type=?');v.push(type);}
+    if (changelog!==undefined){u.push('changelog=?');v.push(changelog);}
+    if (show_popup!==undefined){u.push('show_popup=?');v.push(show_popup);}
+    if (dismissible!==undefined){u.push('dismissible=?');v.push(dismissible);}
+    if (status!==undefined){u.push('status=?');v.push(status);}
+    if (release_date!==undefined){u.push('release_date=?');v.push(release_date);}
+    u.push('updated_at=?');v.push(new Date().toISOString());
+    if (u.length<=1) return err('Nothing to update');
+    v.push(updId);
+    await db.prepare(`UPDATE updates SET ${u.join(',')} WHERE id=?`).bind(...v).run();
+    return json({ message: 'Update saved' });
+  }
   if (method === 'DELETE' && path.match(/^\/updates\/\d+$/)) {
     const updId = parseInt(path.split('/')[2]);
     await db.prepare('DELETE FROM update_seen WHERE update_id=?').bind(updId).run();
@@ -862,9 +961,7 @@ async function handleAdmin(method, path, body, db, user) {
 export async function onRequest(context) {
   const { request, env } = context;
   const db = env.ABHYUDOY_DB;
-
   if (request.method === 'OPTIONS') return new Response(null, { headers: CORS });
-
   await ensureTables(db);
 
   const url = new URL(request.url);
@@ -877,14 +974,12 @@ export async function onRequest(context) {
 
   const authUser = await getUser(request);
 
-  if (fullPath === '/contact/submit' && request.method === 'POST')
+  if (fullPath === '/contact' && request.method === 'POST')
     return handleContact(request.method, fullPath, body, db, authUser);
   if (fullPath.startsWith('/auth/'))
     return handleAuth(request.method, fullPath.replace('/auth',''), body, db);
   if (fullPath.startsWith('/user/'))
-    return handleUser(request.method, fullPath.replace('/user',''), body, db, authUser, request);
-  if (fullPath === '/courses' && request.method === 'GET')
-    return handleUser('GET', '/browse-courses', body, db, authUser, request);
+    return handleUser(request.method, fullPath.replace('/user',''), body, db, authUser);
   if (fullPath.startsWith('/admin/'))
     return handleAdmin(request.method, fullPath.replace('/admin',''), body, db, authUser);
 
