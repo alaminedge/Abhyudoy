@@ -5,774 +5,569 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Settings — Abhyudoy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Cabinet+Grotesk:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #03050a;
-  --surface: #080c17;
-  --surface2: #0d1321;
-  --surface3: #111827;
-  --border: rgba(255,255,255,0.05);
-  --border2: rgba(255,255,255,0.09);
-  --border3: rgba(255,255,255,0.13);
-  --teal: #00d4aa;
-  --teal2: #00b894;
-  --teal-dim: rgba(0,212,170,0.07);
-  --teal-glow: rgba(0,212,170,0.14);
-  --white: #f1f5f9;
-  --gray: #6b7d91;
-  --gray2: #94a3b8;
-  --gray3: #cbd5e1;
-  --red: #f0566a;
-  --red-dim: rgba(240,86,106,0.08);
-  --green: #10d48e;
-  --green-dim: rgba(16,212,142,0.08);
-  --orange: #f59e0b;
-  --orange-dim: rgba(245,158,11,0.08);
-  --radius: 10px;
-  --radius-sm: 6px;
-  --radius-lg: 16px;
-  --sidebar-width: 260px;
-  --header-height: 64px;
-  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+:root{
+  --bg:#05080f;--surface:#0b0f1a;--surface2:#111827;--surface3:#161e2e;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.11);
+  --teal:#00d4aa;--teal2:#00b894;--teal-dim:rgba(0,212,170,0.08);--teal-glow:rgba(0,212,170,0.18);
+  --white:#f0f4f8;--gray:#7a8899;--gray2:#a0adb8;
+  --red:#f0566a;--red-dim:rgba(240,86,106,0.09);
+  --orange:#f59e0b;--orange-dim:rgba(245,158,11,0.09);
+  --green:#10d48e;--green-dim:rgba(16,212,142,0.09);
+  --radius:9px;--radius-lg:13px;--transition:.18s cubic-bezier(.4,0,.2,1);--sw:260px;
 }
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Cabinet Grotesk',sans-serif;background:var(--bg);color:var(--white);min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:4px}
 
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+/* SIDEBAR OVERLAY */
+.sb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:90;opacity:0;pointer-events:none;transition:opacity .28s;backdrop-filter:blur(2px)}
+.sb-overlay.open{opacity:1;pointer-events:all}
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sw);background:var(--surface);border-right:1px solid var(--border2);z-index:100;display:flex;flex-direction:column;transform:translateX(-100%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+.sidebar.open{transform:translateX(0)}
+.sb-head{padding:22px 20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.sb-close{background:none;border:none;color:var(--gray);cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center;border-radius:6px;transition:all var(--transition)}
+.sb-close:hover{background:var(--surface2);color:var(--white)}
+.sb-nav{flex:1;overflow-y:auto;padding:10px 10px}
+.sb-nav-item{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:var(--radius);font-size:.83rem;font-weight:500;color:var(--gray2);cursor:pointer;text-decoration:none;transition:all var(--transition);border-left:2px solid transparent;margin-bottom:2px}
+.sb-nav-item:hover{background:var(--surface2);color:var(--white)}
+.sb-nav-item.active{background:var(--teal-dim);color:var(--teal);border-left-color:var(--teal)}
+.sb-nav-item svg{width:17px;height:17px;fill:currentColor;flex-shrink:0}
+.sb-divider{height:1px;background:var(--border);margin:10px 4px}
+.sb-footer{padding:14px 16px;border-top:1px solid var(--border)}
+.sb-user{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.sb-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal2));color:#000;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.75rem;flex-shrink:0}
+.sb-user-name{font-size:.8rem;font-weight:600;color:var(--white);line-height:1.2}
+.sb-user-email{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--gray);margin-top:1px}
+.btn-signout{width:100%;padding:8px;border:1.5px solid rgba(240,86,106,0.3);background:transparent;color:var(--red);border-radius:var(--radius);font-family:'Cabinet Grotesk',sans-serif;font-size:.72rem;font-weight:600;cursor:pointer;transition:all var(--transition);letter-spacing:.04em;text-transform:uppercase}
+.btn-signout:hover{background:var(--red);color:#fff;border-color:var(--red)}
 
-html, body {
-  height: 100%;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--bg);
-  color: var(--white);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
-}
+/* HEADER */
+header{position:sticky;top:0;z-index:80;height:64px;background:rgba(5,8,15,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.hdr{max-width:1280px;margin:0 auto;padding:0 24px;height:100%;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.hdr-left{display:flex;align-items:center;gap:14px}
+.hbtn{background:none;border:none;color:var(--gray2);cursor:pointer;padding:6px;display:flex;align-items:center;justify-content:center;border-radius:6px;transition:all var(--transition)}
+.hbtn:hover{background:var(--surface2);color:var(--white)}
+.hdr-logo img{height:30px;object-fit:contain}
+.hdr-right{display:flex;align-items:center;gap:8px}
+.notif-wrap{position:relative}
+.notif-btn{background:none;border:none;color:var(--gray2);cursor:pointer;padding:8px;display:flex;align-items:center;justify-content:center;border-radius:8px;transition:all var(--transition)}
+.notif-btn:hover{background:var(--surface2);color:var(--white)}
+.notif-badge{position:absolute;top:4px;right:4px;min-width:16px;height:16px;background:var(--red);color:#fff;font-family:'DM Mono',monospace;font-size:.58rem;font-weight:700;border-radius:8px;display:none;align-items:center;justify-content:center;border:2px solid var(--bg);padding:0 3px}
+.notif-badge.show{display:flex}
+.profile-wrap{position:relative}
+.profile-btn{display:flex;align-items:center;gap:8px;padding:5px 10px 5px 5px;background:var(--surface);border:1px solid var(--border2);border-radius:24px;cursor:pointer;transition:all var(--transition)}
+.profile-btn:hover{border-color:var(--teal);background:var(--surface2)}
+.p-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal2));color:#000;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.66rem;flex-shrink:0}
+.p-name{font-size:.78rem;font-weight:600;color:var(--gray2);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.p-chevron{color:var(--gray);transition:transform var(--transition)}
+.profile-btn.open .p-chevron{transform:rotate(180deg)}
+.profile-dropdown{position:absolute;top:calc(100% + 8px);right:0;width:200px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-lg);overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.5);display:none}
+.profile-dropdown.open{display:block;animation:fadeDown .15s ease}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.pd-item{display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:.8rem;color:var(--gray2);cursor:pointer;text-decoration:none;transition:all var(--transition)}
+.pd-item:hover{background:var(--surface2);color:var(--white)}
+.pd-item svg{width:15px;height:15px;fill:currentColor}
+.pd-item.danger{color:var(--red)}
+.pd-item.danger:hover{background:var(--red-dim)}
+.pd-divider{height:1px;background:var(--border);margin:4px 0}
 
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.06); border-radius: 4px; }
+/* PAGE LAYOUT */
+.page{max-width:1000px;margin:0 auto;padding:48px 24px 80px}
+.page-eyebrow{font-family:'DM Mono',monospace;font-size:.62rem;text-transform:uppercase;letter-spacing:.16em;color:var(--teal);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.page-eyebrow::before{content:'';display:block;width:18px;height:1.5px;background:var(--teal)}
+.page-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;letter-spacing:-.025em;margin-bottom:32px}
 
-/* ── SIDEBAR ── */
-.sidebar-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.6);
-  z-index: 90; opacity: 0; pointer-events: none;
-  transition: opacity var(--transition);
-  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-}
-.sidebar-overlay.open { opacity: 1; pointer-events: auto; }
+.settings-layout{display:grid;grid-template-columns:220px 1fr;gap:28px;align-items:start}
 
-.sidebar {
-  position: fixed; top: 0; left: 0; bottom: 0;
-  width: var(--sidebar-width); background: var(--surface);
-  border-right: 1px solid var(--border); z-index: 100;
-  display: flex; flex-direction: column;
-  transform: translateX(-100%);
-  transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
-  overflow-y: auto;
-}
-.sidebar.open { transform: translateX(0); }
+/* LEFT NAV */
+.settings-nav{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;position:sticky;top:88px}
+.sn-item{display:flex;align-items:center;gap:11px;padding:13px 16px;font-size:.83rem;font-weight:500;color:var(--gray2);cursor:pointer;border:none;background:transparent;width:100%;text-align:left;transition:all var(--transition);border-left:2.5px solid transparent}
+.sn-item:hover{background:var(--surface2);color:var(--white)}
+.sn-item.active{background:var(--teal-dim);color:var(--teal);border-left-color:var(--teal)}
+.sn-item svg{width:16px;height:16px;fill:currentColor;flex-shrink:0}
 
-.sidebar-top {
-  padding: 20px 18px 16px; border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; gap: 10px;
-}
-.sidebar-logo { height: 28px; flex-shrink: 0; }
-.sidebar-brand {
-  font-family: 'Cormorant Garamond', serif; font-size: 1.35rem;
-  font-weight: 700; letter-spacing: -0.01em; color: var(--white);
-  text-decoration: none; line-height: 1;
-}
+/* TAB CONTENT */
+.tab-panel{display:none}
+.tab-panel.active{display:block}
 
-.sidebar-nav { padding: 10px 10px; flex: 1; }
-.sidebar-section-label {
-  font-family: 'JetBrains Mono', monospace; font-size: 0.54rem;
-  font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em;
-  color: rgba(255,255,255,0.18); padding: 14px 12px 8px;
-}
-.sidebar-nav-item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 12px; border-radius: var(--radius-sm);
-  color: rgba(255,255,255,0.45); text-decoration: none;
-  font-size: 0.8rem; font-weight: 500;
-  transition: all var(--transition); cursor: pointer;
-  border: none; background: transparent; width: 100%;
-  text-align: left; font-family: 'Inter', sans-serif;
-  letter-spacing: 0.01em; margin-bottom: 1px;
-}
-.sidebar-nav-item:hover { background: rgba(255,255,255,0.03); color: rgba(255,255,255,0.75); }
-.sidebar-nav-item.active { background: var(--teal-dim); color: var(--teal); font-weight: 600; }
-.sidebar-nav-item svg { width: 17px; height: 17px; flex-shrink: 0; opacity: 0.65; }
-.sidebar-nav-item.active svg { opacity: 1; }
+.settings-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:16px}
+.sc-head{padding:18px 22px 14px;border-bottom:1px solid var(--border)}
+.sc-head h3{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;letter-spacing:-.01em;margin-bottom:3px}
+.sc-head p{font-size:.74rem;color:var(--gray);font-weight:300}
+.sc-body{padding:20px 22px}
 
-.sidebar-footer {
-  padding: 14px 16px; border-top: 1px solid var(--border);
-}
-.sidebar-user { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-.sidebar-avatar {
-  width: 34px; height: 34px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--teal), #00e6c0);
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 700; font-size: 0.8rem; color: #000; flex-shrink: 0;
-}
-.sidebar-user-info { flex: 1; min-width: 0; }
-.sidebar-user-name {
-  font-size: 0.8rem; font-weight: 600; color: var(--white);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.sidebar-user-email {
-  font-size: 0.64rem; color: var(--gray);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  font-family: 'JetBrains Mono', monospace;
-}
+/* FORM FIELDS */
+.fg{margin-bottom:18px;position:relative}
+.fg:last-child{margin-bottom:0}
+.fl{display:block;font-family:'DM Mono',monospace;font-size:.62rem;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.fl svg{width:12px;height:12px;fill:currentColor}
+.fi{width:100%;padding:11px 14px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius);color:var(--white);font-family:'Cabinet Grotesk',sans-serif;font-size:.86rem;outline:none;transition:all var(--transition)}
+.fi:focus{border-color:var(--teal);background:rgba(0,212,170,0.03);box-shadow:0 0 0 3px var(--teal-dim)}
+.fi::placeholder{color:rgba(122,136,153,.4)}
+.fi:disabled{opacity:.45;cursor:not-allowed;background:var(--surface3)}
+.fi-hint{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--gray);margin-top:5px;display:flex;align-items:center;gap:5px}
+.fi-hint svg{width:11px;height:11px;fill:currentColor;flex-shrink:0}
+.fi-hint.locked{color:var(--orange)}
+.fi-hint.available{color:var(--green)}
+.field-group{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 
-.btn-signout {
-  width: 100%; padding: 8px 14px; background: transparent;
-  border: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.38);
-  border-radius: var(--radius-sm); cursor: pointer;
-  font-family: 'Inter', sans-serif; font-size: 0.7rem;
-  font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
-  transition: all var(--transition);
-}
-.btn-signout:hover { border-color: var(--red); color: var(--red); background: var(--red-dim); }
+/* BUTTONS */
+.btn-save{padding:11px 28px;background:var(--teal);color:#000;border:none;border-radius:var(--radius);font-family:'Cabinet Grotesk',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;transition:all var(--transition);letter-spacing:.03em;display:inline-flex;align-items:center;gap:7px}
+.btn-save:hover:not(:disabled){background:var(--teal2);transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,212,170,.28)}
+.btn-save:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn-save svg{width:14px;height:14px;fill:currentColor}
 
-/* ── MAIN ── */
-.main { min-height: 100vh; display: flex; flex-direction: column; }
+/* PASSWORD STRENGTH */
+.pw-strength{margin-top:6px;display:flex;gap:4px}
+.pw-bar{flex:1;height:3px;border-radius:2px;background:var(--border2);transition:background .2s}
+.pw-bar.weak{background:var(--red)}
+.pw-bar.fair{background:var(--orange)}
+.pw-bar.strong{background:var(--green)}
+.pw-label{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--gray);margin-top:4px}
 
-/* ── HEADER ── */
-.header {
-  height: var(--header-height);
-  background: rgba(8,12,23,0.88); backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 20px; position: sticky; top: 0; z-index: 50; gap: 16px;
-}
-.header-left { display: flex; align-items: center; gap: 14px; }
+/* DISPLAY SETTINGS */
+.radio-group{display:flex;flex-direction:column;gap:8px}
+.radio-opt{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all var(--transition)}
+.radio-opt:hover{border-color:var(--border2)}
+.radio-opt.selected{border-color:var(--teal);background:var(--teal-dim)}
+.radio-opt-left{display:flex;align-items:center;gap:10px}
+.radio-opt-left svg{width:16px;height:16px;fill:currentColor;color:var(--gray2)}
+.radio-opt-label{font-size:.83rem;font-weight:500}
+.radio-dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;transition:all var(--transition);flex-shrink:0}
+.radio-opt.selected .radio-dot{border-color:var(--teal)}
+.radio-dot::after{content:'';width:8px;height:8px;border-radius:50%;background:var(--teal);opacity:0;transition:opacity .15s}
+.radio-opt.selected .radio-dot::after{opacity:1}
 
-.hamburger-btn {
-  background: transparent; border: none; cursor: pointer;
-  padding: 6px; display: flex; align-items: center; justify-content: center;
-  color: var(--gray2); border-radius: var(--radius-sm);
-  transition: all var(--transition);
-}
-.hamburger-btn:hover { color: var(--white); background: rgba(255,255,255,0.04); }
+/* TOGGLE */
+.toggle-field{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--radius)}
+.toggle-label-wrap{display:flex;flex-direction:column;gap:2px}
+.toggle-label{font-size:.83rem;font-weight:500}
+.toggle-sub{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--gray)}
+.toggle{position:relative;width:40px;height:22px;cursor:pointer;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0;position:absolute}
+.toggle-track{position:absolute;inset:0;background:var(--surface3);border:1px solid var(--border2);border-radius:11px;transition:all .2s}
+.toggle input:checked+.toggle-track{background:var(--teal);border-color:var(--teal)}
+.toggle-thumb{position:absolute;top:3px;left:3px;width:14px;height:14px;background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.toggle input:checked~.toggle-thumb{transform:translateX(18px)}
 
-.header-logo { height: 26px; display: none; }
+/* SECTION DIVIDER */
+.sc-divider{height:1px;background:var(--border);margin:18px 0}
 
-.breadcrumb {
-  display: flex; align-items: center; gap: 6px;
-  font-size: 0.78rem; color: var(--gray);
-}
-.breadcrumb a { color: var(--gray2); text-decoration: none; transition: color var(--transition); }
-.breadcrumb a:hover { color: var(--teal); }
-.breadcrumb svg { width: 12px; height: 12px; flex-shrink: 0; }
-.breadcrumb span { color: var(--gray3); }
+/* ALERT */
+.alert{padding:11px 14px;border-radius:var(--radius);font-size:.78rem;display:none;line-height:1.4;margin-bottom:14px;display:flex;align-items:flex-start;gap:8px}
+.alert.show{display:flex}
+.alert svg{width:14px;height:14px;fill:currentColor;flex-shrink:0;margin-top:1px}
+.alert-error{background:var(--red-dim);border:1px solid rgba(240,86,106,.22);color:var(--red)}
+.alert-success{background:var(--green-dim);border:1px solid rgba(16,212,142,.2);color:var(--green)}
+.alert-warn{background:var(--orange-dim);border:1px solid rgba(245,158,11,.2);color:var(--orange)}
 
-.header-right { display: flex; align-items: center; gap: 6px; }
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;padding:12px 18px;border-radius:var(--radius);font-size:.8rem;font-weight:600;z-index:999;transform:translateY(20px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;max-width:320px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast-success{background:var(--green-dim);border:1px solid rgba(16,212,142,.25);color:var(--green)}
+.toast-error{background:var(--red-dim);border:1px solid rgba(240,86,106,.25);color:var(--red)}
 
-.icon-btn {
-  position: relative; background: transparent; border: 1px solid transparent;
-  cursor: pointer; padding: 7px; display: flex; align-items: center;
-  justify-content: center; color: var(--gray2); border-radius: var(--radius-sm);
-  transition: all var(--transition); text-decoration: none;
-}
-.icon-btn:hover { background: rgba(255,255,255,0.04); color: var(--white); border-color: var(--border2); }
-.icon-btn svg { width: 19px; height: 19px; flex-shrink: 0; }
+/* FOOTER */
+footer{background:var(--surface);border-top:1px solid var(--border)}
+.footer-grid{max-width:1280px;margin:0 auto;padding:52px 24px 36px;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px}
+.footer-brand .f-logo img{height:28px;object-fit:contain;margin-bottom:12px}
+.footer-brand p{font-size:.76rem;color:var(--gray);line-height:1.6;max-width:240px;font-weight:300}
+.f-col h4{font-family:'DM Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.25);margin-bottom:14px}
+.f-col ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.f-col a{font-size:.78rem;color:var(--gray);text-decoration:none;transition:color var(--transition)}
+.f-col a:hover{color:var(--white)}
+.footer-bottom{max-width:1280px;margin:0 auto;padding:16px 24px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.footer-bottom p{font-family:'DM Mono',monospace;font-size:.62rem;color:rgba(255,255,255,.2)}
+.footer-status{display:flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:.62rem;color:var(--green)}
+.footer-status::before{content:'';display:block;width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green)}
 
-.notif-badge {
-  position: absolute; top: 4px; right: 4px;
-  width: 8px; height: 8px; background: var(--red);
-  border-radius: 50%; border: 2px solid rgba(8,12,23,0.88);
-  display: none;
+@media(max-width:900px){.footer-grid{grid-template-columns:1fr 1fr;gap:28px}}
+@media(max-width:560px){.footer-grid{grid-template-columns:1fr}}
+@media(max-width:760px){
+  .settings-layout{grid-template-columns:1fr}
+  .settings-nav{position:static;display:flex;overflow-x:auto}
+  .sn-item{flex-direction:column;gap:4px;font-size:.7rem;padding:10px 14px;border-left:none;border-bottom:2.5px solid transparent;white-space:nowrap}
+  .sn-item.active{border-bottom-color:var(--teal);border-left-color:transparent}
+  .field-group{grid-template-columns:1fr}
+  .page{padding:32px 16px 60px}
+  .hdr{padding:0 16px}
 }
-.notif-badge.show { display: block; }
-
-.profile-dropdown { position: relative; }
-.profile-trigger {
-  display: flex; align-items: center; gap: 8px;
-  padding: 4px 10px 4px 4px; background: transparent;
-  border: 1px solid var(--border2); border-radius: 24px;
-  cursor: pointer; transition: all var(--transition);
-  color: var(--gray2); font-family: 'Inter', sans-serif;
-}
-.profile-trigger:hover { border-color: var(--border3); background: rgba(255,255,255,0.02); }
-.profile-avatar {
-  width: 28px; height: 28px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--teal), #00e6c0);
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 700; font-size: 0.68rem; color: #000; flex-shrink: 0;
-}
-.profile-name {
-  font-size: 0.78rem; font-weight: 600; color: var(--white);
-  max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.profile-chevron { width: 14px; height: 14px; flex-shrink: 0; transition: transform var(--transition); }
-
-.profile-menu {
-  position: absolute; top: calc(100% + 8px); right: 0;
-  width: 200px; background: var(--surface2);
-  border: 1px solid var(--border2); border-radius: var(--radius-lg);
-  padding: 4px; box-shadow: 0 16px 48px rgba(0,0,0,0.6);
-  opacity: 0; pointer-events: none;
-  transform: translateY(-6px); transition: all var(--transition); z-index: 60;
-}
-.profile-menu.open { opacity: 1; pointer-events: auto; transform: translateY(0); }
-
-.profile-menu-item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 9px 12px; border-radius: var(--radius-sm);
-  color: var(--gray2); text-decoration: none;
-  font-size: 0.78rem; font-weight: 500;
-  transition: all var(--transition); border: none;
-  background: transparent; width: 100%; cursor: pointer;
-  font-family: 'Inter', sans-serif;
-}
-.profile-menu-item:hover { background: rgba(255,255,255,0.04); color: var(--white); }
-.profile-menu-item svg { width: 15px; height: 15px; flex-shrink: 0; }
-.profile-menu-divider { height: 1px; background: var(--border); margin: 4px 0; }
-.profile-menu-item.logout { color: var(--red); }
-.profile-menu-item.logout:hover { background: var(--red-dim); }
-
-/* ── CONTENT ── */
-.content { flex: 1; padding: 40px 24px 80px; max-width: 960px; margin: 0 auto; width: 100%; }
-
-.page-eyebrow {
-  font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
-  font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em;
-  color: var(--teal); margin-bottom: 8px;
-  display: flex; align-items: center; gap: 8px;
-}
-.page-eyebrow::before { content: ''; display: block; width: 16px; height: 1.5px; background: var(--teal); border-radius: 1px; }
-.page-title {
-  font-family: 'Cormorant Garamond', serif; font-size: 2rem;
-  font-weight: 700; letter-spacing: -0.02em; margin-bottom: 28px;
-}
-
-.settings-layout { display: grid; grid-template-columns: 220px 1fr; gap: 28px; align-items: start; }
-
-.settings-nav {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius-lg); overflow: hidden;
-  position: sticky; top: 88px;
-}
-.sn-item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 13px 16px; font-size: 0.82rem; font-weight: 500;
-  color: var(--gray2); cursor: pointer; border: none;
-  background: transparent; width: 100%; text-align: left;
-  transition: all var(--transition);
-  border-left: 2.5px solid transparent;
-  font-family: 'Inter', sans-serif;
-}
-.sn-item:hover { background: var(--surface2); color: var(--white); }
-.sn-item.active { background: var(--teal-dim); color: var(--teal); border-left-color: var(--teal); }
-.sn-item svg { width: 16px; height: 16px; flex-shrink: 0; }
-
-.tab-panel { display: none; }
-.tab-panel.active { display: block; }
-
-.settings-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 16px;
-}
-.sc-head { padding: 18px 22px 14px; border-bottom: 1px solid var(--border); }
-.sc-head h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 3px; }
-.sc-head p { font-size: 0.74rem; color: var(--gray); }
-.sc-body { padding: 20px 22px; }
-
-.fg { margin-bottom: 18px; }
-.fg:last-child { margin-bottom: 0; }
-.fl {
-  display: flex; align-items: center; gap: 6px;
-  font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
-  font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em;
-  color: var(--gray); margin-bottom: 7px;
-}
-.fi {
-  width: 100%; padding: 10px 14px; background: var(--surface2);
-  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
-  color: var(--white); font-family: 'Inter', sans-serif; font-size: 0.84rem;
-  outline: none; transition: all var(--transition);
-}
-.fi:focus { border-color: var(--teal); background: rgba(0,212,170,0.03); box-shadow: 0 0 0 3px var(--teal-dim); }
-.fi::placeholder { color: rgba(107,125,145,0.4); }
-.fi:disabled { opacity: 0.45; cursor: not-allowed; background: var(--surface3); }
-
-.field-group { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-
-.fi-hint {
-  font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
-  color: var(--gray); margin-top: 5px; display: flex; align-items: center; gap: 5px;
-}
-.fi-hint.locked { color: var(--orange); }
-.fi-hint.available { color: var(--green); }
-.fi-hint svg { width: 11px; height: 11px; flex-shrink: 0; }
-
-.btn-save {
-  padding: 10px 24px; background: var(--teal); color: #000;
-  border: none; border-radius: var(--radius-sm);
-  font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 700;
-  cursor: pointer; transition: all var(--transition);
-  letter-spacing: 0.02em; display: inline-flex; align-items: center; gap: 6px;
-}
-.btn-save:hover:not(:disabled) { background: var(--teal2); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,212,170,0.25); }
-.btn-save:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-.btn-save svg { width: 14px; height: 14px; }
-
-.pw-strength { margin-top: 6px; display: flex; gap: 4px; }
-.pw-bar { flex: 1; height: 3px; border-radius: 2px; background: var(--border2); transition: background 0.2s; }
-.pw-bar.weak { background: var(--red); }
-.pw-bar.fair { background: var(--orange); }
-.pw-bar.strong { background: var(--green); }
-.pw-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: var(--gray); margin-top: 4px; }
-
-.radio-group { display: flex; flex-direction: column; gap: 8px; }
-.radio-opt {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 11px 14px; background: var(--surface2);
-  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
-  cursor: pointer; transition: all var(--transition);
-}
-.radio-opt:hover { border-color: var(--border2); }
-.radio-opt.selected { border-color: var(--teal); background: var(--teal-dim); }
-.radio-opt-left { display: flex; align-items: center; gap: 10px; }
-.radio-opt-left svg { width: 16px; height: 16px; color: var(--gray2); }
-.radio-opt-label { font-size: 0.82rem; font-weight: 500; }
-.radio-dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all var(--transition); }
-.radio-opt.selected .radio-dot { border-color: var(--teal); }
-.radio-dot::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--teal); opacity: 0; transition: opacity 0.15s; }
-.radio-opt.selected .radio-dot::after { opacity: 1; }
-
-.toggle-field {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 11px 14px; background: var(--surface2);
-  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
-}
-.toggle-label-wrap { display: flex; flex-direction: column; gap: 2px; }
-.toggle-label { font-size: 0.82rem; font-weight: 500; }
-.toggle-sub { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: var(--gray); }
-.toggle { position: relative; width: 40px; height: 22px; cursor: pointer; flex-shrink: 0; }
-.toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
-.toggle-track { position: absolute; inset: 0; background: var(--surface3); border: 1px solid var(--border2); border-radius: 11px; transition: all 0.2s; }
-.toggle input:checked + .toggle-track { background: var(--teal); border-color: var(--teal); }
-.toggle-thumb { position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; background: #fff; border-radius: 50%; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
-.toggle input:checked ~ .toggle-thumb { transform: translateX(18px); }
-
-.alert {
-  padding: 10px 14px; border-radius: var(--radius-sm); font-size: 0.75rem;
-  margin-bottom: 14px; display: none; line-height: 1.4; align-items: flex-start; gap: 8px;
-}
-.alert.show { display: flex; }
-.alert-error { background: var(--red-dim); border: 1px solid rgba(240,86,106,0.2); color: var(--red); }
-.alert-success { background: var(--green-dim); border: 1px solid rgba(16,212,142,0.2); color: var(--green); }
-.alert svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; }
-
-.sc-divider { height: 1px; background: var(--border); margin: 18px 0; }
-
-/* ── TOAST ── */
-.toast-container {
-  position: fixed; bottom: 20px; right: 20px; z-index: 300;
-  display: flex; flex-direction: column; gap: 8px;
-}
-.toast {
-  background: var(--surface2); border: 1px solid var(--border2);
-  border-radius: var(--radius); padding: 12px 16px;
-  font-size: 0.78rem; color: var(--white);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-  animation: slideIn 0.3s ease, slideOut 0.3s ease 3s forwards;
-  display: flex; align-items: center; gap: 8px; min-width: 260px;
-}
-.toast-success { border-color: rgba(16,212,142,0.3); }
-.toast-error { border-color: rgba(240,86,106,0.3); }
-@keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
-@keyframes slideOut { from { opacity: 1; } to { opacity: 0; transform: translateX(20px); } }
-
-/* ── FOOTER ── */
-.footer {
-  background: var(--surface); border-top: 1px solid var(--border);
-  padding: 40px 24px 20px; margin-top: auto;
-}
-.footer-grid {
-  max-width: 1200px; margin: 0 auto;
-  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 36px;
-}
-.footer-brand p { color: var(--gray); font-size: 0.76rem; line-height: 1.7; margin-top: 10px; max-width: 240px; }
-.footer-logo { height: 22px; }
-.footer-social { display: flex; gap: 8px; margin-top: 14px; }
-.footer-social a {
-  width: 30px; height: 30px; border-radius: 50%;
-  background: rgba(255,255,255,0.03); border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--gray); transition: all var(--transition); text-decoration: none;
-}
-.footer-social a:hover { background: var(--teal-dim); border-color: var(--teal); color: var(--teal); }
-.footer-social a svg { width: 13px; height: 13px; fill: currentColor; }
-.footer-col h4 {
-  font-family: 'JetBrains Mono', monospace; font-size: 0.56rem;
-  font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em;
-  color: rgba(255,255,255,0.22); margin-bottom: 12px;
-}
-.footer-col a {
-  display: block; color: var(--gray); text-decoration: none;
-  font-size: 0.78rem; padding: 3px 0; transition: color var(--transition);
-}
-.footer-col a:hover { color: var(--teal); }
-.footer-bottom {
-  max-width: 1200px; margin: 32px auto 0; padding-top: 16px;
-  border-top: 1px solid var(--border);
-  display: flex; justify-content: space-between; align-items: center;
-  font-size: 0.64rem; color: rgba(255,255,255,0.14);
-  font-family: 'JetBrains Mono', monospace; flex-wrap: wrap; gap: 8px;
-}
-.footer-status { display: flex; align-items: center; gap: 5px; }
-.footer-status-dot {
-  width: 5px; height: 5px; background: var(--green);
-  border-radius: 50%; animation: pulse-dot 2s ease-in-out infinite;
-}
-@keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
-@media (min-width: 861px) { .sidebar { transform: translateX(0); } .sidebar-overlay { display: none; } .main { margin-left: var(--sidebar-width); } .hamburger-btn { display: none; } }
-@media (max-width: 860px) {
-  .header { padding: 0 14px; } .content { padding: 28px 14px 60px; } .header-logo { display: block; } .profile-name { display: none; }
-  .settings-layout { grid-template-columns: 1fr; }
-  .settings-nav { position: static; display: flex; overflow-x: auto; }
-  .sn-item { flex-direction: column; gap: 4px; font-size: 0.7rem; padding: 10px 12px; border-left: none; border-bottom: 2.5px solid transparent; white-space: nowrap; }
-  .sn-item.active { border-bottom-color: var(--teal); border-left-color: transparent; }
-  .field-group { grid-template-columns: 1fr; }
-  .footer-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
-}
-@media (max-width: 480px) { .footer-grid { grid-template-columns: 1fr; gap: 24px; } }
 </style>
 </head>
 <body>
 
-<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
-
+<div class="sb-overlay" id="sbOverlay" onclick="closeSidebar()"></div>
 <aside class="sidebar" id="sidebar">
-  <div class="sidebar-top">
-    <img src="/images/reallogo.png" height="28" alt="Abhyudoy" class="sidebar-logo">
-    <span class="sidebar-brand">Abhyudoy</span>
+  <div class="sb-head">
+    <a href="/dashboard.html"><img src="/images/reallogo.png" height="28" alt="Abhyudoy"></a>
+    <button class="sb-close" onclick="closeSidebar()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
   </div>
-  <nav class="sidebar-nav">
-    <div class="sidebar-section-label">Main</div>
-    <a href="/dashboard.html" class="sidebar-nav-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</a>
-    <a href="/browse.html" class="sidebar-nav-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="20" y1="20" x2="16.65" y2="16.65"/></svg>Browse Courses</a>
-    <a href="/dashboard.html" class="sidebar-nav-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>My Courses</a>
-    <a href="/notifications.html" class="sidebar-nav-item">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>Notifications</a>
-    <a href="/settings.html" class="sidebar-nav-item active">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Settings</a>
+  <nav class="sb-nav">
+    <a href="/dashboard.html" class="sb-nav-item"><svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>Dashboard</a>
+    <a href="/browse.html" class="sb-nav-item"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>Browse Courses</a>
+    <a href="/dashboard.html" class="sb-nav-item"><svg viewBox="0 0 24 24"><path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1z"/></svg>My Courses</a>
+    <a href="/notifications.html" class="sb-nav-item"><svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>Notifications</a>
+    <div class="sb-divider"></div>
+    <a href="/contact.html" class="sb-nav-item"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>Contact Support</a>
+    <a href="/settings.html" class="sb-nav-item active"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>Settings</a>
   </nav>
-  <div class="sidebar-footer">
-    <div class="sidebar-user"><div class="sidebar-avatar" id="sidebarAvatar">U</div><div class="sidebar-user-info"><div class="sidebar-user-name" id="sidebarName">User</div><div class="sidebar-user-email" id="sidebarEmail">user@email.com</div></div></div>
+  <div class="sb-footer">
+    <div class="sb-user"><div class="sb-avatar" id="sbAvatar">U</div><div><div class="sb-user-name" id="sbName">User</div><div class="sb-user-email" id="sbEmail"></div></div></div>
     <button class="btn-signout" onclick="logout()">Sign Out</button>
   </div>
 </aside>
 
-<div class="main">
-  <header class="header">
-    <div class="header-left">
-      <button class="hamburger-btn" onclick="openSidebar()" aria-label="Menu"><svg width="18" height="12" viewBox="0 0 18 12" fill="none"><rect width="18" height="1.5" rx="0.75" fill="currentColor"/><rect y="5.25" width="18" height="1.5" rx="0.75" fill="currentColor"/><rect y="10.5" width="18" height="1.5" rx="0.75" fill="currentColor"/></svg></button>
-      <img src="/images/reallogo.png" height="26" alt="Abhyudoy" class="header-logo">
-      <div class="breadcrumb"><a href="/dashboard.html">Home</a><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg><span>Settings</span></div>
+<header>
+  <div class="hdr">
+    <div class="hdr-left">
+      <button class="hbtn" onclick="openSidebar()"><svg width="20" height="14" viewBox="0 0 20 14" fill="none"><rect width="20" height="2" rx="1" fill="currentColor"/><rect y="6" width="20" height="2" rx="1" fill="currentColor"/><rect y="12" width="20" height="2" rx="1" fill="currentColor"/></svg></button>
+      <a href="/dashboard.html" class="hdr-logo"><img src="/images/reallogo.png" height="30" alt="Abhyudoy"></a>
     </div>
-    <div class="header-right">
-      <a href="/notifications.html" class="icon-btn" title="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></a>
-      <div class="profile-dropdown" id="profileDropdown">
-        <button class="profile-trigger" onclick="toggleProfileMenu()"><div class="profile-avatar" id="headerAvatar">U</div><span class="profile-name" id="headerName">User</span><svg class="profile-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>
-        <div class="profile-menu" id="profileMenu">
-          <a href="/settings.html" class="profile-menu-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>Settings</a>
-          <div class="profile-menu-divider"></div>
-          <button class="profile-menu-item logout" onclick="logout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Sign Out</button>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <div class="content">
-    <div class="page-eyebrow">Account</div>
-    <h1 class="page-title">Settings</h1>
-
-    <div class="settings-layout">
-      <div class="settings-nav">
-        <button class="sn-item active" onclick="showTab('profile', this)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile
-        </button>
-        <button class="sn-item" onclick="showTab('security', this)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Security
-        </button>
-        <button class="sn-item" onclick="showTab('display', this)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Display
+    <div class="hdr-right">
+      <div class="notif-wrap">
+        <button class="notif-btn" onclick="window.location.href='/notifications.html'">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+          <span class="notif-badge" id="notifBadge"></span>
         </button>
       </div>
-
-      <div>
-        <!-- PROFILE TAB -->
-        <div class="tab-panel active" id="tab-profile">
-          <div class="settings-card">
-            <div class="sc-head"><h3>Profile Information</h3><p>Changes are limited to once every 90 days for security.</p></div>
-            <div class="sc-body">
-              <div class="alert" id="profileAlert"></div>
-              <div class="field-group">
-                <div class="fg"><label class="fl">Full Name</label><input class="fi" type="text" id="profileName" placeholder="Your full name"><div class="fi-hint" id="nameHint"></div></div>
-                <div class="fg"><label class="fl">Email Address</label><input class="fi" type="email" id="profileEmail" placeholder="your@email.com"><div class="fi-hint" id="emailHint"></div></div>
-              </div>
-              <div class="field-group">
-                <div class="fg"><label class="fl">Phone Number</label><input class="fi" type="tel" id="profilePhone" placeholder="+880 1XXX XXXXXX"></div>
-                <div class="fg"><label class="fl">Institution</label><input class="fi" type="text" id="profileInstitution" placeholder="Your school or university"></div>
-              </div>
-              <div class="sc-divider"></div>
-              <button class="btn-save" id="profileSaveBtn" onclick="saveProfile()"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>Save Changes</button>
-            </div>
-          </div>
+      <div class="profile-wrap">
+        <div class="profile-btn" id="profileBtn" onclick="toggleProfileDropdown()">
+          <div class="p-avatar" id="pAvatar">U</div>
+          <span class="p-name" id="pName">User</span>
+          <svg class="p-chevron" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>
         </div>
-
-        <!-- SECURITY TAB -->
-        <div class="tab-panel" id="tab-security">
-          <div class="settings-card">
-            <div class="sc-head"><h3>Change Password</h3><p>Password changes are allowed once every 90 days.</p></div>
-            <div class="sc-body">
-              <div class="alert" id="secAlert"></div>
-              <div class="fg"><label class="fl">Current Password</label><input class="fi" type="password" id="curPassword" placeholder="Your current password"></div>
-              <div class="fg"><label class="fl">New Password</label><input class="fi" type="password" id="newPassword" placeholder="Min 6 chars, 1 number, 1 special char" oninput="checkPwStrength(this.value)"><div class="pw-strength" id="pwBars"><div class="pw-bar" id="b1"></div><div class="pw-bar" id="b2"></div><div class="pw-bar" id="b3"></div><div class="pw-bar" id="b4"></div></div><div class="pw-label" id="pwLabel"></div></div>
-              <div class="fg"><label class="fl">Confirm New Password</label><input class="fi" type="password" id="confPassword" placeholder="Repeat new password"><div class="fi-hint" id="confHint"></div></div>
-              <div class="fi-hint locked" id="pwChangeHint" style="margin-bottom:14px"></div>
-              <div class="sc-divider"></div>
-              <button class="btn-save" id="secSaveBtn" onclick="savePassword()"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>Update Password</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- DISPLAY TAB -->
-        <div class="tab-panel" id="tab-display">
-          <div class="settings-card">
-            <div class="sc-head"><h3>Display Preferences</h3><p>Customize how the platform looks and feels.</p></div>
-            <div class="sc-body">
-              <div class="fg"><label class="fl">Theme</label><div class="radio-group" id="themeGroup">
-                <div class="radio-opt selected" onclick="selectRadio('theme','dark',this)"><div class="radio-opt-left"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg><span class="radio-opt-label">Dark Mode</span></div><div class="radio-dot"></div></div>
-                <div class="radio-opt" onclick="selectRadio('theme','light',this)"><div class="radio-opt-left"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/></svg><span class="radio-opt-label">Light Mode</span></div><div class="radio-dot"></div></div>
-              </div></div>
-              <div class="sc-divider"></div>
-              <div class="fg"><label class="fl">Font Size</label><div class="radio-group" id="fontGroup">
-                <div class="radio-opt" onclick="selectRadio('font','small',this)"><div class="radio-opt-left"><span class="radio-opt-label" style="font-size:0.74rem">Small</span></div><div class="radio-dot"></div></div>
-                <div class="radio-opt selected" onclick="selectRadio('font','normal',this)"><div class="radio-opt-left"><span class="radio-opt-label">Normal</span></div><div class="radio-dot"></div></div>
-                <div class="radio-opt" onclick="selectRadio('font','large',this)"><div class="radio-opt-left"><span class="radio-opt-label" style="font-size:0.94rem">Large</span></div><div class="radio-dot"></div></div>
-              </div></div>
-              <div class="sc-divider"></div>
-              <div class="fg"><div class="toggle-field"><div class="toggle-label-wrap"><span class="toggle-label">Reduced Motion</span><span class="toggle-sub">Minimize animations and transitions</span></div><label class="toggle"><input type="checkbox" id="reducedMotion"><div class="toggle-track"></div><div class="toggle-thumb"></div></label></div></div>
-              <div class="sc-divider"></div>
-              <button class="btn-save" onclick="saveDisplay()"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>Save Preferences</button>
-            </div>
-          </div>
+        <div class="profile-dropdown" id="profileDropdown">
+          <a href="/settings.html" class="pd-item"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>Settings</a>
+          <div class="pd-divider"></div>
+          <div class="pd-item danger" onclick="logout()"><svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>Sign Out</div>
         </div>
       </div>
     </div>
   </div>
+</header>
 
-  <footer class="footer">
-    <div class="footer-grid">
-      <div class="footer-brand"><img src="/images/reallogo.png" height="22" alt="Abhyudoy" class="footer-logo"><p>Structured academic excellence through expert-designed video lectures and comprehensive study materials.</p><div class="footer-social"><a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.852L1.745 2.25H8.2l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a></div></div>
-      <div class="footer-col"><h4>Platform</h4><a href="/browse.html">Browse Courses</a><a href="/dashboard.html">My Courses</a></div>
-      <div class="footer-col"><h4>Support</h4><a href="/contact.html">Contact Us</a><a href="/notifications.html">Notifications</a></div>
-      <div class="footer-col"><h4>Legal</h4><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></div>
+<div class="page">
+  <div class="page-eyebrow">Account</div>
+  <h1 class="page-title">Settings</h1>
+  <div class="settings-layout">
+    <!-- LEFT NAV -->
+    <div class="settings-nav">
+      <button class="sn-item active" onclick="showTab('profile',this)">
+        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>Profile
+      </button>
+      <button class="sn-item" onclick="showTab('security',this)">
+        <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>Security
+      </button>
+      <button class="sn-item" onclick="showTab('display',this)">
+        <svg viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zM5 10h9v2H5zm0-3h9v2H5zm0 6h6v2H5zm10 1l3-3 1.41 1.41L16 15.83l-1.41-1.42L16 13l-1 1z"/></svg>Display
+      </button>
     </div>
-    <div class="footer-bottom"><span>&copy; 2024 Abhyudoy. All rights reserved.</span><span class="footer-status"><span class="footer-status-dot"></span>All Systems Operational</span><span>v2.0.0</span></div>
-  </footer>
+
+    <!-- RIGHT CONTENT -->
+    <div class="settings-content">
+
+      <!-- PROFILE TAB -->
+      <div class="tab-panel active" id="tab-profile">
+        <div class="settings-card">
+          <div class="sc-head"><h3>Profile Information</h3><p>Update your personal details. Changes are limited to once every 90 days.</p></div>
+          <div class="sc-body">
+            <div class="alert" id="profileAlert"></div>
+            <div class="field-group">
+              <div class="fg">
+                <label class="fl" id="nameLabel">Full Name</label>
+                <input class="fi" type="text" id="profileName" placeholder="Your full name">
+                <div class="fi-hint" id="nameHint"></div>
+              </div>
+              <div class="fg">
+                <label class="fl" id="emailLabel">Email Address</label>
+                <input class="fi" type="email" id="profileEmail" placeholder="your@email.com">
+                <div class="fi-hint" id="emailHint"></div>
+              </div>
+            </div>
+            <div class="field-group">
+              <div class="fg">
+                <label class="fl">Phone Number</label>
+                <input class="fi" type="tel" id="profilePhone" placeholder="+880 1XXX XXXXXX">
+              </div>
+              <div class="fg">
+                <label class="fl">Institution</label>
+                <input class="fi" type="text" id="profileInstitution" placeholder="Your school or university">
+              </div>
+            </div>
+            <div class="sc-divider"></div>
+            <button class="btn-save" id="profileSaveBtn" onclick="saveProfile()">
+              <svg viewBox="0 0 24 24"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>Save Changes
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECURITY TAB -->
+      <div class="tab-panel" id="tab-security">
+        <div class="settings-card">
+          <div class="sc-head"><h3>Change Password</h3><p>Password changes are allowed once every 90 days.</p></div>
+          <div class="sc-body">
+            <div class="alert" id="secAlert"></div>
+            <div class="fg">
+              <label class="fl">Current Password</label>
+              <input class="fi" type="password" id="curPassword" placeholder="Your current password">
+            </div>
+            <div class="fg">
+              <label class="fl">New Password</label>
+              <input class="fi" type="password" id="newPassword" placeholder="Min 6 chars, 1 number, 1 special char" oninput="checkPwStrength(this.value)">
+              <div class="pw-strength" id="pwBars"><div class="pw-bar" id="b1"></div><div class="pw-bar" id="b2"></div><div class="pw-bar" id="b3"></div><div class="pw-bar" id="b4"></div></div>
+              <div class="pw-label" id="pwLabel"></div>
+            </div>
+            <div class="fg">
+              <label class="fl">Confirm New Password</label>
+              <input class="fi" type="password" id="confPassword" placeholder="Repeat new password">
+              <div class="fi-hint" id="confHint"></div>
+            </div>
+            <div class="fi-hint" id="pwChangeHint" style="margin-bottom:14px"></div>
+            <div class="sc-divider"></div>
+            <button class="btn-save" id="secSaveBtn" onclick="savePassword()">
+              <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>Update Password
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- DISPLAY TAB -->
+      <div class="tab-panel" id="tab-display">
+        <div class="settings-card">
+          <div class="sc-head"><h3>Display Preferences</h3><p>Customize how the platform looks and behaves. Saved locally.</p></div>
+          <div class="sc-body">
+            <div class="fg">
+              <label class="fl">Theme</label>
+              <div class="radio-group" id="themeGroup">
+                <div class="radio-opt selected" onclick="selectRadio('theme','dark',this)">
+                  <div class="radio-opt-left"><svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg><span class="radio-opt-label">Dark Mode</span></div>
+                  <div class="radio-dot"></div>
+                </div>
+                <div class="radio-opt" onclick="selectRadio('theme','light',this)">
+                  <div class="radio-opt-left"><svg viewBox="0 0 24 24"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/></svg><span class="radio-opt-label">Light Mode</span></div>
+                  <div class="radio-dot"></div>
+                </div>
+              </div>
+            </div>
+            <div class="sc-divider"></div>
+            <div class="fg">
+              <label class="fl">Font Size</label>
+              <div class="radio-group" id="fontGroup">
+                <div class="radio-opt" onclick="selectRadio('font','small',this)"><div class="radio-opt-left"><span class="radio-opt-label" style="font-size:.76rem">Small</span></div><div class="radio-dot"></div></div>
+                <div class="radio-opt selected" onclick="selectRadio('font','normal',this)"><div class="radio-opt-left"><span class="radio-opt-label">Normal</span></div><div class="radio-dot"></div></div>
+                <div class="radio-opt" onclick="selectRadio('font','large',this)"><div class="radio-opt-left"><span class="radio-opt-label" style="font-size:.96rem">Large</span></div><div class="radio-dot"></div></div>
+              </div>
+            </div>
+            <div class="sc-divider"></div>
+            <div class="fg">
+              <div class="toggle-field">
+                <div class="toggle-label-wrap">
+                  <span class="toggle-label">Reduced Motion</span>
+                  <span class="toggle-sub">Minimize animations and transitions</span>
+                </div>
+                <label class="toggle">
+                  <input type="checkbox" id="reducedMotion">
+                  <div class="toggle-track"></div>
+                  <div class="toggle-thumb"></div>
+                </label>
+              </div>
+            </div>
+            <div class="sc-divider"></div>
+            <button class="btn-save" onclick="saveDisplay()">
+              <svg viewBox="0 0 24 24"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>Save Preferences
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end settings-content -->
+  </div>
 </div>
 
-<div class="toast-container" id="toastContainer"></div>
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand"><div class="f-logo"><img src="/images/reallogo.png" height="28" alt="Abhyudoy"></div><p>A premium EdTech platform built for academic excellence.</p></div>
+    <div class="f-col"><h4>Platform</h4><ul><li><a href="/browse.html">Browse Courses</a></li><li><a href="/dashboard.html">My Courses</a></li></ul></div>
+    <div class="f-col"><h4>Support</h4><ul><li><a href="/contact.html">Contact Us</a></li><li><a href="/notifications.html">Notifications</a></li></ul></div>
+    <div class="f-col"><h4>Legal</h4><ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>© 2024 Abhyudoy. All rights reserved.</p><div class="footer-status">All Systems Operational</div><p>v2.0.0</p></div>
+</footer>
+<div class="toast" id="toast"></div>
 
 <script>
-var token = localStorage.getItem('abhyudoy_token');
-var user = JSON.parse(localStorage.getItem('abhyudoy_user') || 'null');
-if (!token || !user) { window.location.href = '/index.html'; }
+const token=localStorage.getItem('abhyudoy_token');
+const user=JSON.parse(localStorage.getItem('abhyudoy_user')||'null');
+if(!token||!user){window.location.href='/index.html';}
+document.getElementById('pAvatar').textContent=user.name.charAt(0).toUpperCase();
+document.getElementById('pName').textContent=user.name;
+document.getElementById('sbAvatar').textContent=user.name.charAt(0).toUpperCase();
+document.getElementById('sbName').textContent=user.name;
+document.getElementById('sbEmail').textContent=user.email;
 
-var initial = user.name.charAt(0).toUpperCase();
-document.getElementById('sidebarAvatar').textContent = initial;
-document.getElementById('sidebarName').textContent = user.name;
-document.getElementById('sidebarEmail').textContent = user.email;
-document.getElementById('headerAvatar').textContent = initial;
-document.getElementById('headerName').textContent = user.name;
+const displayPrefs=JSON.parse(localStorage.getItem('abhyudoy_display')||'{}');
+let changeStatus={name_locked:false,email_locked:false,password_locked:false};
 
-var displayPrefs = JSON.parse(localStorage.getItem('abhyudoy_display') || '{}');
-var radioState = { theme: 'dark', font: 'normal' };
+function openSidebar(){document.getElementById('sidebar').classList.add('open');document.getElementById('sbOverlay').classList.add('open');}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sbOverlay').classList.remove('open');}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSidebar();closeProfileDropdown();}});
+function toggleProfileDropdown(){const d=document.getElementById('profileDropdown'),b=document.getElementById('profileBtn');d.classList.toggle('open');b.classList.toggle('open');}
+function closeProfileDropdown(){document.getElementById('profileDropdown').classList.remove('open');document.getElementById('profileBtn').classList.remove('open');}
+document.addEventListener('click',e=>{if(!e.target.closest('.profile-wrap'))closeProfileDropdown();});
+function showToast(msg,type='success'){const t=document.getElementById('toast');t.textContent=msg;t.className=`toast toast-${type} show`;setTimeout(()=>t.classList.remove('show'),3500);}
+function esc(s){const d=document.createElement('div');d.textContent=String(s||'');return d.innerHTML;}
+function logout(){localStorage.clear();window.location.href='/index.html';}
 
-function openSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('open'); }
-function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('open'); }
-document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { closeSidebar(); closeProfileMenu(); } });
-function toggleProfileMenu() { document.getElementById('profileMenu').classList.toggle('open'); }
-function closeProfileMenu() { document.getElementById('profileMenu').classList.remove('open'); }
-document.addEventListener('click', function(e) { if (!e.target.closest('.profile-dropdown')) closeProfileMenu(); });
-
-function showToast(msg, type) {
-  var container = document.getElementById('toastContainer');
-  var toast = document.createElement('div');
-  toast.className = 'toast toast-' + (type || 'success');
-  toast.innerHTML = '<span style="font-weight:700;color:' + (type === 'success' ? 'var(--green)' : 'var(--red)') + '">' + (type === 'success' ? '\u2713' : '\u2717') + '</span><span>' + msg + '</span>';
-  container.appendChild(toast);
-  setTimeout(function() { toast.remove(); }, 3500);
-}
-
-function esc(s) { var d = document.createElement('div'); d.textContent = String(s || ''); return d.innerHTML; }
-function logout() { localStorage.clear(); window.location.href = '/index.html'; }
-
-function showTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.sn-item').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('tab-' + name).classList.add('active');
+function showTab(name,btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sn-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
   btn.classList.add('active');
 }
 
-async function api(method, path, body) {
-  var opts = { method: method, headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token } };
-  if (body) opts.body = JSON.stringify(body);
-  var res = await fetch('/api' + path, opts);
-  var data = await res.json();
-  return { ok: res.ok, data: data };
+async function api(method,path,body){
+  const opts={method,headers:{'Content-Type':'application/json',Authorization:'Bearer '+token}};
+  if(body)opts.body=JSON.stringify(body);
+  const res=await fetch('/api'+path,opts);const data=await res.json();return{ok:res.ok,data};
 }
 
-function showAlert(id, msg, type) {
-  var al = document.getElementById(id);
-  if (!al) return;
-  al.className = 'alert alert-' + type + ' show';
-  al.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg><span>' + msg + '</span>';
-  setTimeout(function() { al.classList.remove('show'); }, 5000);
-}
+function daysUntil(dateStr){if(!dateStr)return 0;const d=new Date(dateStr),now=new Date();return Math.max(0,Math.ceil((d-now)/86400000));}
+function dateIn90Days(dateStr){if(!dateStr)return null;const d=new Date(dateStr);d.setDate(d.getDate()+90);return d;}
 
-// PROFILE
-async function loadProfile() {
-  try {
-    var profRes = await api('GET', '/user/profile');
-    var statusRes = await api('GET', '/user/profile-change-status');
-
-    if (profRes.ok) {
-      var p = profRes.data;
-      document.getElementById('profileName').value = p.name || '';
-      document.getElementById('profileEmail').value = p.email || '';
-      document.getElementById('profilePhone').value = p.phone || '';
-      document.getElementById('profileInstitution').value = p.institution || '';
+async function loadProfile(){
+  try{
+    const[profRes,statusRes]=await Promise.all([
+      api('GET','/user/profile'),
+      api('GET','/user/profile-change-status')
+    ]);
+    if(profRes.ok){
+      const p=profRes.data;
+      document.getElementById('profileName').value=p.name||'';
+      document.getElementById('profileEmail').value=p.email||'';
+      document.getElementById('profilePhone').value=p.phone||'';
+      document.getElementById('profileInstitution').value=p.institution||'';
     }
-
-    if (statusRes.ok) {
-      var s = statusRes.data;
-
-      if (!s.name_can_change) {
-        document.getElementById('profileName').disabled = true;
-        document.getElementById('nameHint').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Locked — 90-day restriction';
-        document.getElementById('nameHint').className = 'fi-hint locked';
-      }
-
-      if (!s.email_can_change) {
-        document.getElementById('profileEmail').disabled = true;
-        document.getElementById('emailHint').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Locked — 90-day restriction';
-        document.getElementById('emailHint').className = 'fi-hint locked';
-      }
-
-      if (!s.password_can_change) {
-        document.getElementById('curPassword').disabled = true;
-        document.getElementById('newPassword').disabled = true;
-        document.getElementById('confPassword').disabled = true;
-        document.getElementById('secSaveBtn').disabled = true;
-        document.getElementById('pwChangeHint').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Password change locked — 90-day restriction';
+    if(statusRes.ok){
+      const s=statusRes.data;changeStatus=s;
+      // Name hint
+      const nameNext=dateIn90Days(s.name_last_changed);
+      const nameLocked=nameNext&&new Date()<nameNext;
+      if(nameLocked){
+        const days=daysUntil(nameNext);
+        document.getElementById('nameHint').innerHTML=`<svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z"/></svg>Locked — available in ${days} day${days!==1?'s':''}`;
+        document.getElementById('nameHint').className='fi-hint locked';
+        document.getElementById('profileName').disabled=true;
+      }else{document.getElementById('nameHint').textContent='';document.getElementById('profileName').disabled=false;}
+      // Email hint
+      const emailNext=dateIn90Days(s.email_last_changed);
+      const emailLocked=emailNext&&new Date()<emailNext;
+      if(emailLocked){
+        const days=daysUntil(emailNext);
+        document.getElementById('emailHint').innerHTML=`<svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z"/></svg>Locked — available in ${days} day${days!==1?'s':''}`;
+        document.getElementById('emailHint').className='fi-hint locked';
+        document.getElementById('profileEmail').disabled=true;
+      }else{document.getElementById('emailHint').textContent='';document.getElementById('profileEmail').disabled=false;}
+      // Password hint
+      const pwNext=dateIn90Days(s.password_last_changed);
+      const pwLocked=pwNext&&new Date()<pwNext;
+      if(pwLocked){
+        const days=daysUntil(pwNext);
+        const h=document.getElementById('pwChangeHint');
+        h.innerHTML=`<svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z"/></svg>Password locked — available in ${days} day${days!==1?'s':''}`;
+        h.className='fi-hint locked';
+        document.getElementById('curPassword').disabled=true;
+        document.getElementById('newPassword').disabled=true;
+        document.getElementById('confPassword').disabled=true;
+        document.getElementById('secSaveBtn').disabled=true;
       }
     }
-  } catch (e) {}
+  }catch{}
 }
 
-async function saveProfile() {
-  var name = document.getElementById('profileName').value.trim();
-  var email = document.getElementById('profileEmail').value.trim();
-  var phone = document.getElementById('profilePhone').value.trim();
-  var institution = document.getElementById('profileInstitution').value.trim();
-  if (!name || !email) { showAlert('profileAlert', 'Name and email are required.', 'error'); return; }
-
-  var btn = document.getElementById('profileSaveBtn');
-  btn.disabled = true;
-  var res = await api('PUT', '/user/profile', { name: name, email: email, phone: phone, institution: institution });
-  btn.disabled = false;
-
-  if (res.ok) { showToast('Profile updated successfully.', 'success'); loadProfile(); }
-  else { showAlert('profileAlert', res.data.error || 'Update failed.', 'error'); }
+async function saveProfile(){
+  const name=document.getElementById('profileName').value.trim();
+  const email=document.getElementById('profileEmail').value.trim();
+  const phone=document.getElementById('profilePhone').value.trim();
+  const institution=document.getElementById('profileInstitution').value.trim();
+  const al=document.getElementById('profileAlert');
+  al.className='alert';
+  if(!name||!email){al.className='alert alert-error show';al.innerHTML='<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>Name and email are required.';return;}
+  const btn=document.getElementById('profileSaveBtn');
+  btn.disabled=true;
+  const{ok,data}=await api('PUT','/user/profile',{name,email,phone,institution});
+  btn.disabled=false;
+  if(ok){showToast('Profile updated successfully.','success');loadProfile();}
+  else{al.className='alert alert-error show';al.innerHTML=`<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>${esc(data.error||'Update failed.')}`;}
 }
 
-function checkPwStrength(pw) {
-  var bars = [document.getElementById('b1'), document.getElementById('b2'), document.getElementById('b3'), document.getElementById('b4')];
-  var lbl = document.getElementById('pwLabel');
-  for (var i = 0; i < bars.length; i++) bars[i].className = 'pw-bar';
-  if (!pw) { lbl.textContent = ''; return; }
-  var score = 0;
-  if (pw.length >= 6) score++;
-  if (pw.length >= 10) score++;
-  if (/[0-9]/.test(pw)) score++;
-  if (/[^a-zA-Z0-9]/.test(pw)) score++;
-  for (var j = 0; j < score; j++) bars[j].className = 'pw-bar ' + (score <= 1 ? 'weak' : score <= 2 ? 'fair' : 'strong');
-  lbl.textContent = ['Weak', 'Fair', 'Good', 'Strong'][score - 1] || '';
+function checkPwStrength(pw){
+  const b=[document.getElementById('b1'),document.getElementById('b2'),document.getElementById('b3'),document.getElementById('b4')];
+  const lbl=document.getElementById('pwLabel');
+  b.forEach(x=>{x.className='pw-bar';});
+  if(!pw){lbl.textContent='';return;}
+  let score=0;
+  if(pw.length>=6)score++;if(pw.length>=10)score++;
+  if(/[0-9]/.test(pw))score++;if(/[^a-zA-Z0-9]/.test(pw))score++;
+  const colors=['weak','fair','fair','strong'];
+  const labels=['Weak','Fair','Good','Strong'];
+  for(let i=0;i<score;i++)b[i].className='pw-bar '+colors[score-1];
+  lbl.textContent=labels[score-1]||'';lbl.style.color=score<=1?'var(--red)':score<=2?'var(--orange)':'var(--green)';
 }
 
-async function savePassword() {
-  var cur = document.getElementById('curPassword').value;
-  var nw = document.getElementById('newPassword').value;
-  var conf = document.getElementById('confPassword').value;
-  var ch = document.getElementById('confHint');
-
-  if (!cur || !nw || !conf) { showAlert('secAlert', 'All fields are required.', 'error'); return; }
-  if (nw.length < 6) { showAlert('secAlert', 'New password must be at least 6 characters.', 'error'); return; }
-  if (nw !== conf) { ch.textContent = 'Passwords do not match.'; ch.className = 'fi-hint locked'; return; }
-  ch.textContent = '';
-  ch.className = 'fi-hint';
-
-  var btn = document.getElementById('secSaveBtn');
-  btn.disabled = true;
-  var res = await api('PUT', '/user/password', { current_password: cur, new_password: nw });
-  btn.disabled = false;
-
-  if (res.ok) {
-    showToast('Password updated successfully.', 'success');
-    document.getElementById('curPassword').value = '';
-    document.getElementById('newPassword').value = '';
-    document.getElementById('confPassword').value = '';
-    loadProfile();
-  } else {
-    showAlert('secAlert', res.data.error || 'Update failed.', 'error');
-  }
+async function savePassword(){
+  const cur=document.getElementById('curPassword').value;
+  const nw=document.getElementById('newPassword').value;
+  const conf=document.getElementById('confPassword').value;
+  const al=document.getElementById('secAlert');
+  const ch=document.getElementById('confHint');
+  al.className='alert';ch.textContent='';
+  if(!cur||!nw||!conf){al.className='alert alert-error show';al.innerHTML='<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>All fields are required.';return;}
+  if(nw.length<6){al.className='alert alert-error show';al.innerHTML='<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>New password must be at least 6 characters.';return;}
+  if(nw!==conf){ch.textContent='Passwords do not match.';ch.className='fi-hint locked';return;}
+  ch.textContent='';
+  const btn=document.getElementById('secSaveBtn');btn.disabled=true;
+  const{ok,data}=await api('PUT','/user/password',{current_password:cur,new_password:nw});
+  btn.disabled=false;
+  if(ok){showToast('Password updated successfully.','success');document.getElementById('curPassword').value='';document.getElementById('newPassword').value='';document.getElementById('confPassword').value='';loadProfile();}
+  else{al.className='alert alert-error show';al.innerHTML=`<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>${esc(data.error||'Update failed.')}`;}
 }
 
 // DISPLAY
-function selectRadio(group, value, el) {
-  radioState[group] = value;
-  var container = el.parentElement;
-  var opts = container.querySelectorAll('.radio-opt');
-  for (var i = 0; i < opts.length; i++) opts[i].classList.remove('selected');
+const radioState={theme:'dark',font:'normal'};
+function selectRadio(group,value,el){
+  radioState[group]=value;
+  el.closest('.radio-group').querySelectorAll('.radio-opt').forEach(o=>o.classList.remove('selected'));
   el.classList.add('selected');
 }
-
-function loadDisplayPrefs() {
-  if (displayPrefs.theme) {
-    var themeOpts = document.querySelectorAll('#themeGroup .radio-opt');
-    for (var i = 0; i < themeOpts.length; i++) { themeOpts[i].classList.remove('selected'); if (themeOpts[i].textContent.toLowerCase().indexOf(displayPrefs.theme) !== -1) themeOpts[i].classList.add('selected'); }
-    radioState.theme = displayPrefs.theme;
-  }
-  if (displayPrefs.font) {
-    var fontOpts = document.querySelectorAll('#fontGroup .radio-opt');
-    for (var j = 0; j < fontOpts.length; j++) { fontOpts[j].classList.remove('selected'); if (fontOpts[j].textContent.toLowerCase().indexOf(displayPrefs.font) !== -1) fontOpts[j].classList.add('selected'); }
-    radioState.font = displayPrefs.font;
-  }
-  if (displayPrefs.reducedMotion) document.getElementById('reducedMotion').checked = true;
+function saveDisplay(){
+  const prefs={theme:radioState.theme,font:radioState.font,reducedMotion:document.getElementById('reducedMotion').checked};
+  localStorage.setItem('abhyudoy_display',JSON.stringify(prefs));
+  showToast('Display preferences saved.','success');
 }
 
-function saveDisplay() {
-  var prefs = { theme: radioState.theme, font: radioState.font, reducedMotion: document.getElementById('reducedMotion').checked };
-  localStorage.setItem('abhyudoy_display', JSON.stringify(prefs));
-  showToast('Display preferences saved.', 'success');
+// Load saved display prefs
+function loadDisplayPrefs(){
+  if(displayPrefs.theme){
+    const opts=document.querySelectorAll('#themeGroup .radio-opt');
+    opts.forEach(o=>{o.classList.remove('selected');if(o.getAttribute('onclick')?.includes(displayPrefs.theme))o.classList.add('selected');});
+    radioState.theme=displayPrefs.theme;
+  }
+  if(displayPrefs.font){
+    const opts=document.querySelectorAll('#fontGroup .radio-opt');
+    opts.forEach(o=>{o.classList.remove('selected');if(o.getAttribute('onclick')?.includes(displayPrefs.font))o.classList.add('selected');});
+    radioState.font=displayPrefs.font;
+  }
+  if(displayPrefs.reducedMotion)document.getElementById('reducedMotion').checked=true;
 }
 
-loadProfile();
-loadDisplayPrefs();
+async function loadNotifBadge(){
+  try{const{ok,data}=await api('GET','/user/notifications');if(ok){const u=data.filter(n=>!n.is_read).length;if(u>0){document.getElementById('notifBadge').textContent=u>9?'9+':u;document.getElementById('notifBadge').classList.add('show');}}}catch{}
+}
+
+loadProfile();loadDisplayPrefs();loadNotifBadge();
 </script>
 </body>
 </html>
