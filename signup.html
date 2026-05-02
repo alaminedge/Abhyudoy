@@ -27,8 +27,22 @@ body::after{content:'';position:fixed;top:-200px;left:50%;transform:translateX(-
 .logo-text em{font-style:italic;color:var(--teal)}
 .logo-sub{font-size:0.72rem;color:var(--gray);text-align:center;margin-bottom:28px;letter-spacing:0.06em}
 
-.notice{display:flex;align-items:flex-start;gap:10px;background:rgba(240,192,96,0.06);border:1px solid rgba(240,192,96,0.15);border-radius:var(--radius);padding:11px 14px;margin-bottom:22px;font-size:0.76rem;color:rgba(240,192,96,0.85);line-height:1.5}
-.notice span{flex-shrink:0;font-size:1rem}
+/* Fixed notice styling - NOW CLEARLY INSIDE THE CARD */
+.notice{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  background:var(--surface2);
+  border-left:3px solid #f0c060;
+  border-radius:var(--radius);
+  padding:14px 16px;
+  margin-bottom:24px;
+  font-size:0.76rem;
+  color:rgba(240,192,96,0.9);
+  line-height:1.5;
+}
+.notice span:first-child{flex-shrink:0;font-size:1rem}
+.notice span:last-child{flex:1}
 
 .alert{padding:11px 14px;border-radius:var(--radius);font-size:0.77rem;margin-bottom:16px;display:none;line-height:1.4}
 .alert.show{display:block}
@@ -45,7 +59,7 @@ body::after{content:'';position:fixed;top:-200px;left:50%;transform:translateX(-
 .btn-sub:hover{background:var(--teal2);transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,212,170,0.28)}
 .btn-sub:disabled{opacity:.5;cursor:not-allowed;transform:none}
 
-.foot-link{margin-top:18px;text-align:center;font-size:0.78rem;color:var(--gray)}
+.foot-link{margin-top:20px;text-align:center;font-size:0.78rem;color:var(--gray)}
 .foot-link a{color:var(--teal);text-decoration:none;font-weight:600}
 
 .spinner{display:inline-block;width:13px;height:13px;border:2px solid rgba(0,0,0,.2);border-top-color:#000;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px}
@@ -56,7 +70,13 @@ body::after{content:'';position:fixed;top:-200px;left:50%;transform:translateX(-
 <div class="card">
   <div class="logo"><div class="logo-text">Abhy<em>udoy</em></div></div>
   <p class="logo-sub">Create Your Account</p>
-  <div class="notice"><span>⚠️</span><span>One account per device. Your account requires admin approval before you can sign in.</span></div>
+  
+  <!-- Disclaimer is NOW properly styled INSIDE the card -->
+  <div class="notice">
+    <span>⚠️</span>
+    <span>One account per device. Your account requires admin approval before you can sign in.</span>
+  </div>
+  
   <div class="alert" id="alert"></div>
   <form onsubmit="doSignup(event)">
     <div class="fg"><label class="fl">Full Name</label><input class="fi" type="text" id="name" placeholder="Your full name" required autocomplete="name"></div>
