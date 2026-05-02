@@ -1,1500 +1,1008 @@
 // functions/api/[[route]].js
-// Abhyudoy EdTech Platform - Complete Working API
-// Handles ALL admin and user routes
+// Abhyudoy EdTech Platform — Complete API v2
 
-export async function onRequest(context) {
-  const { request, env } = context;
-  
-  // CORS headers for all responses
-  const corsHeaders = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization'
-  };
-  
-  // Handle CORS preflight requests
-  if (request.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+async function sha256(text) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+const SECRET = 'abhyudoy_2024_secret';
+
+async function signToken(payload) {
+  const header = btoa(JSON.stringify({ alg:'HS256', typ:'JWT' }));
+  const body = btoa(JSON.stringify(payload));
+  const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(SECRET),
+    { name:'HMAC', hash:'SHA-256' }, false, ['sign']);
+  const sig = btoa(String.fromCharCode(...new Uint8Array(
+    await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(`${header}.${body}`))
+  )));
+  return `${header}.${body}.${sig}`;
+}
+
+async function verifyToken(token) {
+  try {
+    const [header, body, sig] = token.split('.');
+    const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(SECRET),
+      { name:'HMAC', hash:'SHA-256' }, false, ['verify']);
+    const valid = await crypto.subtle.verify('HMAC', key,
+      Uint8Array.from(atob(sig), c => c.charCodeAt(0)),
+      new TextEncoder().encode(`${header}.${body}`)
+    );
+    if (!valid) return null;
+    const payload = JSON.parse(atob(body));
+    if (payload.exp && Date.now() > payload.exp) return null;
+    return payload;
+  } catch { return null; }
+}
+
+async function getUser(request) {
+  const auth = request.headers.get('Authorization') || '';
+  const token = auth.replace('Bearer ', '').trim();
+  if (!token) return null;
+  return verifyToken(token);
+}
+
+const CORS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+};
+
+function json(data, status = 200) {
+  return new Response(JSON.stringify(data), {
+    status, headers: { 'Content-Type': 'application/json', ...CORS }
+  });
+}
+function err(msg, status = 400) { return json({ error: msg }, status); }
+
+// ─────────────────────────────────────────────
+// TABLE SETUP
+// ─────────────────────────────────────────────
+async function ensureTables(db) {
+  await db.prepare(`CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL, email TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL, role TEXT DEFAULT 'user',
+    is_blocked INTEGER DEFAULT 0, is_approved INTEGER DEFAULT 0,
+    phone TEXT, institution TEXT,
+    name_last_changed DATETIME, email_last_changed DATETIME, password_last_changed DATETIME,
+    restriction_override INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`).run();
+
+  await db.prepare(`CREATE TABLE IF NOT EXISTS device_registrations (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    device_fingerprint TEXT NOT NULL, user_id INTEGER,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`).run();
+
+  await db.prepare(`CREATE TABLE IF NOT EXISTS courses (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL, description TEXT, thumbnail TEXT,
+    is_active INTEGER DEFAULT 1,
+    show_in_browse INTEGER DEFAULT 0,
+    subject_area TEXT, difficulty_level TEXT,
+    enrollment_type TEXT DEFAULT 'open',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`).run();
+
+  await db.prepare(`CREATE TABLE IF NOT EXISTS subjects (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    course_id INTEGER NOT NULL, name TEXT NOT NULL,
+    has_papers INTEGER DEFAULT 1, sort_order INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`).run();
+
+  await db.prepare(`CREATE TABLE IF NOT EXISTS papers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    subject_id INTEGER NOT NULL, name TEXT NOT NULL,
+    sort_order INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`).run();
+
+  await db.prepare(`CREATE TABLE IF NOT EXISTS chapters (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    paper_id INTEGER NOT NULL, title TEXT NOT NULL,
+    sort_order INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`).run();
+
+  await db.prepare(`CREATE TABLE IF NOT EXISTS lectures (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    chapter_id INTEGER NOT NULL, title TEXT NOT NULL,
+    yt_video_id TEXT NOT NULL, sort_order INTEGER DEFAULT 0,
+    description TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`).run();
+
+  await db.prepare(`CREATE TABLE IF NOT EXISTS lecture_pdfs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    lecture_id INTEGER NOT NULL, title TEXT NOT NULL, pdf_url TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`).run();
+
+  await db.prepare(`CREATE TABLE IF NOT EXISTS resources (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    course_id INTEGER NOT NULL, title TEXT NOT NULL, pdf_url TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`).run();
+
+  await db.prepare(`CREATE TABLE IF NOT EXISTS memberships (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL, course_id INTEGER NOT NULL,
+    expires_at DATETIME NOT NULL, is_active INTEGER DEFAULT 1,
+    granted_by INTEGER,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(user_id, course_id)
+  )`).run();
+
+  await db.prepare(`CREATE TABLE IF NOT EXISTS enrollment_requests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL, course_id INTEGER NOT NULL,
+    status TEXT DEFAULT 'pending',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(user_id, course_id)
+  )`).run();
+
+  await db.prepare(`CREATE TABLE IF NOT EXISTS notifications (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL, message TEXT,
+    type TEXT DEFAULT 'info',
+    target_type TEXT DEFAULT 'all',
+    target_id INTEGER,
+    action_url TEXT,
+    is_active INTEGER DEFAULT 1,
+    scheduled_at DATETIME,
+    expires_at DATETIME,
+    created_by INTEGER,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`).run();
+
+  await db.prepare(`CREATE TABLE IF NOT EXISTS notification_reads (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    notification_id INTEGER NOT NULL, user_id INTEGER NOT NULL,
+    read_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(notification_id, user_id)
+  )`).run();
+
+  await db.prepare(`CREATE TABLE IF NOT EXISTS support_tickets (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL, email TEXT NOT NULL,
+    subject TEXT, message TEXT NOT NULL,
+    status TEXT DEFAULT 'open',
+    user_id INTEGER,
+    resolved_at DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`).run();
+
+  await db.prepare(`CREATE TABLE IF NOT EXISTS updates (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    version TEXT, title TEXT NOT NULL,
+    type TEXT DEFAULT 'feature',
+    changelog TEXT,
+    show_popup INTEGER DEFAULT 1,
+    dismissible INTEGER DEFAULT 1,
+    status TEXT DEFAULT 'draft',
+    release_date DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`).run();
+
+  await db.prepare(`CREATE TABLE IF NOT EXISTS update_seen (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    update_id INTEGER NOT NULL, user_id INTEGER NOT NULL,
+    seen_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(update_id, user_id)
+  )`).run();
+
+  // Default admin password: admin123
+  const adminHash = await sha256('admin123');
+  await db.prepare(`INSERT OR IGNORE INTO users (name, email, password, role, is_approved)
+    VALUES ('Admin', 'cnct.nx@gmail.com', ?, 'admin', 1)`).bind(adminHash).run();
+
+  // ── MIGRATIONS: Add new columns to existing tables safely ──
+  const migrations = [
+    "ALTER TABLE courses ADD COLUMN show_in_browse INTEGER DEFAULT 0",
+    "ALTER TABLE courses ADD COLUMN subject_area TEXT",
+    "ALTER TABLE courses ADD COLUMN difficulty_level TEXT",
+    "ALTER TABLE courses ADD COLUMN enrollment_type TEXT DEFAULT 'open'",
+    "ALTER TABLE users ADD COLUMN phone TEXT",
+    "ALTER TABLE users ADD COLUMN institution TEXT",
+    "ALTER TABLE users ADD COLUMN name_last_changed DATETIME",
+    "ALTER TABLE users ADD COLUMN email_last_changed DATETIME",
+    "ALTER TABLE users ADD COLUMN password_last_changed DATETIME",
+    "ALTER TABLE users ADD COLUMN restriction_override INTEGER DEFAULT 0",
+  ];
+  for (const sql of migrations) {
+    try { await db.prepare(sql).run(); } catch (e) { /* Column already exists - ignore */ }
   }
-  
-  // Parse URL and path
-  const url = new URL(request.url);
-  const path = url.pathname;
-  
-  // Parse request body for POST and PUT
-  let body = {};
-  if (request.method === 'POST' || request.method === 'PUT') {
-    try {
-      const contentType = request.headers.get('Content-Type') || '';
-      if (contentType.includes('application/json')) {
-        body = await request.json();
-      }
-    } catch (error) {
-      console.error('Error parsing request body:', error.message);
-    }
-  }
-  
-  // Helper function to send JSON response
-  function sendJSON(data, status) {
-    status = status || 200;
-    return new Response(JSON.stringify(data), {
-      status: status,
-      headers: corsHeaders
-    });
-  }
-  
-  // Helper function to send error response
-  function sendError(message, status) {
-    status = status || 400;
-    return sendJSON({ error: message }, status);
-  }
-  
-  // Get database connection
-  const db = env.ABHYUDOY_DB;
-  
-  console.log('Request:', request.method, path);
-  
-  // ==========================================
-  // DATABASE MIGRATION - Run once per cold start
-  // ==========================================
-  if (db && !globalThis.__abhyudoy_migrated) {
-    console.log('Running database migration...');
-    
-    try {
-      // Create tables if they don't exist (fresh database)
-      await db.prepare(`
-        CREATE TABLE IF NOT EXISTS courses (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          title TEXT NOT NULL,
-          description TEXT DEFAULT '',
-          thumbnail TEXT,
-          is_active INTEGER DEFAULT 1,
-          show_in_browse INTEGER DEFAULT 0,
-          subject_area TEXT,
-          difficulty_level TEXT,
-          enrollment_type TEXT DEFAULT 'open',
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-          updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-      `).run();
-      
-      await db.prepare(`
-        CREATE TABLE IF NOT EXISTS subjects (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          course_id INTEGER NOT NULL,
-          name TEXT NOT NULL,
-          has_papers INTEGER DEFAULT 1,
-          sort_order INTEGER DEFAULT 0,
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-      `).run();
-      
-      await db.prepare(`
-        CREATE TABLE IF NOT EXISTS papers (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          subject_id INTEGER NOT NULL,
-          name TEXT NOT NULL,
-          sort_order INTEGER DEFAULT 0,
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-      `).run();
-      
-      await db.prepare(`
-        CREATE TABLE IF NOT EXISTS chapters (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          paper_id INTEGER NOT NULL,
-          title TEXT NOT NULL,
-          sort_order INTEGER DEFAULT 0,
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-      `).run();
-      
-      await db.prepare(`
-        CREATE TABLE IF NOT EXISTS lectures (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          chapter_id INTEGER NOT NULL,
-          title TEXT NOT NULL,
-          yt_video_id TEXT NOT NULL,
-          sort_order INTEGER DEFAULT 0,
-          description TEXT DEFAULT '',
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-          updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-      `).run();
-      
-      await db.prepare(`
-        CREATE TABLE IF NOT EXISTS lecture_pdfs (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          lecture_id INTEGER NOT NULL,
-          title TEXT NOT NULL,
-          pdf_url TEXT NOT NULL,
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-      `).run();
-      
-      await db.prepare(`
-        CREATE TABLE IF NOT EXISTS resources (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          course_id INTEGER NOT NULL,
-          title TEXT NOT NULL,
-          pdf_url TEXT NOT NULL,
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-      `).run();
-      
-      await db.prepare(`
-        CREATE TABLE IF NOT EXISTS users (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          name TEXT NOT NULL,
-          email TEXT UNIQUE NOT NULL,
-          password TEXT NOT NULL,
-          role TEXT DEFAULT 'user',
-          is_approved INTEGER DEFAULT 0,
-          is_blocked INTEGER DEFAULT 0,
-          restriction_override INTEGER DEFAULT 0,
-          phone TEXT,
-          institution TEXT,
-          name_last_changed DATETIME,
-          email_last_changed DATETIME,
-          password_last_changed DATETIME,
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-      `).run();
-      
-      await db.prepare(`
-        CREATE TABLE IF NOT EXISTS memberships (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          user_id INTEGER NOT NULL,
-          course_id INTEGER NOT NULL,
-          expires_at DATETIME NOT NULL,
-          is_active INTEGER DEFAULT 1,
-          granted_by INTEGER,
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-          UNIQUE(user_id, course_id)
-        )
-      `).run();
-      
-      await db.prepare(`
-        CREATE TABLE IF NOT EXISTS enrollment_requests (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          user_id INTEGER NOT NULL,
-          course_id INTEGER NOT NULL,
-          status TEXT DEFAULT 'pending',
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-          UNIQUE(user_id, course_id)
-        )
-      `).run();
-      
-      await db.prepare(`
-        CREATE TABLE IF NOT EXISTS notifications (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          title TEXT NOT NULL,
-          message TEXT,
-          type TEXT DEFAULT 'info',
-          target_type TEXT DEFAULT 'all',
-          target_id INTEGER,
-          action_url TEXT,
-          is_active INTEGER DEFAULT 1,
-          scheduled_at DATETIME,
-          expires_at DATETIME,
-          created_by INTEGER,
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-      `).run();
-      
-      await db.prepare(`
-        CREATE TABLE IF NOT EXISTS notification_reads (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          notification_id INTEGER NOT NULL,
-          user_id INTEGER NOT NULL,
-          read_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-          UNIQUE(notification_id, user_id)
-        )
-      `).run();
-      
-      await db.prepare(`
-        CREATE TABLE IF NOT EXISTS support_tickets (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          name TEXT NOT NULL,
-          email TEXT NOT NULL,
-          subject TEXT,
-          message TEXT NOT NULL,
-          status TEXT DEFAULT 'open',
-          user_id INTEGER,
-          resolved_at DATETIME,
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-      `).run();
-      
-      await db.prepare(`
-        CREATE TABLE IF NOT EXISTS updates (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          version TEXT,
-          title TEXT NOT NULL,
-          type TEXT DEFAULT 'feature',
-          changelog TEXT,
-          show_popup INTEGER DEFAULT 1,
-          dismissible INTEGER DEFAULT 1,
-          status TEXT DEFAULT 'draft',
-          release_date DATETIME,
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-          updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        )
-      `).run();
-      
-      await db.prepare(`
-        CREATE TABLE IF NOT EXISTS update_seen (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          update_id INTEGER NOT NULL,
-          user_id INTEGER NOT NULL,
-          seen_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-          UNIQUE(update_id, user_id)
-        )
-      `).run();
-      
-      // Add missing columns to existing tables (for old databases)
-      try {
-        await db.prepare(`ALTER TABLE courses ADD COLUMN show_in_browse INTEGER DEFAULT 0`).run();
-      } catch (e) {
-        // Column already exists, ignore
-      }
-      
-      try {
-        await db.prepare(`ALTER TABLE courses ADD COLUMN subject_area TEXT`).run();
-      } catch (e) {
-        // Column already exists, ignore
-      }
-      
-      try {
-        await db.prepare(`ALTER TABLE courses ADD COLUMN difficulty_level TEXT`).run();
-      } catch (e) {
-        // Column already exists, ignore
-      }
-      
-      try {
-        await db.prepare(`ALTER TABLE courses ADD COLUMN enrollment_type TEXT DEFAULT 'open'`).run();
-      } catch (e) {
-        // Column already exists, ignore
-      }
-      
-      try {
-        await db.prepare(`ALTER TABLE courses ADD COLUMN updated_at DATETIME DEFAULT CURRENT_TIMESTAMP`).run();
-      } catch (e) {
-        // Column already exists, ignore
-      }
-      
-      try {
-        await db.prepare(`ALTER TABLE users ADD COLUMN phone TEXT`).run();
-      } catch (e) {
-        // Column already exists, ignore
-      }
-      
-      try {
-        await db.prepare(`ALTER TABLE users ADD COLUMN institution TEXT`).run();
-      } catch (e) {
-        // Column already exists, ignore
-      }
-      
-      try {
-        await db.prepare(`ALTER TABLE users ADD COLUMN name_last_changed DATETIME`).run();
-      } catch (e) {
-        // Column already exists, ignore
-      }
-      
-      try {
-        await db.prepare(`ALTER TABLE users ADD COLUMN email_last_changed DATETIME`).run();
-      } catch (e) {
-        // Column already exists, ignore
-      }
-      
-      try {
-        await db.prepare(`ALTER TABLE users ADD COLUMN password_last_changed DATETIME`).run();
-      } catch (e) {
-        // Column already exists, ignore
-      }
-      
-      try {
-        await db.prepare(`ALTER TABLE users ADD COLUMN restriction_override INTEGER DEFAULT 0`).run();
-      } catch (e) {
-        // Column already exists, ignore
-      }
-      
-      try {
-        await db.prepare(`ALTER TABLE notifications ADD COLUMN target_id INTEGER`).run();
-      } catch (e) {
-        // Column already exists, ignore
-      }
-      
-      try {
-        await db.prepare(`ALTER TABLE notifications ADD COLUMN action_url TEXT`).run();
-      } catch (e) {
-        // Column already exists, ignore
-      }
-      
-      try {
-        await db.prepare(`ALTER TABLE notifications ADD COLUMN scheduled_at DATETIME`).run();
-      } catch (e) {
-        // Column already exists, ignore
-      }
-      
-      try {
-        await db.prepare(`ALTER TABLE notifications ADD COLUMN expires_at DATETIME`).run();
-      } catch (e) {
-        // Column already exists, ignore
-      }
-      
-      try {
-        await db.prepare(`ALTER TABLE notifications ADD COLUMN created_by INTEGER`).run();
-      } catch (e) {
-        // Column already exists, ignore
-      }
-      
-      // Create default admin user
-      try {
-        await db.prepare(`
-          INSERT OR IGNORE INTO users (name, email, password, role, is_approved)
-          VALUES ('Admin', 'cnct.nx@gmail.com', 'admin123_hashed', 'admin', 1)
-        `).run();
-      } catch (e) {
-        console.error('Admin user creation error:', e.message);
-      }
-      
-      console.log('Database migration complete');
-      globalThis.__abhyudoy_migrated = true;
-      
-    } catch (error) {
-      console.error('Migration error:', error.message);
-    }
-  }
-  
-  // ==========================================
-  // AUTH ROUTES
-  // ==========================================
-  
-  // POST /api/auth/login
-  if (path === '/api/auth/login' && request.method === 'POST') {
-    const { email, password } = body;
-    
-    // Simple login for testing
-    if (email === 'cnct.nx@gmail.com' && password === 'admin123') {
-      return sendJSON({
-        token: 'abhyudoy_admin_token_2024',
-        user: {
-          id: 1,
-          name: 'Admin',
-          email: 'cnct.nx@gmail.com',
-          role: 'admin'
-        }
-      });
-    }
-    
-    // If database exists, check credentials
-    if (db) {
-      try {
-        const user = await db.prepare(
-          'SELECT * FROM users WHERE email = ? AND is_approved = 1 AND is_blocked = 0'
-        ).bind(email.toLowerCase().trim()).first();
-        
-        if (user) {
-          return sendJSON({
-            token: 'abhyudoy_token_' + user.id + '_' + Date.now(),
-            user: {
-              id: user.id,
-              name: user.name,
-              email: user.email,
-              role: user.role
-            }
-          });
-        }
-      } catch (e) {
-        console.error('Login error:', e.message);
-      }
-    }
-    
-    return sendError('Invalid email or password', 401);
-  }
-  
-  // POST /api/auth/signup
-  if (path === '/api/auth/signup' && request.method === 'POST') {
+}
+
+// ─────────────────────────────────────────────
+// AUTH
+// ─────────────────────────────────────────────
+async function handleAuth(method, path, body, db) {
+  if (method === 'POST' && path === '/signup') {
     const { name, email, password, device_fingerprint } = body;
-    
-    if (!name || !email || !password) {
-      return sendError('All fields are required');
-    }
-    
-    if (password.length < 6) {
-      return sendError('Password must be at least 6 characters');
-    }
-    
-    if (!db) {
-      return sendJSON({ message: 'Account created! Awaiting approval.' }, 201);
-    }
-    
-    try {
-      // Check if email already exists
+    if (!name || !email || !password) return err('All fields required');
+    if (password.length < 6) return err('Password must be 6+ characters');
+    if (device_fingerprint) {
       const existing = await db.prepare(
-        'SELECT id FROM users WHERE email = ?'
-      ).bind(email.toLowerCase().trim()).first();
-      
-      if (existing) {
-        return sendError('Email already registered');
-      }
-      
-      // Check device fingerprint
-      if (device_fingerprint) {
-        const deviceExists = await db.prepare(
-          'SELECT COUNT(*) as count FROM device_registrations WHERE device_fingerprint = ?'
-        ).bind(device_fingerprint).first();
-        
-        if (deviceExists && deviceExists.count > 0) {
-          return sendError('An account already exists on this device', 403);
-        }
-      }
-      
-      // Create user
+        'SELECT COUNT(*) as cnt FROM device_registrations WHERE device_fingerprint = ?'
+      ).bind(device_fingerprint).first();
+      if (existing.cnt > 0) return err('An account already exists on this device', 403);
+    }
+    const hashed = await sha256(password);
+    try {
       const result = await db.prepare(
         'INSERT INTO users (name, email, password) VALUES (?, ?, ?)'
-      ).bind(name.trim(), email.toLowerCase().trim(), password).run();
-      
-      // Save device fingerprint
+      ).bind(name.trim(), email.toLowerCase().trim(), hashed).run();
       if (device_fingerprint) {
         await db.prepare(
           'INSERT INTO device_registrations (device_fingerprint, user_id) VALUES (?, ?)'
         ).bind(device_fingerprint, result.meta.last_row_id).run();
       }
-      
-      return sendJSON({ message: 'Account created! Awaiting admin approval.' }, 201);
-      
+      return json({ message: 'Account created! Awaiting admin approval.' }, 201);
     } catch (e) {
-      console.error('Signup error:', e.message);
-      return sendError('Signup failed. Please try again.');
+      if (e.message?.includes('UNIQUE')) return err('Email already registered');
+      return err('Signup failed');
     }
   }
-  
-  // ==========================================
-  // CONTACT ROUTE (Public)
-  // ==========================================
-  
-  if (path === '/api/contact' && request.method === 'POST') {
+
+  if (method === 'POST' && path === '/login') {
+    const { email, password } = body;
+    if (!email || !password) return err('Email and password required');
+    const hashed = await sha256(password);
+    const user = await db.prepare(
+      'SELECT * FROM users WHERE email = ? AND password = ?'
+    ).bind(email.toLowerCase().trim(), hashed).first();
+    if (!user) return err('Invalid email or password', 401);
+    if (user.is_blocked) return err('Your account has been suspended. Contact support.', 403);
+    if (!user.is_approved) return err('Your account is pending admin approval.', 403);
+    const token = await signToken({
+      id: user.id, email: user.email, role: user.role,
+      exp: Date.now() + 30 * 24 * 60 * 60 * 1000
+    });
+    return json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role } });
+  }
+
+  return err('Auth route not found', 404);
+}
+
+// ─────────────────────────────────────────────
+// CONTACT
+// ─────────────────────────────────────────────
+async function handleContact(method, path, body, db, user) {
+  if (method === 'POST' && path === '/contact') {
     const { name, email, subject, message } = body;
-    
-    if (!name || !email || !message) {
-      return sendError('Name, email, and message are required');
-    }
-    
-    if (db) {
-      try {
-        await db.prepare(
-          'INSERT INTO support_tickets (name, email, subject, message) VALUES (?, ?, ?, ?)'
-        ).bind(name, email, subject || 'General Inquiry', message).run();
-      } catch (e) {
-        console.error('Contact error:', e.message);
-      }
-    }
-    
-    return sendJSON({ message: 'Message received! We will respond within 24 hours.' }, 201);
+    if (!name || !email || !message) return err('Name, email and message required');
+    await db.prepare(
+      'INSERT INTO support_tickets (name, email, subject, message, user_id) VALUES (?, ?, ?, ?, ?)'
+    ).bind(name, email, subject || 'General Inquiry', message, user?.id || null).run();
+    return json({ message: 'Message received. We will respond within 24 hours.' }, 201);
   }
-  
-  // ==========================================
-  // ADMIN ROUTES
-  // ==========================================
-  
-  if (path.startsWith('/api/admin/')) {
-    
-    // ──────────────────────────────────────
-    // COURSES
-    // ──────────────────────────────────────
-    
-    // GET /api/admin/courses
-    if (path === '/api/admin/courses' && request.method === 'GET') {
-      if (!db) {
-        return sendJSON([]);
-      }
-      
-      try {
-        const result = await db.prepare(
-          'SELECT * FROM courses ORDER BY id DESC'
-        ).all();
-        
-        return sendJSON(result.results || []);
-      } catch (e) {
-        console.error('Get courses error:', e.message);
-        return sendJSON([]);
-      }
-    }
-    
-    // POST /api/admin/courses
-    if (path === '/api/admin/courses' && request.method === 'POST') {
-      const { title, description, thumbnail, is_active, show_in_browse, subject_area, difficulty_level, enrollment_type } = body;
-      
-      if (!title) {
-        return sendError('Title is required');
-      }
-      
-      if (!db) {
-        return sendJSON({ id: Date.now(), message: 'Course created (test mode)' }, 201);
-      }
-      
-      try {
-        const result = await db.prepare(`
-          INSERT INTO courses (title, description, thumbnail, is_active, show_in_browse, subject_area, difficulty_level, enrollment_type)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        `).bind(
-          title,
-          description || '',
-          thumbnail || null,
-          is_active !== undefined ? is_active : 1,
-          show_in_browse ? 1 : 0,
-          subject_area || null,
-          difficulty_level || null,
-          enrollment_type || 'open'
-        ).run();
-        
-        return sendJSON({
-          id: result.meta.last_row_id,
-          message: 'Course created successfully'
-        }, 201);
-        
-      } catch (e) {
-        console.error('Create course error:', e.message);
-        return sendError('Failed to create course: ' + e.message, 500);
-      }
-    }
-    
-    // PUT /api/admin/courses/:id
-    if (request.method === 'PUT' && path.match(/^\/api\/admin\/courses\/\d+$/)) {
-      const courseId = parseInt(path.split('/')[4]);
-      const { title, description, thumbnail, is_active, show_in_browse, subject_area, difficulty_level, enrollment_type } = body;
-      
-      if (!db) {
-        return sendJSON({ message: 'Course updated (test mode)' });
-      }
-      
-      try {
-        const updates = [];
-        const values = [];
-        
-        if (title !== undefined) {
-          updates.push('title = ?');
-          values.push(title);
-        }
-        if (description !== undefined) {
-          updates.push('description = ?');
-          values.push(description);
-        }
-        if (thumbnail !== undefined) {
-          updates.push('thumbnail = ?');
-          values.push(thumbnail);
-        }
-        if (is_active !== undefined) {
-          updates.push('is_active = ?');
-          values.push(is_active);
-        }
-        if (show_in_browse !== undefined) {
-          updates.push('show_in_browse = ?');
-          values.push(show_in_browse ? 1 : 0);
-        }
-        if (subject_area !== undefined) {
-          updates.push('subject_area = ?');
-          values.push(subject_area);
-        }
-        if (difficulty_level !== undefined) {
-          updates.push('difficulty_level = ?');
-          values.push(difficulty_level);
-        }
-        if (enrollment_type !== undefined) {
-          updates.push('enrollment_type = ?');
-          values.push(enrollment_type);
-        }
-        
-        if (updates.length > 0) {
-          updates.push('updated_at = CURRENT_TIMESTAMP');
-          values.push(courseId);
-          
-          await db.prepare(
-            `UPDATE courses SET ${updates.join(', ')} WHERE id = ?`
-          ).bind(...values).run();
-        }
-        
-        return sendJSON({ message: 'Course updated successfully' });
-        
-      } catch (e) {
-        console.error('Update course error:', e.message);
-        return sendError('Failed to update course: ' + e.message, 500);
-      }
-    }
-    
-    // DELETE /api/admin/courses/:id
-    if (request.method === 'DELETE' && path.match(/^\/api\/admin\/courses\/\d+$/)) {
-      const courseId = parseInt(path.split('/')[4]);
-      
-      if (db) {
-        try {
-          // Delete related records
-          await db.prepare('DELETE FROM memberships WHERE course_id = ?').bind(courseId).run();
-          await db.prepare('DELETE FROM enrollment_requests WHERE course_id = ?').bind(courseId).run();
-          await db.prepare('DELETE FROM resources WHERE course_id = ?').bind(courseId).run();
-          
-          // Delete subjects and their children
-          const subjects = await db.prepare('SELECT id FROM subjects WHERE course_id = ?').bind(courseId).all();
-          for (const subject of (subjects.results || [])) {
-            const papers = await db.prepare('SELECT id FROM papers WHERE subject_id = ?').bind(subject.id).all();
-            for (const paper of (papers.results || [])) {
-              const chapters = await db.prepare('SELECT id FROM chapters WHERE paper_id = ?').bind(paper.id).all();
-              for (const chapter of (chapters.results || [])) {
-                await db.prepare('DELETE FROM lecture_pdfs WHERE lecture_id IN (SELECT id FROM lectures WHERE chapter_id = ?)').bind(chapter.id).run();
-                await db.prepare('DELETE FROM lectures WHERE chapter_id = ?').bind(chapter.id).run();
-              }
-              await db.prepare('DELETE FROM chapters WHERE paper_id = ?').bind(paper.id).run();
-            }
-            await db.prepare('DELETE FROM papers WHERE subject_id = ?').bind(subject.id).run();
-          }
-          await db.prepare('DELETE FROM subjects WHERE course_id = ?').bind(courseId).run();
-          
-          // Delete course
-          await db.prepare('DELETE FROM courses WHERE id = ?').bind(courseId).run();
-        } catch (e) {
-          console.error('Delete course error:', e.message);
-          return sendError('Failed to delete course: ' + e.message, 500);
-        }
-      }
-      
-      return sendJSON({ message: 'Course deleted successfully' });
-    }
-    
-    // ──────────────────────────────────────
-    // SUBJECTS
-    // ──────────────────────────────────────
-    
-    // GET /api/admin/all-subjects
-    if (path === '/api/admin/all-subjects' && request.method === 'GET') {
-      if (!db) return sendJSON([]);
-      
-      try {
-        const result = await db.prepare('SELECT * FROM subjects ORDER BY course_id ASC, sort_order ASC').all();
-        return sendJSON(result.results || []);
-      } catch (e) {
-        return sendJSON([]);
-      }
-    }
-    
-    // POST /api/admin/subjects
-    if (path === '/api/admin/subjects' && request.method === 'POST') {
-      const { course_id, name, has_papers } = body;
-      
-      if (!course_id || !name) {
-        return sendError('Course ID and name are required');
-      }
-      
-      if (!db) {
-        return sendJSON({ id: Date.now(), message: 'Subject created (test mode)' }, 201);
-      }
-      
-      try {
-        const result = await db.prepare(
-          'INSERT INTO subjects (course_id, name, has_papers) VALUES (?, ?, ?)'
-        ).bind(course_id, name, has_papers !== undefined ? has_papers : 1).run();
-        
-        // If no papers, create a default paper
-        if (!has_papers || has_papers === 0) {
-          await db.prepare(
-            'INSERT INTO papers (subject_id, name, sort_order) VALUES (?, ?, 0)'
-          ).bind(result.meta.last_row_id, 'Full Course').run();
-        }
-        
-        return sendJSON({ id: result.meta.last_row_id, message: 'Subject created' }, 201);
-      } catch (e) {
-        return sendError('Failed to create subject: ' + e.message, 500);
-      }
-    }
-    
-    // DELETE /api/admin/subjects/:id
-    if (request.method === 'DELETE' && path.match(/^\/api\/admin\/subjects\/\d+$/)) {
-      const subjectId = parseInt(path.split('/')[4]);
-      
-      if (db) {
-        try {
-          const papers = await db.prepare('SELECT id FROM papers WHERE subject_id = ?').bind(subjectId).all();
-          for (const paper of (papers.results || [])) {
-            const chapters = await db.prepare('SELECT id FROM chapters WHERE paper_id = ?').bind(paper.id).all();
-            for (const chapter of (chapters.results || [])) {
-              await db.prepare('DELETE FROM lecture_pdfs WHERE lecture_id IN (SELECT id FROM lectures WHERE chapter_id = ?)').bind(chapter.id).run();
-              await db.prepare('DELETE FROM lectures WHERE chapter_id = ?').bind(chapter.id).run();
-            }
-            await db.prepare('DELETE FROM chapters WHERE paper_id = ?').bind(paper.id).run();
-          }
-          await db.prepare('DELETE FROM papers WHERE subject_id = ?').bind(subjectId).run();
-          await db.prepare('DELETE FROM subjects WHERE id = ?').bind(subjectId).run();
-        } catch (e) {
-          return sendError('Failed to delete subject: ' + e.message, 500);
-        }
-      }
-      
-      return sendJSON({ message: 'Subject deleted' });
-    }
-    
-    // ──────────────────────────────────────
-    // PAPERS
-    // ──────────────────────────────────────
-    
-    // GET /api/admin/all-papers
-    if (path === '/api/admin/all-papers' && request.method === 'GET') {
-      if (!db) return sendJSON([]);
-      
-      try {
-        const result = await db.prepare('SELECT * FROM papers ORDER BY subject_id ASC, sort_order ASC').all();
-        return sendJSON(result.results || []);
-      } catch (e) {
-        return sendJSON([]);
-      }
-    }
-    
-    // POST /api/admin/papers
-    if (path === '/api/admin/papers' && request.method === 'POST') {
-      const { subject_id, name } = body;
-      
-      if (!subject_id || !name) {
-        return sendError('Subject ID and name are required');
-      }
-      
-      if (!db) {
-        return sendJSON({ id: Date.now(), message: 'Paper created (test mode)' }, 201);
-      }
-      
-      try {
-        const result = await db.prepare(
-          'INSERT INTO papers (subject_id, name) VALUES (?, ?)'
-        ).bind(subject_id, name).run();
-        
-        return sendJSON({ id: result.meta.last_row_id, message: 'Paper created' }, 201);
-      } catch (e) {
-        return sendError('Failed to create paper: ' + e.message, 500);
-      }
-    }
-    
-    // DELETE /api/admin/papers/:id
-    if (request.method === 'DELETE' && path.match(/^\/api\/admin\/papers\/\d+$/)) {
-      const paperId = parseInt(path.split('/')[4]);
-      
-      if (db) {
-        try {
-          const chapters = await db.prepare('SELECT id FROM chapters WHERE paper_id = ?').bind(paperId).all();
-          for (const chapter of (chapters.results || [])) {
-            await db.prepare('DELETE FROM lecture_pdfs WHERE lecture_id IN (SELECT id FROM lectures WHERE chapter_id = ?)').bind(chapter.id).run();
-            await db.prepare('DELETE FROM lectures WHERE chapter_id = ?').bind(chapter.id).run();
-          }
-          await db.prepare('DELETE FROM chapters WHERE paper_id = ?').bind(paperId).run();
-          await db.prepare('DELETE FROM papers WHERE id = ?').bind(paperId).run();
-        } catch (e) {
-          return sendError('Failed to delete paper: ' + e.message, 500);
-        }
-      }
-      
-      return sendJSON({ message: 'Paper deleted' });
-    }
-    
-    // ──────────────────────────────────────
-    // CHAPTERS
-    // ──────────────────────────────────────
-    
-    // GET /api/admin/all-chapters
-    if (path === '/api/admin/all-chapters' && request.method === 'GET') {
-      if (!db) return sendJSON([]);
-      
-      try {
-        const result = await db.prepare('SELECT * FROM chapters ORDER BY paper_id ASC, sort_order ASC').all();
-        return sendJSON(result.results || []);
-      } catch (e) {
-        return sendJSON([]);
-      }
-    }
-    
-    // POST /api/admin/chapters
-    if (path === '/api/admin/chapters' && request.method === 'POST') {
-      const { paper_id, title, sort_order } = body;
-      
-      if (!paper_id || !title) {
-        return sendError('Paper ID and title are required');
-      }
-      
-      if (!db) {
-        return sendJSON({ id: Date.now(), message: 'Chapter created (test mode)' }, 201);
-      }
-      
-      try {
-        const result = await db.prepare(
-          'INSERT INTO chapters (paper_id, title, sort_order) VALUES (?, ?, ?)'
-        ).bind(paper_id, title, sort_order || 0).run();
-        
-        return sendJSON({ id: result.meta.last_row_id, message: 'Chapter created' }, 201);
-      } catch (e) {
-        return sendError('Failed to create chapter: ' + e.message, 500);
-      }
-    }
-    
-    // DELETE /api/admin/chapters/:id
-    if (request.method === 'DELETE' && path.match(/^\/api\/admin\/chapters\/\d+$/)) {
-      const chapterId = parseInt(path.split('/')[4]);
-      
-      if (db) {
-        try {
-          await db.prepare('DELETE FROM lecture_pdfs WHERE lecture_id IN (SELECT id FROM lectures WHERE chapter_id = ?)').bind(chapterId).run();
-          await db.prepare('DELETE FROM lectures WHERE chapter_id = ?').bind(chapterId).run();
-          await db.prepare('DELETE FROM chapters WHERE id = ?').bind(chapterId).run();
-        } catch (e) {
-          return sendError('Failed to delete chapter: ' + e.message, 500);
-        }
-      }
-      
-      return sendJSON({ message: 'Chapter deleted' });
-    }
-    
-    // ──────────────────────────────────────
-    // LECTURES
-    // ──────────────────────────────────────
-    
-    // GET /api/admin/all-lectures
-    if (path === '/api/admin/all-lectures' && request.method === 'GET') {
-      if (!db) return sendJSON([]);
-      
-      try {
-        const result = await db.prepare(`
-          SELECT l.*, ch.title as chapter_title, p.name as paper_name, s.name as subject_name, s.course_id
-          FROM lectures l
-          LEFT JOIN chapters ch ON l.chapter_id = ch.id
-          LEFT JOIN papers p ON ch.paper_id = p.id
-          LEFT JOIN subjects s ON p.subject_id = s.id
-          ORDER BY l.created_at DESC
-        `).all();
-        
-        return sendJSON(result.results || []);
-      } catch (e) {
-        return sendJSON([]);
-      }
-    }
-    
-    // POST /api/admin/lectures
-    if (path === '/api/admin/lectures' && request.method === 'POST') {
-      const { chapter_id, title, yt_video_id, sort_order, description } = body;
-      
-      if (!chapter_id || !title || !yt_video_id) {
-        return sendError('Chapter ID, title, and YouTube ID are required');
-      }
-      
-      if (!db) {
-        return sendJSON({ id: Date.now(), message: 'Lecture created (test mode)' }, 201);
-      }
-      
-      try {
-        const result = await db.prepare(
-          'INSERT INTO lectures (chapter_id, title, yt_video_id, sort_order, description) VALUES (?, ?, ?, ?, ?)'
-        ).bind(chapter_id, title, yt_video_id, sort_order || 0, description || '').run();
-        
-        return sendJSON({ id: result.meta.last_row_id, message: 'Lecture created' }, 201);
-      } catch (e) {
-        return sendError('Failed to create lecture: ' + e.message, 500);
-      }
-    }
-    
-    // PUT /api/admin/lectures/:id
-    if (request.method === 'PUT' && path.match(/^\/api\/admin\/lectures\/\d+$/)) {
-      const lectureId = parseInt(path.split('/')[4]);
-      const { title, yt_video_id, sort_order, description } = body;
-      
-      if (!db) return sendJSON({ message: 'Lecture updated (test mode)' });
-      
-      try {
-        const updates = [];
-        const values = [];
-        
-        if (title !== undefined) { updates.push('title = ?'); values.push(title); }
-        if (yt_video_id !== undefined) { updates.push('yt_video_id = ?'); values.push(yt_video_id); }
-        if (sort_order !== undefined) { updates.push('sort_order = ?'); values.push(sort_order); }
-        if (description !== undefined) { updates.push('description = ?'); values.push(description); }
-        
-        if (updates.length > 0) {
-          updates.push('updated_at = CURRENT_TIMESTAMP');
-          values.push(lectureId);
-          await db.prepare(`UPDATE lectures SET ${updates.join(', ')} WHERE id = ?`).bind(...values).run();
-        }
-        
-        return sendJSON({ message: 'Lecture updated' });
-      } catch (e) {
-        return sendError('Failed to update lecture: ' + e.message, 500);
-      }
-    }
-    
-    // DELETE /api/admin/lectures/:id
-    if (request.method === 'DELETE' && path.match(/^\/api\/admin\/lectures\/\d+$/)) {
-      const lectureId = parseInt(path.split('/')[4]);
-      
-      if (db) {
-        try {
-          await db.prepare('DELETE FROM lecture_pdfs WHERE lecture_id = ?').bind(lectureId).run();
-          await db.prepare('DELETE FROM lectures WHERE id = ?').bind(lectureId).run();
-        } catch (e) {
-          return sendError('Failed to delete lecture: ' + e.message, 500);
-        }
-      }
-      
-      return sendJSON({ message: 'Lecture deleted' });
-    }
-    
-    // ──────────────────────────────────────
-    // USERS
-    // ──────────────────────────────────────
-    
-    // GET /api/admin/users
-    if (path === '/api/admin/users' && request.method === 'GET') {
-      if (!db) {
-        return sendJSON([{
-          id: 1,
-          name: 'Admin',
-          email: 'cnct.nx@gmail.com',
-          role: 'admin',
-          is_approved: 1,
-          is_blocked: 0,
-          restriction_override: 0,
-          created_at: new Date().toISOString()
-        }]);
-      }
-      
-      try {
-        const result = await db.prepare(
-          'SELECT id, name, email, role, is_blocked, is_approved, restriction_override, created_at FROM users ORDER BY created_at DESC'
-        ).all();
-        
-        return sendJSON(result.results || []);
-      } catch (e) {
-        return sendJSON([]);
-      }
-    }
-    
-    // PUT /api/admin/users/:id/approve
-    if (request.method === 'PUT' && path.match(/^\/api\/admin\/users\/\d+\/approve$/)) {
-      const userId = parseInt(path.split('/')[4]);
-      
-      if (db) {
-        try {
-          await db.prepare('UPDATE users SET is_approved = 1 WHERE id = ?').bind(userId).run();
-        } catch (e) {
-          return sendError('Failed to approve user: ' + e.message, 500);
-        }
-      }
-      
-      return sendJSON({ message: 'User approved' });
-    }
-    
-    // PUT /api/admin/users/:id/block
-    if (request.method === 'PUT' && path.match(/^\/api\/admin\/users\/\d+\/block$/)) {
-      const userId = parseInt(path.split('/')[4]);
-      const { is_blocked } = body;
-      
-      if (db) {
-        try {
-          await db.prepare('UPDATE users SET is_blocked = ? WHERE id = ?')
-            .bind(is_blocked ? 1 : 0, userId).run();
-        } catch (e) {
-          return sendError('Failed to update user: ' + e.message, 500);
-        }
-      }
-      
-      return sendJSON({ message: is_blocked ? 'User blocked' : 'User unblocked' });
-    }
-    
-    // PUT /api/admin/users/:id/override-restriction
-    if (request.method === 'PUT' && path.match(/^\/api\/admin\/users\/\d+\/override-restriction$/)) {
-      const userId = parseInt(path.split('/')[4]);
-      const { override } = body;
-      
-      if (db) {
-        try {
-          await db.prepare('UPDATE users SET restriction_override = ? WHERE id = ?')
-            .bind(override ? 1 : 0, userId).run();
-        } catch (e) {
-          return sendError('Failed to update restriction: ' + e.message, 500);
-        }
-      }
-      
-      return sendJSON({ message: override ? 'Restriction override enabled' : 'Restriction override disabled' });
-    }
-    
-    // DELETE /api/admin/users/:id
-    if (request.method === 'DELETE' && path.match(/^\/api\/admin\/users\/\d+$/)) {
-      const userId = parseInt(path.split('/')[4]);
-      
-      if (db) {
-        try {
-          await db.prepare('DELETE FROM memberships WHERE user_id = ?').bind(userId).run();
-          await db.prepare('DELETE FROM device_registrations WHERE user_id = ?').bind(userId).run();
-          await db.prepare('DELETE FROM notification_reads WHERE user_id = ?').bind(userId).run();
-          await db.prepare('DELETE FROM enrollment_requests WHERE user_id = ?').bind(userId).run();
-          await db.prepare("DELETE FROM users WHERE id = ? AND role != 'admin'").bind(userId).run();
-        } catch (e) {
-          return sendError('Failed to delete user: ' + e.message, 500);
-        }
-      }
-      
-      return sendJSON({ message: 'User deleted' });
-    }
-    
-    // ──────────────────────────────────────
-    // MEMBERSHIPS
-    // ──────────────────────────────────────
-    
-    // GET /api/admin/memberships
-    if (path === '/api/admin/memberships' && request.method === 'GET') {
-      if (!db) return sendJSON([]);
-      
-      try {
-        const result = await db.prepare(`
-          SELECT m.*, u.name as user_name, u.email as user_email, c.title as course_title
-          FROM memberships m
-          LEFT JOIN users u ON m.user_id = u.id
-          LEFT JOIN courses c ON m.course_id = c.id
-          ORDER BY m.created_at DESC
-        `).all();
-        
-        return sendJSON(result.results || []);
-      } catch (e) {
-        return sendJSON([]);
-      }
-    }
-    
-    // POST /api/admin/memberships
-    if (path === '/api/admin/memberships' && request.method === 'POST') {
-      const { user_id, course_id, days } = body;
-      
-      if (!user_id || !course_id || !days) {
-        return sendError('User ID, course ID, and days are required');
-      }
-      
-      if (!db) {
-        const expires_at = new Date(Date.now() + days * 86400000).toISOString();
-        return sendJSON({ message: 'Membership granted (test mode)', expires_at: expires_at }, 201);
-      }
-      
-      try {
-        const expires_at = new Date(Date.now() + days * 86400000).toISOString();
-        
-        await db.prepare(
-          'INSERT OR REPLACE INTO memberships (user_id, course_id, expires_at, is_active) VALUES (?, ?, ?, 1)'
-        ).bind(user_id, course_id, expires_at).run();
-        
-        return sendJSON({ message: 'Membership granted', expires_at: expires_at }, 201);
-      } catch (e) {
-        return sendError('Failed to grant membership: ' + e.message, 500);
-      }
-    }
-    
-    // PUT /api/admin/memberships/:id/extend
-    if (request.method === 'PUT' && path.match(/^\/api\/admin\/memberships\/\d+\/extend$/)) {
-      const membershipId = parseInt(path.split('/')[4]);
-      const { days } = body;
-      
-      if (!days) return sendError('Days is required');
-      
-      if (db) {
-        try {
-          await db.prepare(
-            `UPDATE memberships SET expires_at = datetime(expires_at, '+' || ? || ' days'), is_active = 1 WHERE id = ?`
-          ).bind(days, membershipId).run();
-        } catch (e) {
-          return sendError('Failed to extend membership: ' + e.message, 500);
-        }
-      }
-      
-      return sendJSON({ message: 'Membership extended' });
-    }
-    
-    // PUT /api/admin/memberships/:id/cancel
-    if (request.method === 'PUT' && path.match(/^\/api\/admin\/memberships\/\d+\/cancel$/)) {
-      const membershipId = parseInt(path.split('/')[4]);
-      
-      if (db) {
-        try {
-          await db.prepare('UPDATE memberships SET is_active = 0 WHERE id = ?').bind(membershipId).run();
-        } catch (e) {
-          return sendError('Failed to cancel membership: ' + e.message, 500);
-        }
-      }
-      
-      return sendJSON({ message: 'Membership cancelled' });
-    }
-    
-    // ──────────────────────────────────────
-    // ENROLLMENT REQUESTS
-    // ──────────────────────────────────────
-    
-    // GET /api/admin/enrollment-requests
-    if (path === '/api/admin/enrollment-requests' && request.method === 'GET') {
-      if (!db) return sendJSON([]);
-      
-      try {
-        const result = await db.prepare(`
-          SELECT er.*, u.name as user_name, u.email as user_email, c.title as course_title
-          FROM enrollment_requests er
-          LEFT JOIN users u ON er.user_id = u.id
-          LEFT JOIN courses c ON er.course_id = c.id
-          ORDER BY er.created_at DESC
-        `).all();
-        
-        return sendJSON(result.results || []);
-      } catch (e) {
-        return sendJSON([]);
-      }
-    }
-    
-    // PUT /api/admin/enrollment-requests/:id/approve
-    if (request.method === 'PUT' && path.match(/^\/api\/admin\/enrollment-requests\/\d+\/approve$/)) {
-      const requestId = parseInt(path.split('/')[4]);
-      
-      if (db) {
-        try {
-          const enrollmentRequest = await db.prepare(
-            'SELECT * FROM enrollment_requests WHERE id = ?'
-          ).bind(requestId).first();
-          
-          if (enrollmentRequest) {
-            const expires_at = new Date(Date.now() + 365 * 86400000).toISOString();
-            
-            await db.prepare(
-              'INSERT OR REPLACE INTO memberships (user_id, course_id, expires_at, is_active) VALUES (?, ?, ?, 1)'
-            ).bind(enrollmentRequest.user_id, enrollmentRequest.course_id, expires_at).run();
-            
-            await db.prepare(
-              "UPDATE enrollment_requests SET status = 'approved' WHERE id = ?"
-            ).bind(requestId).run();
-          }
-        } catch (e) {
-          return sendError('Failed to approve enrollment: ' + e.message, 500);
-        }
-      }
-      
-      return sendJSON({ message: 'Enrollment approved' });
-    }
-    
-    // PUT /api/admin/enrollment-requests/:id/reject
-    if (request.method === 'PUT' && path.match(/^\/api\/admin\/enrollment-requests\/\d+\/reject$/)) {
-      const requestId = parseInt(path.split('/')[4]);
-      
-      if (db) {
-        try {
-          await db.prepare(
-            "UPDATE enrollment_requests SET status = 'rejected' WHERE id = ?"
-          ).bind(requestId).run();
-        } catch (e) {
-          return sendError('Failed to reject enrollment: ' + e.message, 500);
-        }
-      }
-      
-      return sendJSON({ message: 'Enrollment rejected' });
-    }
-    
-    // ──────────────────────────────────────
-    // NOTIFICATIONS
-    // ──────────────────────────────────────
-    
-    // GET /api/admin/notifications
-    if (path === '/api/admin/notifications' && request.method === 'GET') {
-      if (!db) return sendJSON([]);
-      
-      try {
-        const result = await db.prepare('SELECT * FROM notifications ORDER BY created_at DESC').all();
-        return sendJSON(result.results || []);
-      } catch (e) {
-        return sendJSON([]);
-      }
-    }
-    
-    // POST /api/admin/notifications
-    if (path === '/api/admin/notifications' && request.method === 'POST') {
-      const { title, message, type, target_type, action_url, expires_at, is_active } = body;
-      
-      if (!title) return sendError('Title is required');
-      
-      if (!db) return sendJSON({ id: Date.now(), message: 'Notification created (test mode)' }, 201);
-      
-      try {
-        const result = await db.prepare(
-          'INSERT INTO notifications (title, message, type, target_type, action_url, expires_at, is_active) VALUES (?, ?, ?, ?, ?, ?, ?)'
-        ).bind(
-          title,
-          message || '',
-          type || 'info',
-          target_type || 'all',
-          action_url || null,
-          expires_at || null,
-          is_active !== undefined ? is_active : 1
-        ).run();
-        
-        return sendJSON({ id: result.meta.last_row_id, message: 'Notification created' }, 201);
-      } catch (e) {
-        return sendError('Failed to create notification: ' + e.message, 500);
-      }
-    }
-    
-    // DELETE /api/admin/notifications/:id
-    if (request.method === 'DELETE' && path.match(/^\/api\/admin\/notifications\/\d+$/)) {
-      const notificationId = parseInt(path.split('/')[4]);
-      
-      if (db) {
-        try {
-          await db.prepare('DELETE FROM notification_reads WHERE notification_id = ?').bind(notificationId).run();
-          await db.prepare('DELETE FROM notifications WHERE id = ?').bind(notificationId).run();
-        } catch (e) {
-          return sendError('Failed to delete notification: ' + e.message, 500);
-        }
-      }
-      
-      return sendJSON({ message: 'Notification deleted' });
-    }
-    
-    // ──────────────────────────────────────
-    // SUPPORT TICKETS
-    // ──────────────────────────────────────
-    
-    // GET /api/admin/support-tickets
-    if (path === '/api/admin/support-tickets' && request.method === 'GET') {
-      if (!db) return sendJSON([]);
-      
-      try {
-        const result = await db.prepare('SELECT * FROM support_tickets ORDER BY created_at DESC').all();
-        return sendJSON(result.results || []);
-      } catch (e) {
-        return sendJSON([]);
-      }
-    }
-    
-    // PUT /api/admin/support-tickets/:id/resolve
-    if (request.method === 'PUT' && path.match(/^\/api\/admin\/support-tickets\/\d+\/resolve$/)) {
-      const ticketId = parseInt(path.split('/')[4]);
-      
-      if (db) {
-        try {
-          await db.prepare(
-            "UPDATE support_tickets SET status = 'resolved', resolved_at = ? WHERE id = ?"
-          ).bind(new Date().toISOString(), ticketId).run();
-        } catch (e) {
-          return sendError('Failed to resolve ticket: ' + e.message, 500);
-        }
-      }
-      
-      return sendJSON({ message: 'Ticket resolved' });
-    }
-    
-    // ──────────────────────────────────────
-    // UPDATES / CHANGELOG
-    // ──────────────────────────────────────
-    
-    // GET /api/admin/updates
-    if (path === '/api/admin/updates' && request.method === 'GET') {
-      if (!db) return sendJSON([]);
-      
-      try {
-        const result = await db.prepare('SELECT * FROM updates ORDER BY created_at DESC').all();
-        return sendJSON(result.results || []);
-      } catch (e) {
-        return sendJSON([]);
-      }
-    }
-    
-    // POST /api/admin/updates
-    if (path === '/api/admin/updates' && request.method === 'POST') {
-      const { version, title, type, changelog, show_popup, dismissible, status, release_date } = body;
-      
-      if (!title) return sendError('Title is required');
-      
-      if (!db) return sendJSON({ id: Date.now(), message: 'Update created (test mode)' }, 201);
-      
-      try {
-        const result = await db.prepare(
-          'INSERT INTO updates (version, title, type, changelog, show_popup, dismissible, status, release_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
-        ).bind(
-          version || null,
-          title,
-          type || 'feature',
-          changelog || '',
-          show_popup !== undefined ? show_popup : 1,
-          dismissible !== undefined ? dismissible : 1,
-          status || 'draft',
-          release_date || null
-        ).run();
-        
-        return sendJSON({ id: result.meta.last_row_id, message: 'Update created' }, 201);
-      } catch (e) {
-        return sendError('Failed to create update: ' + e.message, 500);
-      }
-    }
-    
-    // PUT /api/admin/updates/:id
-    if (request.method === 'PUT' && path.match(/^\/api\/admin\/updates\/\d+$/)) {
-      const updateId = parseInt(path.split('/')[4]);
-      const { title, status } = body;
-      
-      if (!db) return sendJSON({ message: 'Update saved (test mode)' });
-      
-      try {
-        const updates = [];
-        const values = [];
-        
-        if (title !== undefined) { updates.push('title = ?'); values.push(title); }
-        if (status !== undefined) { updates.push('status = ?'); values.push(status); }
-        
-        if (updates.length > 0) {
-          updates.push('updated_at = CURRENT_TIMESTAMP');
-          values.push(updateId);
-          await db.prepare(`UPDATE updates SET ${updates.join(', ')} WHERE id = ?`).bind(...values).run();
-        }
-        
-        return sendJSON({ message: 'Update saved' });
-      } catch (e) {
-        return sendError('Failed to save update: ' + e.message, 500);
-      }
-    }
-    
-    // DELETE /api/admin/updates/:id
-    if (request.method === 'DELETE' && path.match(/^\/api\/admin\/updates\/\d+$/)) {
-      const updateId = parseInt(path.split('/')[4]);
-      
-      if (db) {
-        try {
-          await db.prepare('DELETE FROM update_seen WHERE update_id = ?').bind(updateId).run();
-          await db.prepare('DELETE FROM updates WHERE id = ?').bind(updateId).run();
-        } catch (e) {
-          return sendError('Failed to delete update: ' + e.message, 500);
-        }
-      }
-      
-      return sendJSON({ message: 'Update deleted' });
-    }
-    
-    // ──────────────────────────────────────
-    // RESOURCES
-    // ──────────────────────────────────────
-    
-    // GET /api/admin/resources/course/:id
-    if (request.method === 'GET' && path.match(/^\/api\/admin\/resources\/course\/\d+$/)) {
-      const courseId = parseInt(path.split('/')[5]);
-      
-      if (!db) return sendJSON([]);
-      
-      try {
-        const result = await db.prepare(
-          'SELECT * FROM resources WHERE course_id = ? ORDER BY created_at DESC'
-        ).bind(courseId).all();
-        
-        return sendJSON(result.results || []);
-      } catch (e) {
-        return sendJSON([]);
-      }
-    }
-    
-    // POST /api/admin/resources
-    if (path === '/api/admin/resources' && request.method === 'POST') {
-      const { course_id, title, pdf_url } = body;
-      
-      if (!course_id || !title || !pdf_url) return sendError('All fields are required');
-      
-      if (!db) return sendJSON({ id: Date.now(), message: 'Resource added (test mode)' }, 201);
-      
-      try {
-        const result = await db.prepare(
-          'INSERT INTO resources (course_id, title, pdf_url) VALUES (?, ?, ?)'
-        ).bind(course_id, title, pdf_url).run();
-        
-        return sendJSON({ id: result.meta.last_row_id, message: 'Resource added' }, 201);
-      } catch (e) {
-        return sendError('Failed to add resource: ' + e.message, 500);
-      }
-    }
-    
-    // DELETE /api/admin/resources/:id
-    if (request.method === 'DELETE' && path.match(/^\/api\/admin\/resources\/\d+$/)) {
-      const resourceId = parseInt(path.split('/')[4]);
-      
-      if (db) {
-        try {
-          await db.prepare('DELETE FROM resources WHERE id = ?').bind(resourceId).run();
-        } catch (e) {
-          return sendError('Failed to delete resource: ' + e.message, 500);
-        }
-      }
-      
-      return sendJSON({ message: 'Resource deleted' });
-    }
-    
-    // ──────────────────────────────────────
-    // LECTURE PDFs
-    // ──────────────────────────────────────
-    
-    // POST /api/admin/lecture-pdfs
-    if (path === '/api/admin/lecture-pdfs' && request.method === 'POST') {
-      const { lecture_id, title, pdf_url } = body;
-      
-      if (!lecture_id || !title || !pdf_url) return sendError('All fields are required');
-      
-      if (!db) return sendJSON({ id: Date.now(), message: 'PDF added (test mode)' }, 201);
-      
-      try {
-        const result = await db.prepare(
-          'INSERT INTO lecture_pdfs (lecture_id, title, pdf_url) VALUES (?, ?, ?)'
-        ).bind(lecture_id, title, pdf_url).run();
-        
-        return sendJSON({ id: result.meta.last_row_id, message: 'PDF added' }, 201);
-      } catch (e) {
-        return sendError('Failed to add PDF: ' + e.message, 500);
-      }
-    }
-    
-    // DELETE /api/admin/lecture-pdfs/:id
-    if (request.method === 'DELETE' && path.match(/^\/api\/admin\/lecture-pdfs\/\d+$/)) {
-      const pdfId = parseInt(path.split('/')[4]);
-      
-      if (db) {
-        try {
-          await db.prepare('DELETE FROM lecture_pdfs WHERE id = ?').bind(pdfId).run();
-        } catch (e) {
-          return sendError('Failed to delete PDF: ' + e.message, 500);
-        }
-      }
-      
-      return sendJSON({ message: 'PDF deleted' });
-    }
+  return err('Not found', 404);
+}
+
+// ─────────────────────────────────────────────
+// USER
+// ─────────────────────────────────────────────
+async function handleUser(method, path, body, db, user) {
+  if (!user) return err('Unauthorized — please sign in', 401);
+
+  // GET /api/user/my-courses
+  if (method === 'GET' && path === '/my-courses') {
+    const courses = await db.prepare(`
+      SELECT c.*, m.expires_at, m.id as membership_id
+      FROM memberships m JOIN courses c ON m.course_id = c.id
+      WHERE m.user_id = ? AND m.is_active = 1
+        AND m.expires_at > datetime('now') AND c.is_active = 1
+      ORDER BY m.created_at DESC
+    `).bind(user.id).all();
+    return json(courses.results);
   }
-  
-  // ==========================================
-  // USER ROUTES
-  // ==========================================
-  
-  if (path.startsWith('/api/user/')) {
-    
-    // GET /api/user/lecture/:id (for PDF modal in admin panel)
-    if (request.method === 'GET' && path.match(/^\/api\/user\/lecture\/\d+$/)) {
-      const lectureId = parseInt(path.split('/')[4]);
-      
-      if (!db) return sendJSON({ lecture: { id: lectureId }, pdfs: [] });
-      
+
+  // GET /api/user/browse-courses
+  if (method === 'GET' && path === '/browse-courses') {
+    const courses = await db.prepare(`
+      SELECT c.*,
+        (SELECT COUNT(*) FROM subjects s WHERE s.course_id = c.id) as subject_count,
+        (SELECT COUNT(*) FROM lectures l
+          JOIN chapters ch ON l.chapter_id = ch.id
+          JOIN papers p ON ch.paper_id = p.id
+          JOIN subjects s ON p.subject_id = s.id
+          WHERE s.course_id = c.id) as lecture_count
+      FROM courses c
+      WHERE c.show_in_browse = 1 AND c.is_active = 1
+      ORDER BY c.created_at DESC
+    `).all();
+    return json(courses.results);
+  }
+
+  // POST /api/user/enroll
+  if (method === 'POST' && path === '/enroll') {
+    const { course_id } = body;
+    if (!course_id) return err('course_id required');
+    const course = await db.prepare('SELECT * FROM courses WHERE id = ? AND is_active = 1').bind(course_id).first();
+    if (!course) return err('Course not found', 404);
+    if (!course.show_in_browse) return err('Enrollment not available', 403);
+
+    if (course.enrollment_type === 'approval') {
       try {
-        const pdfs = await db.prepare(
-          'SELECT * FROM lecture_pdfs WHERE lecture_id = ? ORDER BY created_at ASC'
-        ).bind(lectureId).all();
-        
-        return sendJSON({
-          lecture: { id: lectureId },
-          pdfs: pdfs.results || []
-        });
-      } catch (e) {
-        return sendJSON({ lecture: { id: lectureId }, pdfs: [] });
+        await db.prepare('INSERT INTO enrollment_requests (user_id, course_id) VALUES (?, ?)')
+          .bind(user.id, course_id).run();
+        return json({ message: 'Enrollment request submitted. Awaiting admin approval.' }, 201);
+      } catch { return err('You already have a pending request for this course'); }
+    }
+
+    // Open enrollment — grant 365-day membership
+    const expires_at = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString();
+    await db.prepare(
+      'INSERT OR REPLACE INTO memberships (user_id, course_id, expires_at, is_active, granted_by) VALUES (?, ?, ?, 1, ?)'
+    ).bind(user.id, course_id, expires_at, null).run();
+    return json({ message: 'Enrolled successfully', expires_at }, 201);
+  }
+
+  // GET /api/user/enrollment-status/:courseId
+  if (method === 'GET' && path.match(/^\/enrollment-status\/\d+$/)) {
+    const courseId = parseInt(path.split('/')[2]);
+    const membership = await db.prepare(
+      `SELECT * FROM memberships WHERE user_id = ? AND course_id = ? AND is_active = 1 AND expires_at > datetime('now')`
+    ).bind(user.id, courseId).first();
+    const request = await db.prepare(
+      'SELECT * FROM enrollment_requests WHERE user_id = ? AND course_id = ?'
+    ).bind(user.id, courseId).first();
+    return json({ enrolled: !!membership, request_status: request?.status || null });
+  }
+
+  // GET /api/user/course/:id
+  if (method === 'GET' && path.match(/^\/course\/\d+$/)) {
+    const courseId = parseInt(path.split('/')[2]);
+    if (user.role !== 'admin') {
+      const membership = await db.prepare(
+        `SELECT * FROM memberships WHERE user_id = ? AND course_id = ? AND is_active = 1 AND expires_at > datetime('now')`
+      ).bind(user.id, courseId).first();
+      if (!membership) return err('No active membership for this course', 403);
+    }
+    const course = await db.prepare('SELECT * FROM courses WHERE id = ? AND is_active = 1').bind(courseId).first();
+    if (!course) return err('Course not found', 404);
+    const subjects = await db.prepare(
+      'SELECT * FROM subjects WHERE course_id = ? ORDER BY sort_order ASC, id ASC'
+    ).bind(courseId).all();
+    for (const subj of subjects.results) {
+      subj.papers = (await db.prepare(
+        'SELECT * FROM papers WHERE subject_id = ? ORDER BY sort_order ASC, id ASC'
+      ).bind(subj.id).all()).results;
+      for (const paper of subj.papers) {
+        paper.chapters = (await db.prepare(
+          'SELECT * FROM chapters WHERE paper_id = ? ORDER BY sort_order ASC, id ASC'
+        ).bind(paper.id).all()).results;
+        for (const ch of paper.chapters) {
+          ch.lectures = (await db.prepare(
+            'SELECT * FROM lectures WHERE chapter_id = ? ORDER BY sort_order ASC, id ASC'
+          ).bind(ch.id).all()).results;
+          for (const lec of ch.lectures) {
+            lec.pdfs = (await db.prepare(
+              'SELECT * FROM lecture_pdfs WHERE lecture_id = ?'
+            ).bind(lec.id).all()).results;
+          }
+        }
       }
     }
+    const resources = await db.prepare(
+      'SELECT * FROM resources WHERE course_id = ? ORDER BY created_at DESC'
+    ).bind(courseId).all();
+    const membership = user.role === 'admin' ? null : await db.prepare(
+      `SELECT * FROM memberships WHERE user_id = ? AND course_id = ? AND is_active = 1 LIMIT 1`
+    ).bind(user.id, courseId).first();
+    return json({ course, subjects: subjects.results, resources: resources.results,
+      membership: membership ? { expires_at: membership.expires_at } : { expires_at: null } });
   }
-  
-  // ==========================================
-  // 404 - Route not found
-  // ==========================================
-  
-  console.log('Route not found:', path);
-  return sendError('Route not found: ' + path, 404);
+
+  // GET /api/user/lecture/:id
+  if (method === 'GET' && path.match(/^\/lecture\/\d+$/)) {
+    const lectureId = parseInt(path.split('/')[2]);
+    const lecture = await db.prepare(`
+      SELECT l.*, ch.title as chapter_title, ch.id as chapter_id,
+             p.name as paper_name, p.id as paper_id,
+             s.name as subject_name, s.id as subject_id, s.course_id
+      FROM lectures l
+      JOIN chapters ch ON l.chapter_id = ch.id
+      JOIN papers p ON ch.paper_id = p.id
+      JOIN subjects s ON p.subject_id = s.id
+      WHERE l.id = ?
+    `).bind(lectureId).first();
+    if (!lecture) return err('Lecture not found', 404);
+    if (user.role !== 'admin') {
+      const membership = await db.prepare(
+        `SELECT * FROM memberships WHERE user_id = ? AND course_id = ? AND is_active = 1 AND expires_at > datetime('now')`
+      ).bind(user.id, lecture.course_id).first();
+      if (!membership) return err('No active membership', 403);
+    }
+    const allLectures = await db.prepare(`
+      SELECT l.*, ch.title as chapter_title, ch.id as chapter_id,
+             p.name as paper_name, s.name as subject_name
+      FROM lectures l
+      JOIN chapters ch ON l.chapter_id = ch.id
+      JOIN papers p ON ch.paper_id = p.id
+      JOIN subjects s ON p.subject_id = s.id
+      WHERE s.course_id = ?
+      ORDER BY s.sort_order ASC, s.id ASC, p.sort_order ASC, p.id ASC,
+               ch.sort_order ASC, ch.id ASC, l.sort_order ASC, l.id ASC
+    `).bind(lecture.course_id).all();
+    const pdfs = await db.prepare(
+      'SELECT * FROM lecture_pdfs WHERE lecture_id = ? ORDER BY created_at ASC'
+    ).bind(lectureId).all();
+    return json({ lecture, allLectures: allLectures.results, pdfs: pdfs.results });
+  }
+
+  // GET /api/user/profile
+  if (method === 'GET' && path === '/profile') {
+    const u = await db.prepare(
+      'SELECT id,name,email,role,phone,institution,name_last_changed,email_last_changed,password_last_changed,created_at FROM users WHERE id=?'
+    ).bind(user.id).first();
+    return json(u);
+  }
+
+  // GET /api/user/profile-change-status
+  if (method === 'GET' && path === '/profile-change-status') {
+    const u = await db.prepare(
+      'SELECT name_last_changed,email_last_changed,password_last_changed,restriction_override FROM users WHERE id=?'
+    ).bind(user.id).first();
+    if (!u) return err('User not found', 404);
+    const canChange = (lastChanged) => {
+      if (u.restriction_override) return true;
+      if (!lastChanged) return true;
+      const next = new Date(lastChanged);
+      next.setDate(next.getDate() + 90);
+      return new Date() >= next;
+    };
+    return json({
+      name_last_changed: u.name_last_changed,
+      email_last_changed: u.email_last_changed,
+      password_last_changed: u.password_last_changed,
+      name_can_change: canChange(u.name_last_changed),
+      email_can_change: canChange(u.email_last_changed),
+      password_can_change: canChange(u.password_last_changed),
+    });
+  }
+
+  // PUT /api/user/profile
+  if (method === 'PUT' && path === '/profile') {
+    const { name, email, phone, institution } = body;
+    const u = await db.prepare(
+      'SELECT * FROM users WHERE id=?'
+    ).bind(user.id).first();
+    if (!u) return err('User not found', 404);
+
+    const updates = []; const values = [];
+    const now = new Date().toISOString();
+
+    if (name !== undefined && name !== u.name) {
+      if (!u.restriction_override && u.name_last_changed) {
+        const next = new Date(u.name_last_changed); next.setDate(next.getDate()+90);
+        if (new Date() < next) return err('Name can only be changed once every 90 days', 403);
+      }
+      updates.push('name = ?', 'name_last_changed = ?');
+      values.push(name, now);
+    }
+    if (email !== undefined && email !== u.email) {
+      if (!u.restriction_override && u.email_last_changed) {
+        const next = new Date(u.email_last_changed); next.setDate(next.getDate()+90);
+        if (new Date() < next) return err('Email can only be changed once every 90 days', 403);
+      }
+      const existing = await db.prepare('SELECT id FROM users WHERE email=? AND id!=?')
+        .bind(email.toLowerCase(), user.id).first();
+      if (existing) return err('Email already in use');
+      updates.push('email = ?', 'email_last_changed = ?');
+      values.push(email.toLowerCase(), now);
+    }
+    if (phone !== undefined) { updates.push('phone = ?'); values.push(phone); }
+    if (institution !== undefined) { updates.push('institution = ?'); values.push(institution); }
+
+    if (!updates.length) return json({ message: 'No changes' });
+    values.push(user.id);
+    await db.prepare(`UPDATE users SET ${updates.join(', ')} WHERE id = ?`).bind(...values).run();
+    return json({ message: 'Profile updated' });
+  }
+
+  // PUT /api/user/password
+  if (method === 'PUT' && path === '/password') {
+    const { current_password, new_password } = body;
+    if (!current_password || !new_password) return err('All fields required');
+    if (new_password.length < 6) return err('New password must be 6+ characters');
+    const u = await db.prepare('SELECT * FROM users WHERE id=?').bind(user.id).first();
+    if (!u) return err('User not found', 404);
+    const curHash = await sha256(current_password);
+    if (u.password !== curHash) return err('Current password is incorrect', 403);
+    if (!u.restriction_override && u.password_last_changed) {
+      const next = new Date(u.password_last_changed); next.setDate(next.getDate()+90);
+      if (new Date() < next) return err('Password can only be changed once every 90 days', 403);
+    }
+    const newHash = await sha256(new_password);
+    await db.prepare('UPDATE users SET password=?, password_last_changed=? WHERE id=?')
+      .bind(newHash, new Date().toISOString(), user.id).run();
+    return json({ message: 'Password updated successfully' });
+  }
+
+  // GET /api/user/notifications
+  if (method === 'GET' && path === '/notifications') {
+    const notifs = await db.prepare(`
+      SELECT n.*,
+        CASE WHEN nr.id IS NOT NULL THEN 1 ELSE 0 END as is_read
+      FROM notifications n
+      LEFT JOIN notification_reads nr ON n.id = nr.notification_id AND nr.user_id = ?
+      WHERE n.is_active = 1
+        AND (n.target_type = 'all' OR (n.target_type = 'user' AND n.target_id = ?))
+        AND (n.scheduled_at IS NULL OR n.scheduled_at <= datetime('now'))
+        AND (n.expires_at IS NULL OR n.expires_at > datetime('now'))
+      ORDER BY n.created_at DESC
+    `).bind(user.id, user.id).all();
+    return json(notifs.results);
+  }
+
+  // PUT /api/user/notifications/:id/read
+  if (method === 'PUT' && path.match(/^\/notifications\/\d+\/read$/)) {
+    const notifId = parseInt(path.split('/')[2]);
+    await db.prepare('INSERT OR IGNORE INTO notification_reads (notification_id, user_id) VALUES (?,?)')
+      .bind(notifId, user.id).run();
+    return json({ message: 'Marked as read' });
+  }
+
+  // PUT /api/user/notifications/mark-all-read
+  if (method === 'PUT' && path === '/notifications/mark-all-read') {
+    const notifs = await db.prepare(
+      'SELECT id FROM notifications WHERE is_active=1'
+    ).all();
+    for (const n of notifs.results) {
+      await db.prepare('INSERT OR IGNORE INTO notification_reads (notification_id, user_id) VALUES (?,?)')
+        .bind(n.id, user.id).run();
+    }
+    return json({ message: 'All marked as read' });
+  }
+
+  // GET /api/user/latest-update
+  if (method === 'GET' && path === '/latest-update') {
+    const update = await db.prepare(`
+      SELECT * FROM updates
+      WHERE status = 'published' AND show_popup = 1
+        AND (release_date IS NULL OR release_date <= datetime('now'))
+      ORDER BY created_at DESC LIMIT 1
+    `).first();
+    if (!update) return json(null);
+    return json(update);
+  }
+
+  // PUT /api/user/updates/:id/seen
+  if (method === 'PUT' && path.match(/^\/updates\/\d+\/seen$/)) {
+    const updateId = parseInt(path.split('/')[2]);
+    await db.prepare('INSERT OR IGNORE INTO update_seen (update_id, user_id) VALUES (?,?)')
+      .bind(updateId, user.id).run();
+    return json({ message: 'Marked as seen' });
+  }
+
+  return err('User route not found', 404);
+}
+
+// ─────────────────────────────────────────────
+// ADMIN
+// ─────────────────────────────────────────────
+async function handleAdmin(method, path, body, db, user) {
+  if (!user) return err('Unauthorized', 401);
+  if (user.role !== 'admin') return err('Admin access required', 403);
+
+  // ── COURSES ──
+  if (method === 'GET' && path === '/courses') {
+    const r = await db.prepare('SELECT * FROM courses ORDER BY created_at DESC').all();
+    return json(r.results);
+  }
+  if (method === 'POST' && path === '/courses') {
+    const { title, description, thumbnail, is_active, show_in_browse, subject_area, difficulty_level, enrollment_type } = body;
+    if (!title) return err('Title required');
+    const r = await db.prepare(
+      'INSERT INTO courses (title,description,thumbnail,is_active,show_in_browse,subject_area,difficulty_level,enrollment_type) VALUES (?,?,?,?,?,?,?,?)'
+    ).bind(title, description||'', thumbnail||null, is_active!==undefined?is_active:1,
+           show_in_browse?1:0, subject_area||null, difficulty_level||null, enrollment_type||'open').run();
+    return json({ id: r.meta.last_row_id, message: 'Course created' }, 201);
+  }
+  if (method === 'PUT' && path.match(/^\/courses\/\d+$/)) {
+    const courseId = parseInt(path.split('/')[2]);
+    const { title, description, thumbnail, is_active, show_in_browse, subject_area, difficulty_level, enrollment_type } = body;
+    const u = [], v = [];
+    if (title !== undefined) { u.push('title=?'); v.push(title); }
+    if (description !== undefined) { u.push('description=?'); v.push(description); }
+    if (thumbnail !== undefined) { u.push('thumbnail=?'); v.push(thumbnail); }
+    if (is_active !== undefined) { u.push('is_active=?'); v.push(is_active); }
+    if (show_in_browse !== undefined) { u.push('show_in_browse=?'); v.push(show_in_browse?1:0); }
+    if (subject_area !== undefined) { u.push('subject_area=?'); v.push(subject_area); }
+    if (difficulty_level !== undefined) { u.push('difficulty_level=?'); v.push(difficulty_level); }
+    if (enrollment_type !== undefined) { u.push('enrollment_type=?'); v.push(enrollment_type); }
+    u.push('updated_at=?'); v.push(new Date().toISOString());
+    v.push(courseId);
+    await db.prepare(`UPDATE courses SET ${u.join(',')} WHERE id=?`).bind(...v).run();
+    return json({ message: 'Course updated' });
+  }
+  if (method === 'DELETE' && path.match(/^\/courses\/\d+$/)) {
+    const courseId = parseInt(path.split('/')[2]);
+    const subjs = await db.prepare('SELECT id FROM subjects WHERE course_id=?').bind(courseId).all();
+    for (const s of subjs.results) {
+      const papers = await db.prepare('SELECT id FROM papers WHERE subject_id=?').bind(s.id).all();
+      for (const p of papers.results) {
+        const chs = await db.prepare('SELECT id FROM chapters WHERE paper_id=?').bind(p.id).all();
+        for (const c of chs.results) {
+          await db.prepare('DELETE FROM lecture_pdfs WHERE lecture_id IN (SELECT id FROM lectures WHERE chapter_id=?)').bind(c.id).run();
+          await db.prepare('DELETE FROM lectures WHERE chapter_id=?').bind(c.id).run();
+        }
+        await db.prepare('DELETE FROM chapters WHERE paper_id=?').bind(p.id).run();
+      }
+      await db.prepare('DELETE FROM papers WHERE subject_id=?').bind(s.id).run();
+    }
+    await db.prepare('DELETE FROM subjects WHERE course_id=?').bind(courseId).run();
+    await db.prepare('DELETE FROM resources WHERE course_id=?').bind(courseId).run();
+    await db.prepare('DELETE FROM memberships WHERE course_id=?').bind(courseId).run();
+    await db.prepare('DELETE FROM enrollment_requests WHERE course_id=?').bind(courseId).run();
+    await db.prepare('DELETE FROM courses WHERE id=?').bind(courseId).run();
+    return json({ message: 'Course deleted' });
+  }
+
+  // ── SUBJECTS ──
+  if (method === 'GET' && path === '/all-subjects') {
+    const r = await db.prepare('SELECT * FROM subjects ORDER BY course_id ASC, sort_order ASC').all();
+    return json(r.results);
+  }
+  if (method === 'GET' && path.match(/^\/subjects\/course\/\d+$/)) {
+    const r = await db.prepare('SELECT * FROM subjects WHERE course_id=? ORDER BY sort_order ASC').bind(parseInt(path.split('/')[3])).all();
+    return json(r.results);
+  }
+  if (method === 'POST' && path === '/subjects') {
+    const { course_id, name, has_papers, sort_order } = body;
+    if (!course_id || !name) return err('Course and name required');
+    const r = await db.prepare('INSERT INTO subjects (course_id,name,has_papers,sort_order) VALUES (?,?,?,?)')
+      .bind(course_id, name, has_papers!==undefined?has_papers:1, sort_order||0).run();
+    const subjId = r.meta.last_row_id;
+    if (!has_papers || has_papers===0) {
+      await db.prepare('INSERT INTO papers (subject_id,name,sort_order) VALUES (?,?,0)').bind(subjId,'Full Course').run();
+    }
+    return json({ id: subjId, message: 'Subject created' }, 201);
+  }
+  if (method === 'DELETE' && path.match(/^\/subjects\/\d+$/)) {
+    const subjId = parseInt(path.split('/')[2]);
+    const papers = await db.prepare('SELECT id FROM papers WHERE subject_id=?').bind(subjId).all();
+    for (const p of papers.results) {
+      const chs = await db.prepare('SELECT id FROM chapters WHERE paper_id=?').bind(p.id).all();
+      for (const c of chs.results) {
+        await db.prepare('DELETE FROM lecture_pdfs WHERE lecture_id IN (SELECT id FROM lectures WHERE chapter_id=?)').bind(c.id).run();
+        await db.prepare('DELETE FROM lectures WHERE chapter_id=?').bind(c.id).run();
+      }
+      await db.prepare('DELETE FROM chapters WHERE paper_id=?').bind(p.id).run();
+    }
+    await db.prepare('DELETE FROM papers WHERE subject_id=?').bind(subjId).run();
+    await db.prepare('DELETE FROM subjects WHERE id=?').bind(subjId).run();
+    return json({ message: 'Subject deleted' });
+  }
+
+  // ── PAPERS ──
+  if (method === 'GET' && path === '/all-papers') {
+    const r = await db.prepare('SELECT * FROM papers ORDER BY subject_id ASC, sort_order ASC').all();
+    return json(r.results);
+  }
+  if (method === 'POST' && path === '/papers') {
+    const { subject_id, name, sort_order } = body;
+    if (!subject_id || !name) return err('Subject and name required');
+    const r = await db.prepare('INSERT INTO papers (subject_id,name,sort_order) VALUES (?,?,?)')
+      .bind(subject_id, name, sort_order||0).run();
+    return json({ id: r.meta.last_row_id, message: 'Paper created' }, 201);
+  }
+  if (method === 'DELETE' && path.match(/^\/papers\/\d+$/)) {
+    const paperId = parseInt(path.split('/')[2]);
+    const chs = await db.prepare('SELECT id FROM chapters WHERE paper_id=?').bind(paperId).all();
+    for (const c of chs.results) {
+      await db.prepare('DELETE FROM lecture_pdfs WHERE lecture_id IN (SELECT id FROM lectures WHERE chapter_id=?)').bind(c.id).run();
+      await db.prepare('DELETE FROM lectures WHERE chapter_id=?').bind(c.id).run();
+    }
+    await db.prepare('DELETE FROM chapters WHERE paper_id=?').bind(paperId).run();
+    await db.prepare('DELETE FROM papers WHERE id=?').bind(paperId).run();
+    return json({ message: 'Paper deleted' });
+  }
+
+  // ── CHAPTERS ──
+  if (method === 'GET' && path === '/all-chapters') {
+    const r = await db.prepare('SELECT * FROM chapters ORDER BY paper_id ASC, sort_order ASC').all();
+    return json(r.results);
+  }
+  if (method === 'POST' && path === '/chapters') {
+    const { paper_id, title, sort_order } = body;
+    if (!paper_id || !title) return err('Paper and title required');
+    const r = await db.prepare('INSERT INTO chapters (paper_id,title,sort_order) VALUES (?,?,?)')
+      .bind(paper_id, title, sort_order||0).run();
+    return json({ id: r.meta.last_row_id, message: 'Chapter created' }, 201);
+  }
+  if (method === 'DELETE' && path.match(/^\/chapters\/\d+$/)) {
+    const chId = parseInt(path.split('/')[2]);
+    await db.prepare('DELETE FROM lecture_pdfs WHERE lecture_id IN (SELECT id FROM lectures WHERE chapter_id=?)').bind(chId).run();
+    await db.prepare('DELETE FROM lectures WHERE chapter_id=?').bind(chId).run();
+    await db.prepare('DELETE FROM chapters WHERE id=?').bind(chId).run();
+    return json({ message: 'Chapter deleted' });
+  }
+
+  // ── LECTURES ──
+  if (method === 'GET' && path === '/all-lectures') {
+    const r = await db.prepare(`
+      SELECT l.*, ch.title as chapter_title, p.name as paper_name, s.name as subject_name, s.course_id
+      FROM lectures l
+      JOIN chapters ch ON l.chapter_id=ch.id
+      JOIN papers p ON ch.paper_id=p.id
+      JOIN subjects s ON p.subject_id=s.id
+      ORDER BY l.created_at DESC
+    `).all();
+    return json(r.results);
+  }
+  if (method === 'POST' && path === '/lectures') {
+    const { chapter_id, title, yt_video_id, sort_order, description } = body;
+    if (!chapter_id||!title||!yt_video_id) return err('Chapter, title, and YouTube ID required');
+    const r = await db.prepare('INSERT INTO lectures (chapter_id,title,yt_video_id,sort_order,description) VALUES (?,?,?,?,?)')
+      .bind(chapter_id, title, yt_video_id, sort_order||0, description||'').run();
+    return json({ id: r.meta.last_row_id, message: 'Lecture created' }, 201);
+  }
+  if (method === 'PUT' && path.match(/^\/lectures\/\d+$/)) {
+    const lecId = parseInt(path.split('/')[2]);
+    const { title, yt_video_id, sort_order, description } = body;
+    const u=[],v=[];
+    if (title!==undefined){u.push('title=?');v.push(title);}
+    if (yt_video_id!==undefined){u.push('yt_video_id=?');v.push(yt_video_id);}
+    if (sort_order!==undefined){u.push('sort_order=?');v.push(sort_order);}
+    if (description!==undefined){u.push('description=?');v.push(description);}
+    u.push('updated_at=?');v.push(new Date().toISOString());v.push(lecId);
+    await db.prepare(`UPDATE lectures SET ${u.join(',')} WHERE id=?`).bind(...v).run();
+    return json({ message: 'Lecture updated' });
+  }
+  if (method === 'DELETE' && path.match(/^\/lectures\/\d+$/)) {
+    const lecId = parseInt(path.split('/')[2]);
+    await db.prepare('DELETE FROM lecture_pdfs WHERE lecture_id=?').bind(lecId).run();
+    await db.prepare('DELETE FROM lectures WHERE id=?').bind(lecId).run();
+    return json({ message: 'Lecture deleted' });
+  }
+
+  // ── LECTURE PDFs ──
+  if (method === 'POST' && path === '/lecture-pdfs') {
+    const { lecture_id, title, pdf_url } = body;
+    if (!lecture_id||!title||!pdf_url) return err('All fields required');
+    const r = await db.prepare('INSERT INTO lecture_pdfs (lecture_id,title,pdf_url) VALUES (?,?,?)')
+      .bind(lecture_id, title, pdf_url).run();
+    return json({ id: r.meta.last_row_id, message: 'PDF added' }, 201);
+  }
+  if (method === 'DELETE' && path.match(/^\/lecture-pdfs\/\d+$/)) {
+    await db.prepare('DELETE FROM lecture_pdfs WHERE id=?').bind(parseInt(path.split('/')[2])).run();
+    return json({ message: 'PDF deleted' });
+  }
+
+  // ── RESOURCES ──
+  if (method === 'GET' && path.match(/^\/resources\/course\/\d+$/)) {
+    const r = await db.prepare('SELECT * FROM resources WHERE course_id=? ORDER BY created_at DESC').bind(parseInt(path.split('/')[3])).all();
+    return json(r.results);
+  }
+  if (method === 'POST' && path === '/resources') {
+    const { course_id, title, pdf_url } = body;
+    if (!course_id||!title||!pdf_url) return err('All fields required');
+    const r = await db.prepare('INSERT INTO resources (course_id,title,pdf_url) VALUES (?,?,?)')
+      .bind(course_id, title, pdf_url).run();
+    return json({ id: r.meta.last_row_id, message: 'Resource added' }, 201);
+  }
+  if (method === 'DELETE' && path.match(/^\/resources\/\d+$/)) {
+    await db.prepare('DELETE FROM resources WHERE id=?').bind(parseInt(path.split('/')[2])).run();
+    return json({ message: 'Resource deleted' });
+  }
+
+  // ── USERS ──
+  if (method === 'GET' && path === '/users') {
+    const r = await db.prepare(
+      'SELECT id,name,email,role,is_blocked,is_approved,restriction_override,created_at FROM users ORDER BY created_at DESC'
+    ).all();
+    return json(r.results);
+  }
+  if (method === 'PUT' && path.match(/^\/users\/\d+\/approve$/)) {
+    await db.prepare('UPDATE users SET is_approved=1 WHERE id=?').bind(parseInt(path.split('/')[2])).run();
+    return json({ message: 'User approved' });
+  }
+  if (method === 'PUT' && path.match(/^\/users\/\d+\/block$/)) {
+    const { is_blocked } = body;
+    await db.prepare('UPDATE users SET is_blocked=? WHERE id=?').bind(is_blocked?1:0, parseInt(path.split('/')[2])).run();
+    return json({ message: is_blocked?'User blocked':'User unblocked' });
+  }
+  if (method === 'PUT' && path.match(/^\/users\/\d+\/override-restriction$/)) {
+    const userId = parseInt(path.split('/')[2]);
+    const { override } = body;
+    await db.prepare('UPDATE users SET restriction_override=? WHERE id=?').bind(override?1:0, userId).run();
+    return json({ message: override?'Restriction override enabled':'Restriction override disabled' });
+  }
+  if (method === 'DELETE' && path.match(/^\/users\/\d+$/)) {
+    const userId = parseInt(path.split('/')[2]);
+    await db.prepare('DELETE FROM memberships WHERE user_id=?').bind(userId).run();
+    await db.prepare('DELETE FROM device_registrations WHERE user_id=?').bind(userId).run();
+    await db.prepare('DELETE FROM notification_reads WHERE user_id=?').bind(userId).run();
+    await db.prepare('DELETE FROM enrollment_requests WHERE user_id=?').bind(userId).run();
+    await db.prepare("DELETE FROM users WHERE id=? AND role!='admin'").bind(userId).run();
+    return json({ message: 'User deleted' });
+  }
+
+  // ── MEMBERSHIPS ──
+  if (method === 'GET' && path === '/memberships') {
+    const r = await db.prepare(`
+      SELECT m.*, u.name as user_name, u.email as user_email, c.title as course_title
+      FROM memberships m JOIN users u ON m.user_id=u.id JOIN courses c ON m.course_id=c.id
+      ORDER BY m.created_at DESC
+    `).all();
+    return json(r.results);
+  }
+  if (method === 'POST' && path === '/memberships') {
+    const { user_id, course_id, days } = body;
+    if (!user_id||!course_id||!days) return err('user_id, course_id, and days required');
+    const expires_at = new Date(Date.now() + days*24*60*60*1000).toISOString();
+    await db.prepare('INSERT OR REPLACE INTO memberships (user_id,course_id,expires_at,is_active,granted_by) VALUES (?,?,?,1,?)')
+      .bind(user_id, course_id, expires_at, user.id).run();
+    return json({ message: 'Membership granted', expires_at }, 201);
+  }
+  if (method === 'PUT' && path.match(/^\/memberships\/\d+\/extend$/)) {
+    const { days } = body;
+    if (!days) return err('Days required');
+    await db.prepare(`UPDATE memberships SET expires_at=datetime(CASE WHEN expires_at<datetime('now') THEN datetime('now') ELSE expires_at END,'+'||?||' days'),is_active=1 WHERE id=?`)
+      .bind(days, parseInt(path.split('/')[2])).run();
+    return json({ message: 'Membership extended' });
+  }
+  if (method === 'PUT' && path.match(/^\/memberships\/\d+\/cancel$/)) {
+    await db.prepare('UPDATE memberships SET is_active=0 WHERE id=?').bind(parseInt(path.split('/')[2])).run();
+    return json({ message: 'Membership cancelled' });
+  }
+
+  // ── ENROLLMENT REQUESTS ──
+  if (method === 'GET' && path === '/enrollment-requests') {
+    const r = await db.prepare(`
+      SELECT er.*, u.name as user_name, u.email as user_email, c.title as course_title
+      FROM enrollment_requests er
+      JOIN users u ON er.user_id=u.id JOIN courses c ON er.course_id=c.id
+      ORDER BY er.created_at DESC
+    `).all();
+    return json(r.results);
+  }
+  if (method === 'PUT' && path.match(/^\/enrollment-requests\/\d+\/approve$/)) {
+    const reqId = parseInt(path.split('/')[2]);
+    const req = await db.prepare('SELECT * FROM enrollment_requests WHERE id=?').bind(reqId).first();
+    if (!req) return err('Request not found', 404);
+    const expires_at = new Date(Date.now() + 365*24*60*60*1000).toISOString();
+    await db.prepare('INSERT OR REPLACE INTO memberships (user_id,course_id,expires_at,is_active,granted_by) VALUES (?,?,?,1,?)')
+      .bind(req.user_id, req.course_id, expires_at, user.id).run();
+    await db.prepare("UPDATE enrollment_requests SET status='approved' WHERE id=?").bind(reqId).run();
+    return json({ message: 'Request approved, membership granted' });
+  }
+  if (method === 'PUT' && path.match(/^\/enrollment-requests\/\d+\/reject$/)) {
+    await db.prepare("UPDATE enrollment_requests SET status='rejected' WHERE id=?").bind(parseInt(path.split('/')[2])).run();
+    return json({ message: 'Request rejected' });
+  }
+
+  // ── NOTIFICATIONS ──
+  if (method === 'GET' && path === '/notifications') {
+    const r = await db.prepare('SELECT * FROM notifications ORDER BY created_at DESC').all();
+    return json(r.results);
+  }
+  if (method === 'POST' && path === '/notifications') {
+    const { title, message, type, target_type, target_id, action_url, scheduled_at, expires_at } = body;
+    if (!title) return err('Title required');
+    const r = await db.prepare(
+      'INSERT INTO notifications (title,message,type,target_type,target_id,action_url,scheduled_at,expires_at,created_by) VALUES (?,?,?,?,?,?,?,?,?)'
+    ).bind(title, message||'', type||'info', target_type||'all', target_id||null,
+           action_url||null, scheduled_at||null, expires_at||null, user.id).run();
+    return json({ id: r.meta.last_row_id, message: 'Notification created' }, 201);
+  }
+  if (method === 'PUT' && path.match(/^\/notifications\/\d+$/)) {
+    const nId = parseInt(path.split('/')[2]);
+    const { title, message, type, is_active, action_url, expires_at } = body;
+    const u=[],v=[];
+    if (title!==undefined){u.push('title=?');v.push(title);}
+    if (message!==undefined){u.push('message=?');v.push(message);}
+    if (type!==undefined){u.push('type=?');v.push(type);}
+    if (is_active!==undefined){u.push('is_active=?');v.push(is_active);}
+    if (action_url!==undefined){u.push('action_url=?');v.push(action_url);}
+    if (expires_at!==undefined){u.push('expires_at=?');v.push(expires_at);}
+    if (!u.length) return err('Nothing to update');
+    v.push(nId);
+    await db.prepare(`UPDATE notifications SET ${u.join(',')} WHERE id=?`).bind(...v).run();
+    return json({ message: 'Notification updated' });
+  }
+  if (method === 'DELETE' && path.match(/^\/notifications\/\d+$/)) {
+    const nId = parseInt(path.split('/')[2]);
+    await db.prepare('DELETE FROM notification_reads WHERE notification_id=?').bind(nId).run();
+    await db.prepare('DELETE FROM notifications WHERE id=?').bind(nId).run();
+    return json({ message: 'Notification deleted' });
+  }
+
+  // ── SUPPORT TICKETS ──
+  if (method === 'GET' && path === '/support-tickets') {
+    const r = await db.prepare('SELECT * FROM support_tickets ORDER BY created_at DESC').all();
+    return json(r.results);
+  }
+  if (method === 'PUT' && path.match(/^\/support-tickets\/\d+\/resolve$/)) {
+    const ticketId = parseInt(path.split('/')[2]);
+    await db.prepare("UPDATE support_tickets SET status='resolved',resolved_at=? WHERE id=?")
+      .bind(new Date().toISOString(), ticketId).run();
+    return json({ message: 'Ticket resolved' });
+  }
+
+  // ── UPDATES / CHANGELOG ──
+  if (method === 'GET' && path === '/updates') {
+    const r = await db.prepare('SELECT * FROM updates ORDER BY created_at DESC').all();
+    return json(r.results);
+  }
+  if (method === 'POST' && path === '/updates') {
+    const { version, title, type, changelog, show_popup, dismissible, status, release_date } = body;
+    if (!title) return err('Title required');
+    const r = await db.prepare(
+      'INSERT INTO updates (version,title,type,changelog,show_popup,dismissible,status,release_date) VALUES (?,?,?,?,?,?,?,?)'
+    ).bind(version||null, title, type||'feature', changelog||'',
+           show_popup!==undefined?show_popup:1, dismissible!==undefined?dismissible:1,
+           status||'draft', release_date||null).run();
+    return json({ id: r.meta.last_row_id, message: 'Update created' }, 201);
+  }
+  if (method === 'PUT' && path.match(/^\/updates\/\d+$/)) {
+    const updId = parseInt(path.split('/')[2]);
+    const { version, title, type, changelog, show_popup, dismissible, status, release_date } = body;
+    const u=[],v=[];
+    if (version!==undefined){u.push('version=?');v.push(version);}
+    if (title!==undefined){u.push('title=?');v.push(title);}
+    if (type!==undefined){u.push('type=?');v.push(type);}
+    if (changelog!==undefined){u.push('changelog=?');v.push(changelog);}
+    if (show_popup!==undefined){u.push('show_popup=?');v.push(show_popup);}
+    if (dismissible!==undefined){u.push('dismissible=?');v.push(dismissible);}
+    if (status!==undefined){u.push('status=?');v.push(status);}
+    if (release_date!==undefined){u.push('release_date=?');v.push(release_date);}
+    u.push('updated_at=?');v.push(new Date().toISOString());
+    if (u.length<=1) return err('Nothing to update');
+    v.push(updId);
+    await db.prepare(`UPDATE updates SET ${u.join(',')} WHERE id=?`).bind(...v).run();
+    return json({ message: 'Update saved' });
+  }
+  if (method === 'DELETE' && path.match(/^\/updates\/\d+$/)) {
+    const updId = parseInt(path.split('/')[2]);
+    await db.prepare('DELETE FROM update_seen WHERE update_id=?').bind(updId).run();
+    await db.prepare('DELETE FROM updates WHERE id=?').bind(updId).run();
+    return json({ message: 'Update deleted' });
+  }
+
+  return err('Admin route not found', 404);
+}
+
+// ─────────────────────────────────────────────
+// MAIN HANDLER
+// ─────────────────────────────────────────────
+export async function onRequest(context) {
+  const { request, env } = context;
+  const db = env.ABHYUDOY_DB;
+  if (request.method === 'OPTIONS') return new Response(null, { headers: CORS });
+  // Only run table setup once per worker instance
+  if (!globalThis.__tablesReady) {
+    await ensureTables(db);
+    globalThis.__tablesReady = true;
+  }
+
+  const url = new URL(request.url);
+  const fullPath = url.pathname.replace(/^\/api/, '');
+
+  let body = {};
+  if (['POST','PUT','DELETE'].includes(request.method)) {
+    try { body = await request.json(); } catch {}
+  }
+
+  const authUser = await getUser(request);
+
+  if (fullPath === '/contact' && request.method === 'POST')
+    return handleContact(request.method, fullPath, body, db, authUser);
+  if (fullPath.startsWith('/auth/'))
+    return handleAuth(request.method, fullPath.replace('/auth',''), body, db);
+  if (fullPath.startsWith('/user/'))
+    return handleUser(request.method, fullPath.replace('/user',''), body, db, authUser);
+  if (fullPath.startsWith('/admin/'))
+    return handleAdmin(request.method, fullPath.replace('/admin',''), body, db, authUser);
+
+  return err('API route not found', 404);
 }
