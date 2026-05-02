@@ -22,6 +22,7 @@
 body{font-family:'Cabinet Grotesk',sans-serif;background:var(--bg);color:var(--white);display:flex;min-height:100vh;overflow-x:hidden}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:4px}
 
+/* SIDEBAR */
 .sidebar{width:var(--sw);background:var(--sidebar-solid);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:60;overflow-y:auto;transition:transform .28s cubic-bezier(.4,0,.2,1)}
 .sb-top{padding:20px 18px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .sb-logo{display:flex;align-items:center}
@@ -38,6 +39,7 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--bg);color:var(--w
 .btn-logout{width:100%;padding:8px;background:transparent;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.38);border-radius:var(--radius);font-family:'Cabinet Grotesk',sans-serif;font-size:.7rem;font-weight:600;cursor:pointer;transition:all var(--transition);text-transform:uppercase;letter-spacing:.05em}
 .btn-logout:hover{border-color:var(--red);color:var(--red)}
 
+/* MAIN */
 .main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;min-height:100vh}
 .topbar{height:56px;padding:0 24px;background:rgba(11,15,26,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40}
 .topbar-left{display:flex;align-items:center;gap:12px}
@@ -54,15 +56,18 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--bg);color:var(--w
 .view.active{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
+/* STATS */
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:26px}
 .stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 14px;transition:border-color var(--transition)}
 .stat:hover{border-color:var(--border2)}
 .stat-label{font-family:'DM Mono',monospace;font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);margin-bottom:8px}
 .stat-val{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:var(--teal);line-height:1}
 
+/* SECTION */
 .sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
 .sec-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;letter-spacing:-.01em}
 
+/* BUTTONS */
 .btn{font-family:'Cabinet Grotesk',sans-serif;font-size:.72rem;font-weight:600;padding:8px 16px;border-radius:var(--radius);border:none;cursor:pointer;transition:all var(--transition);display:inline-flex;align-items:center;gap:5px;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
 .btn-primary{background:var(--teal);color:#000}.btn-primary:hover{background:var(--teal2);transform:translateY(-1px)}
 .btn-ghost{background:transparent;color:var(--gray);border:1.5px solid var(--border2)}.btn-ghost:hover{border-color:var(--teal);color:var(--teal)}
@@ -72,6 +77,7 @@ body{font-family:'Cabinet Grotesk',sans-serif;background:var(--bg);color:var(--w
 .btn-sm{padding:5px 12px;font-size:.68rem}
 .btn-xs{padding:3px 8px;font-size:.63rem;border-radius:5px}
 
+/* CARD / TABLE */
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:18px}
 .card-pad{padding:20px}
 .table-wrap{overflow-x:auto}
@@ -85,6 +91,7 @@ tr:hover td{background:rgba(255,255,255,0.015);cursor:pointer}
 .td-max{max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .td-wrap{max-width:280px;white-space:normal;line-height:1.4}
 
+/* BADGES */
 .badge{font-family:'DM Mono',monospace;font-size:.58rem;text-transform:uppercase;letter-spacing:.06em;padding:3px 8px;border-radius:20px;display:inline-block;white-space:nowrap}
 .b-active{background:var(--green-dim);color:var(--green);border:1px solid rgba(16,212,142,0.2)}
 .b-inactive{background:rgba(122,136,153,0.08);color:var(--gray);border:1px solid var(--border)}
@@ -100,6 +107,7 @@ tr:hover td{background:rgba(255,255,255,0.015);cursor:pointer}
 .b-important{background:var(--red-dim);color:var(--red);border:1px solid rgba(240,86,106,0.2)}
 .b-success{background:var(--green-dim);color:var(--green);border:1px solid rgba(16,212,142,0.2)}
 
+/* FORMS */
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
 .fg{margin-bottom:14px}
@@ -114,11 +122,13 @@ tr:hover td{background:rgba(255,255,255,0.015);cursor:pointer}
 input[type=checkbox]{accent-color:var(--teal);width:14px;height:14px;cursor:pointer}
 .hint{font-family:'DM Mono',monospace;font-size:.62rem;color:var(--gray);margin-top:4px}
 
+/* ALERT */
 .alert{padding:10px 14px;border-radius:var(--radius);font-size:.77rem;margin-bottom:12px;display:none;line-height:1.4}
 .alert.show{display:block}
 .alert-error{background:var(--red-dim);border:1px solid rgba(240,86,106,0.22);color:var(--red)}
 .alert-success{background:var(--green-dim);border:1px solid rgba(16,212,142,0.2);color:var(--green)}
 
+/* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:200;display:none;place-items:center;padding:20px;backdrop-filter:blur(3px)}
 .modal-overlay.open{display:grid;animation:fadeIn .18s ease}
 .modal{background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius-lg);max-width:660px;width:100%;max-height:88vh;overflow-y:auto;animation:slideUp .22s cubic-bezier(.34,1.3,.64,1)}
@@ -131,6 +141,7 @@ input[type=checkbox]{accent-color:var(--teal);width:14px;height:14px;cursor:poin
 .modal-body{padding:20px 22px}
 .modal-footer{padding:14px 22px;border-top:1px solid var(--border);display:flex;gap:10px}
 
+/* TREE */
 .tree-course{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:16px;overflow:hidden}
 .tree-course-head{padding:14px 18px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
 .tree-course-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;flex:1}
@@ -142,13 +153,16 @@ input[type=checkbox]{accent-color:var(--teal);width:14px;height:14px;cursor:poin
 .tree-actions{display:flex;gap:4px;flex-wrap:wrap}
 .i1{margin-left:16px}.i2{margin-left:32px}.i3{margin-left:48px}
 
+/* EMPTY */
 .empty-row td{text-align:center;padding:40px!important;color:var(--gray)!important;font-style:italic}
 
+/* TOAST */
 .toast{position:fixed;bottom:22px;right:22px;padding:11px 18px;border-radius:var(--radius);font-size:.8rem;font-weight:600;z-index:999;transform:translateY(20px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;max-width:320px}
 .toast.show{transform:translateY(0);opacity:1}
 .toast-success{background:var(--green-dim);border:1px solid rgba(16,212,142,.25);color:var(--green)}
 .toast-error{background:var(--red-dim);border:1px solid rgba(240,86,106,.25);color:var(--red)}
 
+/* TICKET MODAL */
 .ticket-detail{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;font-size:.82rem;line-height:1.6;color:var(--gray2);white-space:pre-wrap;word-break:break-word}
 
 footer{border-top:1px solid var(--border);background:var(--surface);padding:16px 24px;text-align:center;font-size:.7rem;color:var(--gray)}
@@ -191,6 +205,7 @@ footer a{color:var(--teal);text-decoration:none}
   </div>
 </aside>
 
+<!-- SIDEBAR OVERLAY -->
 <div style="position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:59;display:none" id="sbOverlay" onclick="closeSidebar()"></div>
 
 <main class="main">
@@ -221,6 +236,7 @@ footer a{color:var(--teal);text-decoration:none}
   <footer><a href="/dashboard.html">View Site</a> · © 2024 Abhyudoy · Admin Panel</footer>
 </main>
 
+<!-- GENERIC MODAL -->
 <div class="modal-overlay" id="gModal" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <div class="modal-head"><h3 id="gModalTitle">—</h3><button class="modal-close" onclick="closeModal()"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button></div>
@@ -232,1502 +248,634 @@ footer a{color:var(--teal);text-decoration:none}
 <div class="toast" id="toast"></div>
 
 <script>
-// ═══════════════ AUTH CHECK ═══════════════
-const token = localStorage.getItem('abhyudoy_token');
-const user = JSON.parse(localStorage.getItem('abhyudoy_user') || 'null');
+const token=localStorage.getItem('abhyudoy_token');
+const user=JSON.parse(localStorage.getItem('abhyudoy_user')||'null');
+if(!token||!user||user.role!=='admin'){window.location.href='/index.html';}
+document.getElementById('adminEmail').textContent=user.email;
 
-if (!token || !user || user.role !== 'admin') {
-  window.location.href = '/index.html';
-}
+let allCourses=[],allSubjects=[],allPapers=[],allChapters=[],allUsers=[],allLectures=[];
 
-document.getElementById('adminEmail').textContent = user.email;
+/* ── HELPERS ── */
+function esc(s){const d=document.createElement('div');d.textContent=String(s||'');return d.innerHTML;}
+function logout(){localStorage.clear();window.location.href='/index.html';}
+function showToast(msg,type='success'){const t=document.getElementById('toast');t.textContent=msg;t.className=`toast toast-${type} show`;setTimeout(()=>t.classList.remove('show'),3500);}
+function fmtDate(d){if(!d)return'—';return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
+function fmtDateTime(d){if(!d)return'—';return new Date(d).toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'});}
 
-let allCourses = [];
-let allSubjects = [];
-let allPapers = [];
-let allChapters = [];
-let allUsers = [];
-let allLectures = [];
-
-// ═══════════════ HELPERS ═══════════════
-function esc(s) {
-  const d = document.createElement('div');
-  d.textContent = String(s || '');
-  return d.innerHTML;
-}
-
-function logout() {
-  localStorage.clear();
-  window.location.href = '/index.html';
-}
-
-function showToast(msg, type) {
-  type = type || 'success';
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast toast-' + type + ' show';
-  setTimeout(function() {
-    t.classList.remove('show');
-  }, 3500);
-}
-
-function fmtDate(d) {
-  if (!d) return '—';
-  return new Date(d).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric'
-  });
-}
-
-function fmtDateTime(d) {
-  if (!d) return '—';
-  return new Date(d).toLocaleString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  });
-}
-
-// ═══════════════ API FUNCTION ═══════════════
-async function api(method, path, body) {
-  try {
-    const opts = {
-      method: method,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token
-      }
-    };
-
-    if (body) {
-      opts.body = JSON.stringify(body);
-    }
-
-    const res = await fetch('/api' + path, opts);
-    const data = await res.json();
-
-    return {
-      ok: res.ok,
-      data: data,
-      status: res.status
-    };
-  } catch (e) {
-    console.error('API error:', method, path, e);
-    return {
-      ok: false,
-      data: { error: 'Network error. Please try again.' },
-      status: 0
-    };
+async function api(method,path,body){
+  try{
+    const opts={method,headers:{'Content-Type':'application/json',Authorization:'Bearer '+token}};
+    if(body)opts.body=JSON.stringify(body);
+    const res=await fetch('/api'+path,opts);
+    const data=await res.json();
+    return{ok:res.ok,data,status:res.status};
+  }catch(e){
+    console.error('API error:',method,path,e);
+    return{ok:false,data:{error:'Network error. Please try again.'},status:0};
   }
 }
 
-// ═══════════════ SIDEBAR ═══════════════
-function toggleSidebar() {
-  const s = document.getElementById('sidebar');
-  const o = document.getElementById('sbOverlay');
-  const isOpen = s.style.transform === 'translateX(0px)' || s.classList.contains('open');
-
-  if (isOpen) {
-    s.style.transform = '';
-    s.classList.remove('open');
-    o.style.display = 'none';
-  } else {
-    s.style.transform = 'translateX(0px)';
-    s.classList.add('open');
-    o.style.display = 'block';
-  }
+/* ── SIDEBAR ── */
+function toggleSidebar(){
+  const s=document.getElementById('sidebar'),o=document.getElementById('sbOverlay');
+  const isOpen=s.style.transform==='translateX(0px)'||s.classList.contains('open');
+  if(isOpen){s.style.transform='';s.classList.remove('open');o.style.display='none';}
+  else{s.style.transform='translateX(0px)';s.classList.add('open');o.style.display='block';}
 }
+function closeSidebar(){document.getElementById('sidebar').style.transform='';document.getElementById('sidebar').classList.remove('open');document.getElementById('sbOverlay').style.display='none';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSidebar();});
 
-function closeSidebar() {
-  document.getElementById('sidebar').style.transform = '';
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sbOverlay').style.display = 'none';
-}
-
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
-    closeSidebar();
-  }
-});
-
-// ═══════════════ MODAL ═══════════════
-function openModal(title, bodyHtml, footerHtml) {
-  document.getElementById('gModalTitle').textContent = title;
-  document.getElementById('gModalBody').innerHTML = bodyHtml;
-  document.getElementById('gModalFooter').innerHTML = footerHtml || '';
+/* ── MODAL ── */
+function openModal(title,bodyHtml,footerHtml){
+  document.getElementById('gModalTitle').textContent=title;
+  document.getElementById('gModalBody').innerHTML=bodyHtml;
+  document.getElementById('gModalFooter').innerHTML=footerHtml||'';
   document.getElementById('gModal').classList.add('open');
 }
+function closeModal(){document.getElementById('gModal').classList.remove('open');}
+function showAlert(msg,type='error'){const el=document.getElementById('_alert');if(el){el.className=`m-alert m-alert-${type} show`;el.textContent=msg;el.scrollIntoView({block:'nearest'});}}
 
-function closeModal() {
-  document.getElementById('gModal').classList.remove('open');
-}
-
-function showAlert(msg, type) {
-  type = type || 'error';
-  const el = document.getElementById('_alert');
-  if (el) {
-    el.className = 'alert alert-' + type + ' show';
-    el.textContent = msg;
-  }
-}
-
-// ═══════════════ NAVIGATION ═══════════════
-const viewTitles = {
-  dashboard: 'Dashboard',
-  courses: 'Courses',
-  content: 'Content Tree',
-  lectures: 'Lectures',
-  resources: 'Resources',
-  users: 'Users',
-  memberships: 'Memberships',
-  enrollments: 'Enrollment Requests',
-  notifications: 'Notifications',
-  tickets: 'Support Tickets',
-  updates: 'Changelog'
-};
-
-function showView(id) {
-  document.querySelectorAll('.view').forEach(function(v) {
-    v.classList.remove('active');
-  });
-
-  document.querySelectorAll('.nav-item').forEach(function(b) {
-    b.classList.remove('active');
-  });
-
-  const vEl = document.getElementById('view-' + id);
-  if (vEl) {
-    vEl.classList.add('active');
-  }
-
-  const nBtn = document.querySelector('.nav-item[data-view="' + id + '"]');
-  if (nBtn) {
-    nBtn.classList.add('active');
-  }
-
-  document.getElementById('topbarTitle').textContent = viewTitles[id] || id;
+/* ── NAV ── */
+const viewTitles={dashboard:'Dashboard',courses:'Courses',content:'Content Tree',lectures:'Lectures',resources:'Resources',users:'Users',memberships:'Memberships',enrollments:'Enrollment Requests',notifications:'Notifications',tickets:'Support Tickets',updates:'Changelog'};
+function showView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  const vEl=document.getElementById('view-'+id);
+  if(vEl)vEl.classList.add('active');
+  const nBtn=document.querySelector('.nav-item[data-view="'+id+'"]');
+  if(nBtn)nBtn.classList.add('active');
+  document.getElementById('topbarTitle').textContent=viewTitles[id]||id;
   closeSidebar();
-
-  const loaders = {
-    dashboard: loadDashboard,
-    courses: loadCourses,
-    content: loadContent,
-    lectures: loadLectures,
-    resources: loadResources,
-    users: loadUsers,
-    memberships: loadMemberships,
-    enrollments: loadEnrollments,
-    notifications: loadNotifications,
-    tickets: loadTickets,
-    updates: loadUpdates
-  };
-
-  if (loaders[id]) {
-    loaders[id]();
-  }
+  const loaders={dashboard:loadDashboard,courses:loadCourses,content:loadContent,lectures:loadLectures,resources:loadResources,users:loadUsers,memberships:loadMemberships,enrollments:loadEnrollments,notifications:loadNotifications,tickets:loadTickets,updates:loadUpdates};
+  if(loaders[id])loaders[id]();
 }
 
-// ═══════════════ DASHBOARD ═══════════════
-async function loadDashboard() {
-  const results = await Promise.all([
-    api('GET', '/admin/courses'),
-    api('GET', '/admin/all-subjects'),
-    api('GET', '/admin/all-papers'),
-    api('GET', '/admin/all-chapters'),
-    api('GET', '/admin/users'),
-    api('GET', '/admin/memberships'),
-    api('GET', '/admin/support-tickets'),
-    api('GET', '/admin/notifications')
+/* ══════════════════════════════════════════════
+   DASHBOARD
+══════════════════════════════════════════════ */
+async function loadDashboard(){
+  const[cR,sR,pR,chR,uR,mR,tR,nR]=await Promise.all([
+    api('GET','/admin/courses'),api('GET','/admin/all-subjects'),
+    api('GET','/admin/all-papers'),api('GET','/admin/all-chapters'),
+    api('GET','/admin/users'),api('GET','/admin/memberships'),
+    api('GET','/admin/support-tickets'),api('GET','/admin/notifications')
   ]);
-
-  allCourses = results[0].ok ? results[0].data : [];
-  allSubjects = results[1].ok ? results[1].data : [];
-  allPapers = results[2].ok ? results[2].data : [];
-  allChapters = results[3].ok ? results[3].data : [];
-  allUsers = results[4].ok ? results[4].data : [];
-
-  const mems = results[5].ok ? results[5].data : [];
-  const tickets = results[6].ok ? results[6].data : [];
-  const notifs = results[7].ok ? results[7].data : [];
-
-  const activeMems = mems.filter(function(m) {
-    return m.is_active && new Date(m.expires_at) > new Date();
-  }).length;
-
-  const openTickets = tickets.filter(function(t) {
-    return t.status === 'open';
-  }).length;
-
-  const pending = allUsers.filter(function(u) {
-    return !u.is_approved;
-  }).length;
-
-  const browseable = allCourses.filter(function(c) {
-    return c.show_in_browse;
-  }).length;
-
-  let html = '<div class="stats-grid">';
-
-  html += '<div class="stat"><div class="stat-label">Courses</div><div class="stat-val">' + allCourses.length + '</div></div>';
-  html += '<div class="stat"><div class="stat-label">Browse Visible</div><div class="stat-val">' + browseable + '</div></div>';
-  html += '<div class="stat"><div class="stat-label">Subjects</div><div class="stat-val">' + allSubjects.length + '</div></div>';
-  html += '<div class="stat"><div class="stat-label">Chapters</div><div class="stat-val">' + allChapters.length + '</div></div>';
-  html += '<div class="stat"><div class="stat-label">Total Users</div><div class="stat-val">' + allUsers.length + '</div></div>';
-  html += '<div class="stat"><div class="stat-label">Pending Approval</div><div class="stat-val">' + pending + '</div></div>';
-  html += '<div class="stat"><div class="stat-label">Active Members</div><div class="stat-val">' + activeMems + '</div></div>';
-  html += '<div class="stat"><div class="stat-label">Open Tickets</div><div class="stat-val">' + openTickets + '</div></div>';
-  html += '<div class="stat"><div class="stat-label">Notifications</div><div class="stat-val">' + notifs.length + '</div></div>';
-
-  html += '</div>';
-
-  if (pending > 0) {
-    html += '<div style="background:var(--orange-dim);border:1px solid rgba(245,158,11,.2);border-radius:var(--radius);padding:12px 16px;font-size:.8rem;color:var(--orange);margin-bottom:16px">';
-    html += '⚠ ' + pending + ' user' + (pending > 1 ? 's' : '') + ' awaiting approval — ';
-    html += '<a href="#" onclick="showView(\'users\');return false" style="color:var(--orange);font-weight:700;text-decoration:underline">Review now</a>';
-    html += '</div>';
-  }
-
-  if (openTickets > 0) {
-    html += '<div style="background:var(--red-dim);border:1px solid rgba(240,86,106,.2);border-radius:var(--radius);padding:12px 16px;font-size:.8rem;color:var(--red);margin-bottom:16px">';
-    html += openTickets + ' open support ticket' + (openTickets > 1 ? 's' : '') + ' — ';
-    html += '<a href="#" onclick="showView(\'tickets\');return false" style="color:var(--red);font-weight:700;text-decoration:underline">View tickets</a>';
-    html += '</div>';
-  }
-
-  document.getElementById('view-dashboard').innerHTML = html;
+  allCourses=cR.ok?cR.data:[];allSubjects=sR.ok?sR.data:[];
+  allPapers=pR.ok?pR.data:[];allChapters=chR.ok?chR.data:[];allUsers=uR.ok?uR.data:[];
+  const mems=mR.ok?mR.data:[];const tickets=tR.ok?tR.data:[];const notifs=nR.ok?nR.data:[];
+  const activeMems=mems.filter(m=>m.is_active&&new Date(m.expires_at)>new Date()).length;
+  const openTickets=tickets.filter(t=>t.status==='open').length;
+  const pending=allUsers.filter(u=>!u.is_approved).length;
+  const browseable=allCourses.filter(c=>c.show_in_browse).length;
+  document.getElementById('view-dashboard').innerHTML=`
+    <div class="stats-grid">
+      ${[['Courses',allCourses.length,''],['Browse Visible',browseable,''],['Subjects',allSubjects.length,''],['Chapters',allChapters.length,''],['Total Users',allUsers.length,''],['Pending Approval',pending,''],['Active Members',activeMems,''],['Open Tickets',openTickets,''],['Notifications',notifs.length,'']].map(([l,v])=>`<div class="stat"><div class="stat-label">${l}</div><div class="stat-val">${v}</div></div>`).join('')}
+    </div>
+    ${pending?`<div style="background:var(--orange-dim);border:1px solid rgba(245,158,11,.2);border-radius:var(--radius);padding:12px 16px;font-size:.8rem;color:var(--orange);margin-bottom:16px">⚠ ${pending} user${pending>1?'s':''} awaiting approval — <a href="#" onclick="showView('users');return false" style="color:var(--orange);font-weight:700;text-decoration:underline">Review now</a></div>`:''}
+    ${openTickets?`<div style="background:var(--red-dim);border:1px solid rgba(240,86,106,.2);border-radius:var(--radius);padding:12px 16px;font-size:.8rem;color:var(--red);margin-bottom:16px">${openTickets} open support ticket${openTickets>1?'s':''} — <a href="#" onclick="showView('tickets');return false" style="color:var(--red);font-weight:700;text-decoration:underline">View tickets</a></div>`:''}
+  `;
 }
 
-// ═══════════════ COURSES ═══════════════
-async function loadCourses() {
-  const result = await api('GET', '/admin/courses');
-  allCourses = result.ok ? result.data : [];
-
-  let html = '<div class="sec-head"><h2 class="sec-title">Courses</h2><button class="btn btn-primary" onclick="openCourseModal()">+ New Course</button></div>';
-  html += '<div class="card"><div class="table-wrap"><table>';
-  html += '<thead><tr><th>Title</th><th>Browse</th><th>Subject Area</th><th>Difficulty</th><th>Enroll Type</th><th>Status</th><th>Actions</th></tr></thead>';
-  html += '<tbody>';
-
-  if (allCourses.length > 0) {
-    allCourses.forEach(function(c) {
-      html += '<tr>';
-      html += '<td class="strong td-max">' + esc(c.title) + '</td>';
-      html += '<td>' + (c.show_in_browse ? '<span class="badge b-active">Yes</span>' : '<span class="badge b-inactive">No</span>') + '</td>';
-      html += '<td style="font-size:.74rem">' + esc(c.subject_area || '—') + '</td>';
-      html += '<td style="font-size:.74rem">' + esc(c.difficulty_level || '—') + '</td>';
-      html += '<td style="font-size:.74rem">' + esc(c.enrollment_type || 'open') + '</td>';
-      html += '<td><span class="badge ' + (c.is_active ? 'b-active' : 'b-inactive') + '">' + (c.is_active ? 'Active' : 'Inactive') + '</span></td>';
-      html += '<td><div style="display:flex;gap:4px">';
-      html += '<button class="btn btn-ghost btn-xs" onclick="openCourseModal(' + c.id + ')">Edit</button> ';
-      html += '<button class="btn btn-danger btn-xs" onclick="deleteCourse(' + c.id + ')">Delete</button>';
-      html += '</div></td>';
-      html += '</tr>';
-    });
-  } else {
-    html += '<tr class="empty-row"><td colspan="7">No courses yet.</td></tr>';
-  }
-
-  html += '</tbody></table></div></div>';
-  document.getElementById('view-courses').innerHTML = html;
+/* ══════════════════════════════════════════════
+   COURSES
+══════════════════════════════════════════════ */
+async function loadCourses(){
+  const{ok,data}=await api('GET','/admin/courses');allCourses=ok?data:[];
+  document.getElementById('view-courses').innerHTML=`
+    <div class="sec-head"><h2 class="sec-title">Courses</h2><button class="btn btn-primary" onclick="openCourseModal()">+ New Course</button></div>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>Title</th><th>Browse</th><th>Subject Area</th><th>Difficulty</th><th>Enroll Type</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>${allCourses.length?allCourses.map(c=>`<tr>
+        <td class="strong td-max">${esc(c.title)}</td>
+        <td>${c.show_in_browse?'<span class="badge b-active">Yes</span>':'<span class="badge b-inactive">No</span>'}</td>
+        <td style="font-size:.74rem">${esc(c.subject_area||'—')}</td>
+        <td style="font-size:.74rem">${esc(c.difficulty_level||'—')}</td>
+        <td style="font-size:.74rem">${esc(c.enrollment_type||'open')}</td>
+        <td><span class="badge ${c.is_active?'b-active':'b-inactive'}">${c.is_active?'Active':'Inactive'}</span></td>
+        <td><div style="display:flex;gap:4px">
+          <button class="btn btn-ghost btn-xs" onclick="openCourseModal(${c.id})">Edit</button>
+          <button class="btn btn-danger btn-xs" onclick="deleteCourse(${c.id})">Delete</button>
+        </div></td></tr>`).join(''):`<tr class="empty-row"><td colspan="7">No courses yet.</td></tr>`}
+      </tbody></table></div></div>`;
 }
 
-function openCourseModal(id) {
-  const c = id ? allCourses.find(function(x) { return x.id === id; }) : null;
-
-  let html = '<div class="alert" id="_alert"></div>';
-  html += '<input type="hidden" id="_id" value="' + (c ? c.id : '') + '">';
-
-  html += '<div class="form-row">';
-  html += '<div class="fg"><label class="fl">Title *</label><input class="fi" id="_title" value="' + esc(c ? c.title : '') + '" placeholder="Course title"></div>';
-  html += '<div class="fg"><label class="fl">Thumbnail URL</label><input class="fi" id="_thumb" value="' + esc(c ? c.thumbnail : '') + '" placeholder="https://..."></div>';
-  html += '</div>';
-
-  html += '<div class="fg"><label class="fl">Description</label><textarea class="fta" id="_desc">' + esc(c ? c.description : '') + '</textarea></div>';
-
-  html += '<div class="form-row">';
-  html += '<div class="fg"><label class="fl">Subject Area</label><input class="fi" id="_area" value="' + esc(c ? c.subject_area : '') + '" placeholder="e.g. Mathematics, Science"></div>';
-  html += '<div class="fg"><label class="fl">Difficulty Level</label>';
-  html += '<select class="fs" id="_diff">';
-  html += '<option value="">— Select —</option>';
-  html += '<option value="Beginner"' + (c && c.difficulty_level === 'Beginner' ? ' selected' : '') + '>Beginner</option>';
-  html += '<option value="Intermediate"' + (c && c.difficulty_level === 'Intermediate' ? ' selected' : '') + '>Intermediate</option>';
-  html += '<option value="Advanced"' + (c && c.difficulty_level === 'Advanced' ? ' selected' : '') + '>Advanced</option>';
-  html += '<option value="All Levels"' + (c && c.difficulty_level === 'All Levels' ? ' selected' : '') + '>All Levels</option>';
-  html += '</select></div>';
-  html += '</div>';
-
-  html += '<div class="form-row">';
-  html += '<div class="fg"><label class="fl">Enrollment Type</label>';
-  html += '<select class="fs" id="_enroll">';
-  html += '<option value="open"' + (!c || c.enrollment_type === 'open' ? ' selected' : '') + '>Open (instant)</option>';
-  html += '<option value="approval"' + (c && c.enrollment_type === 'approval' ? ' selected' : '') + '>Approval Required</option>';
-  html += '</select></div>';
-  html += '<div class="fg" style="display:flex;align-items:flex-end;padding-bottom:14px;gap:14px">';
-  html += '<label class="toggle-row"><input type="checkbox" id="_active"' + (!c || c.is_active ? ' checked' : '') + '><span>Active</span></label>';
-  html += '<label class="toggle-row"><input type="checkbox" id="_browse"' + (c && c.show_in_browse ? ' checked' : '') + '><span>Show in Browse</span></label>';
-  html += '</div>';
-  html += '</div>';
-
-  openModal(
-    c ? 'Edit Course' : 'New Course',
-    html,
-    '<button class="btn btn-primary" onclick="saveCourse()">Save Course</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>'
-  );
+function openCourseModal(id){
+  const c=id?allCourses.find(x=>x.id===id):null;
+  openModal(c?'Edit Course':'New Course',`
+    <div class="m-alert" id="_alert"></div>
+    <input type="hidden" id="_id" value="${c?.id||''}">
+    <div class="form-row">
+      <div class="fg"><label class="fl">Title *</label><input class="fi" id="_title" value="${esc(c?.title||'')}" placeholder="Course title"></div>
+      <div class="fg"><label class="fl">Thumbnail URL</label><input class="fi" id="_thumb" value="${esc(c?.thumbnail||'')}" placeholder="https://..."></div>
+    </div>
+    <div class="fg"><label class="fl">Description</label><textarea class="fta" id="_desc">${esc(c?.description||'')}</textarea></div>
+    <div class="form-row">
+      <div class="fg"><label class="fl">Subject Area</label><input class="fi" id="_area" value="${esc(c?.subject_area||'')}" placeholder="e.g. Mathematics, Science"></div>
+      <div class="fg"><label class="fl">Difficulty Level</label>
+        <select class="fs" id="_diff">
+          <option value="">— Select —</option>
+          ${['All Levels','Beginner','Intermediate','Advanced'].map(d=>`<option value="${d}" ${c?.difficulty_level===d?'selected':''}>${d}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="fg"><label class="fl">Enrollment Type</label>
+        <select class="fs" id="_enroll">
+          <option value="open" ${(!c||c.enrollment_type==='open')?'selected':''}>Open (instant)</option>
+          <option value="approval" ${c?.enrollment_type==='approval'?'selected':''}>Approval Required</option>
+        </select>
+      </div>
+      <div class="fg" style="display:flex;align-items:flex-end;padding-bottom:14px;gap:14px">
+        <label class="toggle-row"><input type="checkbox" id="_active" ${!c||c.is_active?'checked':''}><span>Active</span></label>
+        <label class="toggle-row"><input type="checkbox" id="_browse" ${c?.show_in_browse?'checked':''}><span>Show in Browse</span></label>
+      </div>
+    </div>
+  `,`<button class="btn btn-primary" onclick="saveCourse()">Save Course</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);
 }
 
-async function saveCourse() {
-  const id = document.getElementById('_id').value;
-  const payload = {
-    title: document.getElementById('_title').value.trim(),
-    description: document.getElementById('_desc').value.trim(),
-    thumbnail: document.getElementById('_thumb').value.trim() || null,
-    subject_area: document.getElementById('_area').value.trim() || null,
-    difficulty_level: document.getElementById('_diff').value || null,
-    enrollment_type: document.getElementById('_enroll').value,
-    is_active: document.getElementById('_active').checked ? 1 : 0,
-    show_in_browse: document.getElementById('_browse').checked ? 1 : 0
+async function saveCourse(){
+  const id=document.getElementById('_id').value;
+  const payload={
+    title:document.getElementById('_title').value.trim(),
+    description:document.getElementById('_desc').value.trim(),
+    thumbnail:document.getElementById('_thumb').value.trim()||null,
+    subject_area:document.getElementById('_area').value.trim()||null,
+    difficulty_level:document.getElementById('_diff').value||null,
+    enrollment_type:document.getElementById('_enroll').value,
+    is_active:document.getElementById('_active').checked?1:0,
+    show_in_browse:document.getElementById('_browse').checked?1:0
   };
-
-  if (!payload.title) {
-    showAlert('Title is required.');
-    return;
-  }
-
-  const result = await api(id ? 'PUT' : 'POST', id ? '/admin/courses/' + id : '/admin/courses', payload);
-
-  if (!result.ok) {
-    showAlert(result.data.error || 'Error saving.');
-    return;
-  }
-
-  closeModal();
-  loadCourses();
-  loadDashboard();
-  showToast(id ? 'Course updated.' : 'Course created.');
+  if(!payload.title){showAlert('Title is required.');return;}
+  const{ok,data}=await api(id?'PUT':'POST',id?`/admin/courses/${id}`:'/admin/courses',payload);
+  if(!ok){showAlert(data.error||'Error saving.');return;}
+  closeModal();loadCourses();showToast(id?'Course updated.':'Course created.');loadDashboard();
 }
+async function deleteCourse(id){if(!confirm('Delete this course and ALL its content? This cannot be undone.'))return;await api('DELETE',`/admin/courses/${id}`);loadCourses();loadDashboard();showToast('Course deleted.');}
 
-async function deleteCourse(id) {
-  if (!confirm('Delete this course and ALL its content? This cannot be undone.')) {
-    return;
-  }
-
-  await api('DELETE', '/admin/courses/' + id);
-  loadCourses();
-  loadDashboard();
-  showToast('Course deleted.');
-}
-
-// ═══════════════ CONTENT TREE ═══════════════
-async function loadContent() {
-  const results = await Promise.all([
-    api('GET', '/admin/courses'),
-    api('GET', '/admin/all-subjects'),
-    api('GET', '/admin/all-papers'),
-    api('GET', '/admin/all-chapters')
-  ]);
-
-  allCourses = results[0].ok ? results[0].data : [];
-  allSubjects = results[1].ok ? results[1].data : [];
-  allPapers = results[2].ok ? results[2].data : [];
-  allChapters = results[3].ok ? results[3].data : [];
-
-  let html = '<div class="sec-head"><h2 class="sec-title">Content Tree</h2></div>';
-
-  if (allCourses.length === 0) {
-    html += '<div class="card card-pad"><p style="color:var(--gray);font-style:italic">No courses yet. Create a course first.</p></div>';
-    document.getElementById('view-content').innerHTML = html;
-    return;
-  }
-
-  allCourses.forEach(function(course) {
-    html += '<div class="tree-course">';
-    html += '<div class="tree-course-head">';
-    html += '<span style="font-family:\'DM Mono\',monospace;font-size:.6rem;color:var(--teal);flex-shrink:0">COURSE</span>';
-    html += '<span class="tree-course-title">' + esc(course.title) + '</span>';
-    html += '<div style="display:flex;gap:6px">';
-    html += '<button class="btn btn-ghost btn-xs" onclick="openSubjectModal(' + course.id + ',\'' + esc(course.title) + '\')">+ Subject</button>';
-    html += '</div></div>';
-    html += '<div class="tree-level">';
-
-    const subjects = allSubjects.filter(function(s) { return s.course_id === course.id; });
-
-    if (subjects.length === 0) {
-      html += '<p style="color:var(--gray);font-size:.76rem;padding:8px 0;font-style:italic">No subjects yet.</p>';
-    }
-
-    subjects.forEach(function(subj) {
-      html += '<div class="i1 tree-row">';
-      html += '<span class="tree-tag">Subj</span>';
-      html += '<span class="tree-name">' + esc(subj.name) + '</span>';
-      html += '<div class="tree-actions">';
-      html += '<button class="btn btn-ghost btn-xs" onclick="openPaperModal(' + subj.id + ',\'' + esc(subj.name) + '\')">+ Paper</button>';
-      html += '<button class="btn btn-danger btn-xs" onclick="deleteSubject(' + subj.id + ')">Del</button>';
-      html += '</div></div>';
-
-      const papers = allPapers.filter(function(p) { return p.subject_id === subj.id; });
-
-      papers.forEach(function(paper) {
-        html += '<div class="i2 tree-row">';
-        html += '<span class="tree-tag">Paper</span>';
-        html += '<span class="tree-name">' + esc(paper.name) + '</span>';
-        html += '<div class="tree-actions">';
-        html += '<button class="btn btn-ghost btn-xs" onclick="openChapterModal(' + paper.id + ',\'' + esc(paper.name) + '\')">+ Chapter</button>';
-        html += '<button class="btn btn-danger btn-xs" onclick="deletePaper(' + paper.id + ')">Del</button>';
-        html += '</div></div>';
-
-        const chapters = allChapters.filter(function(ch) { return ch.paper_id === paper.id; });
-
-        chapters.forEach(function(ch) {
-          html += '<div class="i3 tree-row">';
-          html += '<span class="tree-tag">Chap</span>';
-          html += '<span class="tree-name">' + esc(ch.title) + '</span>';
-          html += '<div class="tree-actions">';
-          html += '<button class="btn btn-ghost btn-xs" onclick="openLectureModal(null,' + ch.id + ',\'' + esc(ch.title) + '\')">+ Lecture</button>';
-          html += '<button class="btn btn-danger btn-xs" onclick="deleteChapter(' + ch.id + ')">Del</button>';
-          html += '</div></div>';
+/* ══════════════════════════════════════════════
+   CONTENT TREE
+══════════════════════════════════════════════ */
+async function loadContent(){
+  const[cR,sR,pR,chR]=await Promise.all([api('GET','/admin/courses'),api('GET','/admin/all-subjects'),api('GET','/admin/all-papers'),api('GET','/admin/all-chapters')]);
+  allCourses=cR.ok?cR.data:[];allSubjects=sR.ok?sR.data:[];allPapers=pR.ok?pR.data:[];allChapters=chR.ok?chR.data:[];
+  let html=`<div class="sec-head"><h2 class="sec-title">Content Tree</h2></div>`;
+  if(!allCourses.length){document.getElementById('view-content').innerHTML=html+'<div class="card card-pad"><p style="color:var(--gray);font-style:italic">No courses yet. Create a course first.</p></div>';return;}
+  allCourses.forEach(course=>{
+    html+=`<div class="tree-course"><div class="tree-course-head"><span style="font-family:'DM Mono',monospace;font-size:.6rem;color:var(--teal);flex-shrink:0">COURSE</span><span class="tree-course-title">${esc(course.title)}</span><div style="display:flex;gap:6px"><button class="btn btn-ghost btn-xs" onclick="openSubjectModal(${course.id},'${esc(course.title)}')">+ Subject</button></div></div><div class="tree-level">`;
+    const subjects=allSubjects.filter(s=>s.course_id===course.id);
+    if(!subjects.length)html+=`<p style="color:var(--gray);font-size:.76rem;padding:8px 0;font-style:italic">No subjects yet.</p>`;
+    subjects.forEach(subj=>{
+      html+=`<div class="i1 tree-row"><span class="tree-tag">Subj</span><span class="tree-name">${esc(subj.name)}</span><div class="tree-actions"><button class="btn btn-ghost btn-xs" onclick="openPaperModal(${subj.id},'${esc(subj.name)}')">+ Paper</button><button class="btn btn-danger btn-xs" onclick="deleteSubject(${subj.id})">Del</button></div></div>`;
+      allPapers.filter(p=>p.subject_id===subj.id).forEach(paper=>{
+        html+=`<div class="i2 tree-row"><span class="tree-tag">Paper</span><span class="tree-name">${esc(paper.name)}</span><div class="tree-actions"><button class="btn btn-ghost btn-xs" onclick="openChapterModal(${paper.id},'${esc(paper.name)}')">+ Chapter</button><button class="btn btn-danger btn-xs" onclick="deletePaper(${paper.id})">Del</button></div></div>`;
+        allChapters.filter(c=>c.paper_id===paper.id).forEach(ch=>{
+          html+=`<div class="i3 tree-row"><span class="tree-tag">Chap</span><span class="tree-name">${esc(ch.title)}</span><div class="tree-actions"><button class="btn btn-ghost btn-xs" onclick="openLectureModal(null,${ch.id},'${esc(ch.title)}')">+ Lecture</button><button class="btn btn-danger btn-xs" onclick="deleteChapter(${ch.id})">Del</button></div></div>`;
         });
       });
     });
-
-    html += '</div></div>';
+    html+=`</div></div>`;
   });
-
-  document.getElementById('view-content').innerHTML = html;
+  document.getElementById('view-content').innerHTML=html;
 }
 
-function openSubjectModal(cid, ctitle) {
-  openModal(
-    'New Subject — ' + ctitle,
-    '<div class="alert" id="_alert"></div>' +
-    '<input type="hidden" id="_cid" value="' + cid + '">' +
-    '<div class="fg"><label class="fl">Subject Name *</label><input class="fi" id="_name" placeholder="e.g. Mathematics"></div>' +
-    '<div class="fg"><label class="toggle-row"><input type="checkbox" id="_hasPapers" checked><span>Has multiple papers</span></label></div>',
-    '<button class="btn btn-primary" onclick="saveSubject()">Add Subject</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>'
-  );
+function openSubjectModal(cid,ctitle){
+  openModal('New Subject — '+ctitle,`<div class="m-alert" id="_alert"></div><input type="hidden" id="_cid" value="${cid}"><div class="fg"><label class="fl">Subject Name *</label><input class="fi" id="_name" placeholder="e.g. Mathematics"></div><div class="fg"><label class="toggle-row"><input type="checkbox" id="_hasPapers" checked><span>Has multiple papers</span></label></div>`,
+  `<button class="btn btn-primary" onclick="saveSubject()">Add Subject</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);
+}
+async function saveSubject(){
+  const course_id=parseInt(document.getElementById('_cid').value);
+  const name=document.getElementById('_name').value.trim();
+  const has_papers=document.getElementById('_hasPapers').checked?1:0;
+  if(!name){showAlert('Name required.');return;}
+  const{ok,data}=await api('POST','/admin/subjects',{course_id,name,has_papers});
+  if(!ok){showAlert(data.error);return;}
+  closeModal();loadContent();showToast('Subject added.');
+}
+async function deleteSubject(id){if(!confirm('Delete this subject and all its content?'))return;await api('DELETE',`/admin/subjects/${id}`);loadContent();}
+
+function openPaperModal(sid,sname){
+  openModal('New Paper — '+sname,`<div class="m-alert" id="_alert"></div><input type="hidden" id="_sid" value="${sid}"><div class="fg"><label class="fl">Paper Name *</label><input class="fi" id="_name" placeholder="e.g. Paper 1"></div>`,
+  `<button class="btn btn-primary" onclick="savePaper()">Add Paper</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);
+}
+async function savePaper(){
+  const subject_id=parseInt(document.getElementById('_sid').value);
+  const name=document.getElementById('_name').value.trim();
+  if(!name){showAlert('Name required.');return;}
+  const{ok,data}=await api('POST','/admin/papers',{subject_id,name});
+  if(!ok){showAlert(data.error);return;}
+  closeModal();loadContent();showToast('Paper added.');
+}
+async function deletePaper(id){if(!confirm('Delete this paper and all chapters/lectures?'))return;await api('DELETE',`/admin/papers/${id}`);loadContent();}
+
+function openChapterModal(pid,pname){
+  openModal('New Chapter — '+pname,`<div class="m-alert" id="_alert"></div><input type="hidden" id="_pid" value="${pid}"><div class="fg"><label class="fl">Chapter Title *</label><input class="fi" id="_title" placeholder="e.g. Introduction"></div><div class="fg"><label class="fl">Sort Order</label><input class="fi" type="number" id="_order" value="0" min="0"></div>`,
+  `<button class="btn btn-primary" onclick="saveChapter()">Add Chapter</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);
+}
+async function saveChapter(){
+  const paper_id=parseInt(document.getElementById('_pid').value);
+  const title=document.getElementById('_title').value.trim();
+  const sort_order=parseInt(document.getElementById('_order').value)||0;
+  if(!title){showAlert('Title required.');return;}
+  const{ok,data}=await api('POST','/admin/chapters',{paper_id,title,sort_order});
+  if(!ok){showAlert(data.error);return;}
+  closeModal();loadContent();showToast('Chapter added.');
+}
+async function deleteChapter(id){if(!confirm('Delete this chapter and all its lectures?'))return;await api('DELETE',`/admin/chapters/${id}`);loadContent();}
+
+/* ══════════════════════════════════════════════
+   LECTURES
+══════════════════════════════════════════════ */
+async function loadLectures(){
+  const{ok,data}=await api('GET','/admin/all-lectures');allLectures=ok?data:[];
+  const{ok:chOk,data:chData}=await api('GET','/admin/all-chapters');allChapters=chOk?chData:[];
+  document.getElementById('view-lectures').innerHTML=`
+    <div class="sec-head"><h2 class="sec-title">All Lectures</h2><button class="btn btn-primary" onclick="openLectureModal()">+ Add Lecture</button></div>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>Title</th><th>Subject</th><th>Chapter</th><th>YouTube ID</th><th>Actions</th></tr></thead>
+      <tbody>${allLectures.length?allLectures.map(l=>`<tr>
+        <td class="strong td-max">${esc(l.title)}</td>
+        <td style="font-size:.72rem">${esc(l.subject_name||'—')}</td>
+        <td style="font-size:.72rem">${esc(l.chapter_title||'—')}</td>
+        <td><a href="https://youtu.be/${esc(l.yt_video_id)}" target="_blank" style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--teal)">${esc(l.yt_video_id)}</a></td>
+        <td><div style="display:flex;gap:4px">
+          <button class="btn btn-ghost btn-xs" onclick="openLectureModal(${l.id})">Edit</button>
+          <button class="btn btn-orange btn-xs" onclick="openPdfModal(${l.id},'${esc(l.title)}')">PDFs</button>
+          <button class="btn btn-danger btn-xs" onclick="deleteLecture(${l.id})">Del</button>
+        </div></td></tr>`).join(''):`<tr class="empty-row"><td colspan="5">No lectures yet.</td></tr>`}
+      </tbody></table></div></div>`;
 }
 
-async function saveSubject() {
-  const course_id = parseInt(document.getElementById('_cid').value);
-  const name = document.getElementById('_name').value.trim();
-  const has_papers = document.getElementById('_hasPapers').checked ? 1 : 0;
+async function openLectureModal(id,preChId,preChName){
+  if(!allChapters.length){const{ok,data}=await api('GET','/admin/all-chapters');allChapters=ok?data:[];}
+  const l=id?allLectures.find(x=>x.id===id):null;
+  const opts=allChapters.map(c=>`<option value="${c.id}" ${(l?.chapter_id==c.id||preChId==c.id)?'selected':''}>${esc(c.title)}</option>`).join('');
+  openModal(l?'Edit Lecture':'New Lecture',`
+    <div class="m-alert" id="_alert"></div>
+    <input type="hidden" id="_id" value="${l?.id||''}">
+    <div class="fg"><label class="fl">Chapter *</label><select class="fs" id="_chap"><option value="">— Select Chapter —</option>${opts}</select></div>
+    <div class="form-row">
+      <div class="fg"><label class="fl">Title *</label><input class="fi" id="_title" value="${esc(l?.title||'')}" placeholder="Lecture title"></div>
+      <div class="fg"><label class="fl">YouTube Video ID *</label><input class="fi" id="_ytid" value="${esc(l?.yt_video_id||'')}" placeholder="e.g. dQw4w9WgXcQ"><div class="hint">From youtube.com/watch?v=<strong>ID</strong></div></div>
+    </div>
+    <div class="form-row">
+      <div class="fg"><label class="fl">Sort Order</label><input class="fi" type="number" id="_order" value="${l?.sort_order||0}" min="0"></div>
+    </div>
+    <div class="fg"><label class="fl">Description (optional)</label><textarea class="fta" id="_desc">${esc(l?.description||'')}</textarea></div>
+  `,`<button class="btn btn-primary" onclick="saveLecture()">Save Lecture</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);
+}
+async function saveLecture(){
+  const id=document.getElementById('_id').value;
+  const chapter_id=parseInt(document.getElementById('_chap').value);
+  const title=document.getElementById('_title').value.trim();
+  const yt_video_id=document.getElementById('_ytid').value.trim();
+  const sort_order=parseInt(document.getElementById('_order').value)||0;
+  const description=document.getElementById('_desc').value.trim();
+  if(!chapter_id||!title||!yt_video_id){showAlert('Chapter, title, and YouTube ID are required.');return;}
+  const{ok,data}=await api(id?'PUT':'POST',id?`/admin/lectures/${id}`:'/admin/lectures',{chapter_id,title,yt_video_id,sort_order,description});
+  if(!ok){showAlert(data.error||'Error.');return;}
+  closeModal();loadLectures();showToast(id?'Lecture updated.':'Lecture added.');
+}
+async function deleteLecture(id){if(!confirm('Delete this lecture and all its PDFs?'))return;await api('DELETE',`/admin/lectures/${id}`);loadLectures();}
 
-  if (!name) {
-    showAlert('Name required.');
-    return;
+async function openPdfModal(lecId,lecTitle){
+  const res=await fetch(`/api/user/lecture/${lecId}`,{headers:{Authorization:'Bearer '+token}});
+  let pdfs=[];
+  if(res.ok){const d=await res.json();pdfs=d.pdfs||[];}
+  openModal(`PDFs — ${lecTitle}`,`
+    <div class="m-alert" id="_alert"></div>
+    <input type="hidden" id="_lid" value="${lecId}">
+    <div style="margin-bottom:16px">
+      <label class="fl" style="margin-bottom:10px">Existing PDFs</label>
+      <div id="_pdfList">${pdfs.length?pdfs.map(p=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)"><span style="flex:1;font-size:.78rem">${esc(p.title)}</span><a href="${esc(p.pdf_url)}" target="_blank" class="btn btn-ghost btn-xs">View</a><button class="btn btn-danger btn-xs" onclick="removePdf(${p.id})">Remove</button></div>`).join(''):'<p style="color:var(--gray);font-style:italic;font-size:.76rem">No PDFs yet.</p>'}</div>
+    </div>
+    <hr style="border-color:var(--border);margin-bottom:16px">
+    <label class="fl" style="margin-bottom:10px">Add New PDF</label>
+    <div class="form-row">
+      <div class="fg"><label class="fl">Title *</label><input class="fi" id="_pTitle" placeholder="e.g. Chapter Notes"></div>
+      <div class="fg"><label class="fl">PDF URL *</label><input class="fi" id="_pUrl" placeholder="https://..."></div>
+    </div>
+  `,`<button class="btn btn-primary" onclick="addPdf()">Add PDF</button><button class="btn btn-ghost" onclick="closeModal()">Done</button>`);
+}
+async function addPdf(){
+  const lecture_id=parseInt(document.getElementById('_lid').value);
+  const title=document.getElementById('_pTitle').value.trim();
+  const pdf_url=document.getElementById('_pUrl').value.trim();
+  if(!title||!pdf_url){showAlert('Title and URL required.');return;}
+  const{ok,data}=await api('POST','/admin/lecture-pdfs',{lecture_id,title,pdf_url});
+  if(!ok){showAlert(data.error);return;}
+  showToast('PDF added.');document.getElementById('_pTitle').value='';document.getElementById('_pUrl').value='';
+  // Refresh list
+  const res=await fetch(`/api/user/lecture/${lecture_id}`,{headers:{Authorization:'Bearer '+token}});
+  if(res.ok){const d=await res.json();const pl=document.getElementById('_pdfList');if(pl&&d.pdfs){pl.innerHTML=d.pdfs.length?d.pdfs.map(p=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)"><span style="flex:1;font-size:.78rem">${esc(p.title)}</span><a href="${esc(p.pdf_url)}" target="_blank" class="btn btn-ghost btn-xs">View</a><button class="btn btn-danger btn-xs" onclick="removePdf(${p.id})">Remove</button></div>`).join(''):'<p style="color:var(--gray);font-style:italic;font-size:.76rem">No PDFs yet.</p>';}}
+}
+async function removePdf(id){await api('DELETE',`/admin/lecture-pdfs/${id}`);showToast('PDF removed.');}
+
+/* ══════════════════════════════════════════════
+   RESOURCES
+══════════════════════════════════════════════ */
+async function loadResources(){
+  if(!allCourses.length){const{ok,data}=await api('GET','/admin/courses');allCourses=ok?data:[];}
+  let html=`<div class="sec-head"><h2 class="sec-title">Course Resources</h2></div>`;
+  for(const c of allCourses){
+    const{ok,data}=await api('GET',`/admin/resources/course/${c.id}`);
+    const res=ok?data:[];
+    html+=`<div class="card" style="margin-bottom:20px"><div style="padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between"><span style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700">${esc(c.title)}</span><button class="btn btn-ghost btn-sm" onclick="openResourceModal(${c.id},'${esc(c.title)}')">+ Add Resource</button></div>
+    <div class="table-wrap"><table><thead><tr><th>Title</th><th>URL</th><th>Actions</th></tr></thead>
+    <tbody>${res.length?res.map(r=>`<tr><td class="strong">${esc(r.title)}</td><td><a href="${esc(r.pdf_url)}" target="_blank" style="color:var(--teal);font-size:.72rem;font-family:'DM Mono',monospace">View →</a></td><td><button class="btn btn-danger btn-xs" onclick="deleteResource(${r.id})">Delete</button></td></tr>`).join(''):`<tr class="empty-row"><td colspan="3">No resources yet.</td></tr>`}
+    </tbody></table></div></div>`;
   }
+  document.getElementById('view-resources').innerHTML=html;
+}
+function openResourceModal(cid,ctitle){
+  openModal('Add Resource — '+ctitle,`<div class="m-alert" id="_alert"></div><input type="hidden" id="_cid" value="${cid}"><div class="form-row"><div class="fg"><label class="fl">Title *</label><input class="fi" id="_title" placeholder="e.g. Formula Sheet"></div><div class="fg"><label class="fl">PDF URL *</label><input class="fi" id="_url" placeholder="https://..."></div></div>`,
+  `<button class="btn btn-primary" onclick="saveResource()">Add Resource</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);
+}
+async function saveResource(){
+  const course_id=parseInt(document.getElementById('_cid').value);
+  const title=document.getElementById('_title').value.trim();
+  const pdf_url=document.getElementById('_url').value.trim();
+  if(!title||!pdf_url){showAlert('Title and URL required.');return;}
+  const{ok,data}=await api('POST','/admin/resources',{course_id,title,pdf_url});
+  if(!ok){showAlert(data.error);return;}
+  closeModal();loadResources();showToast('Resource added.');
+}
+async function deleteResource(id){if(!confirm('Delete this resource?'))return;await api('DELETE',`/admin/resources/${id}`);loadResources();}
 
-  const result = await api('POST', '/admin/subjects', { course_id: course_id, name: name, has_papers: has_papers });
+/* ══════════════════════════════════════════════
+   USERS
+══════════════════════════════════════════════ */
+async function loadUsers(){
+  const{ok,data}=await api('GET','/admin/users');allUsers=ok?data:[];
+  document.getElementById('view-users').innerHTML=`
+    <div class="sec-head"><h2 class="sec-title">Users</h2></div>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Override</th><th>Joined</th><th>Actions</th></tr></thead>
+      <tbody>${allUsers.length?allUsers.map(u=>`<tr>
+        <td class="strong">${esc(u.name)}</td>
+        <td style="font-family:'DM Mono',monospace;font-size:.7rem">${esc(u.email)}</td>
+        <td><span class="badge ${u.role==='admin'?'b-admin':'b-inactive'}">${u.role}</span></td>
+        <td>${u.is_blocked?'<span class="badge b-blocked">Blocked</span>':u.is_approved?'<span class="badge b-active">Active</span>':'<span class="badge b-pending">Pending</span>'}</td>
+        <td>${u.restriction_override?'<span class="badge b-active">On</span>':'<span class="badge b-inactive">Off</span>'}</td>
+        <td style="font-family:'DM Mono',monospace;font-size:.68rem">${fmtDate(u.created_at)}</td>
+        <td><div style="display:flex;gap:4px;flex-wrap:wrap">
+          ${!u.is_approved&&u.role!=='admin'?`<button class="btn btn-success btn-xs" onclick="approveUser(${u.id})">Approve</button>`:''}
+          ${u.role!=='admin'?`<button class="btn ${u.is_blocked?'btn-success':'btn-danger'} btn-xs" onclick="toggleBlock(${u.id},${u.is_blocked})">${u.is_blocked?'Unblock':'Block'}</button>`:''}
+          <button class="btn btn-orange btn-xs" onclick="toggleOverride(${u.id},${u.restriction_override})">${u.restriction_override?'Lock 90d':'Unlock 90d'}</button>
+          ${u.role!=='admin'?`<button class="btn btn-danger btn-xs" onclick="deleteUser(${u.id})">Del</button>`:''}
+        </div></td></tr>`).join(''):`<tr class="empty-row"><td colspan="7">No users.</td></tr>`}
+      </tbody></table></div></div>`;
+}
+async function approveUser(id){await api('PUT',`/admin/users/${id}/approve`,{});loadUsers();showToast('User approved.');}
+async function toggleBlock(id,cur){await api('PUT',`/admin/users/${id}/block`,{is_blocked:cur?0:1});loadUsers();showToast(cur?'User unblocked.':'User blocked.');}
+async function toggleOverride(id,cur){await api('PUT',`/admin/users/${id}/override-restriction`,{override:cur?0:1});loadUsers();showToast(cur?'90-day lock restored.':'90-day restriction lifted.');}
+async function deleteUser(id){if(!confirm('Permanently delete this user?'))return;await api('DELETE',`/admin/users/${id}`);loadUsers();showToast('User deleted.');}
 
-  if (!result.ok) {
-    showAlert(result.data.error);
-    return;
-  }
+/* ══════════════════════════════════════════════
+   MEMBERSHIPS
+══════════════════════════════════════════════ */
+async function loadMemberships(){
+  const[mR,cR,uR]=await Promise.all([api('GET','/admin/memberships'),api('GET','/admin/courses'),api('GET','/admin/users')]);
+  const mems=mR.ok?mR.data:[];allCourses=cR.ok?cR.data:[];allUsers=uR.ok?uR.data:[];
+  document.getElementById('view-memberships').innerHTML=`
+    <div class="sec-head"><h2 class="sec-title">Memberships</h2><button class="btn btn-primary" onclick="openMembershipModal()">+ Grant</button></div>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>User</th><th>Course</th><th>Status</th><th>Expires</th><th>Actions</th></tr></thead>
+      <tbody>${mems.length?mems.map(m=>{
+        const exp=new Date(m.expires_at),active=m.is_active&&exp>new Date();
+        const days=Math.ceil((exp-new Date())/86400000);
+        return`<tr>
+          <td><div class="strong">${esc(m.user_name)}</div><div style="font-family:'DM Mono',monospace;font-size:.66rem;color:var(--gray)">${esc(m.user_email)}</div></td>
+          <td class="td-max">${esc(m.course_title)}</td>
+          <td><span class="badge ${active?'b-active':'b-inactive'}">${active?'Active':'Expired'}</span></td>
+          <td style="font-family:'DM Mono',monospace;font-size:.7rem">${fmtDate(m.expires_at)}<div style="font-size:.62rem;color:${days>0&&active?'var(--teal)':'var(--red)'}">${days>0?days+'d left':'Expired'}</div></td>
+          <td><div style="display:flex;gap:4px">
+            <button class="btn btn-ghost btn-xs" onclick="openExtendModal(${m.id})">Extend</button>
+            ${active?`<button class="btn btn-danger btn-xs" onclick="cancelMembership(${m.id})">Cancel</button>`:''}
+          </div></td></tr>`;
+      }).join(''):`<tr class="empty-row"><td colspan="5">No memberships yet.</td></tr>`}
+      </tbody></table></div></div>`;
+}
+function openMembershipModal(){
+  const uOpts=allUsers.filter(u=>u.role!=='admin'&&u.is_approved).map(u=>`<option value="${u.id}">${esc(u.name)} (${esc(u.email)})</option>`).join('');
+  const cOpts=allCourses.map(c=>`<option value="${c.id}">${esc(c.title)}</option>`).join('');
+  openModal('Grant Membership',`
+    <div class="m-alert" id="_alert"></div>
+    <div class="fg"><label class="fl">User *</label><select class="fs" id="_uid"><option value="">— Select User —</option>${uOpts}</select></div>
+    <div class="fg"><label class="fl">Course *</label><select class="fs" id="_cid"><option value="">— Select Course —</option>${cOpts}</select></div>
+    <div class="fg"><label class="fl">Duration (days) *</label><input class="fi" type="number" id="_days" value="30" min="1" max="3650"></div>
+    <div id="_expPrev" style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--teal);margin-top:-4px"></div>
+  `,`<button class="btn btn-primary" onclick="grantMembership()">Grant</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);
+  document.getElementById('_days').addEventListener('input',()=>{const d=parseInt(document.getElementById('_days').value)||0;if(d>0)document.getElementById('_expPrev').textContent='Expires: '+new Date(Date.now()+d*86400000).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});});
+}
+async function grantMembership(){
+  const user_id=parseInt(document.getElementById('_uid').value);
+  const course_id=parseInt(document.getElementById('_cid').value);
+  const days=parseInt(document.getElementById('_days').value)||0;
+  if(!user_id||!course_id||!days){showAlert('All fields required.');return;}
+  const{ok,data}=await api('POST','/admin/memberships',{user_id,course_id,days});
+  if(!ok){showAlert(data.error);return;}
+  closeModal();loadMemberships();showToast('Membership granted.');
+}
+function openExtendModal(id){
+  openModal('Extend Membership',`<div class="m-alert" id="_alert"></div><input type="hidden" id="_mid" value="${id}"><div class="fg"><label class="fl">Extend by (days) *</label><input class="fi" type="number" id="_days" value="30" min="1"></div>`,
+  `<button class="btn btn-primary" onclick="extendMembership()">Extend</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);
+}
+async function extendMembership(){
+  const id=document.getElementById('_mid').value;const days=parseInt(document.getElementById('_days').value)||0;
+  if(!days){showAlert('Days required.');return;}
+  const{ok,data}=await api('PUT',`/admin/memberships/${id}/extend`,{days});
+  if(!ok){showAlert(data.error);return;}
+  closeModal();loadMemberships();showToast('Membership extended.');
+}
+async function cancelMembership(id){if(!confirm('Cancel this membership?'))return;await api('PUT',`/admin/memberships/${id}/cancel`,{});loadMemberships();showToast('Membership cancelled.');}
 
-  closeModal();
-  loadContent();
-  showToast('Subject added.');
+/* ══════════════════════════════════════════════
+   ENROLLMENT REQUESTS
+══════════════════════════════════════════════ */
+async function loadEnrollments(){
+  const{ok,data}=await api('GET','/admin/enrollment-requests');
+  const reqs=ok?data:[];
+  document.getElementById('view-enrollments').innerHTML=`
+    <div class="sec-head"><h2 class="sec-title">Enrollment Requests</h2></div>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>User</th><th>Course</th><th>Status</th><th>Requested</th><th>Actions</th></tr></thead>
+      <tbody>${reqs.length?reqs.map(r=>`<tr>
+        <td><div class="strong">${esc(r.user_name)}</div><div style="font-family:'DM Mono',monospace;font-size:.66rem;color:var(--gray)">${esc(r.user_email)}</div></td>
+        <td class="td-max">${esc(r.course_title)}</td>
+        <td><span class="badge ${r.status==='pending'?'b-pending':r.status==='approved'?'b-active':'b-blocked'}">${r.status}</span></td>
+        <td style="font-family:'DM Mono',monospace;font-size:.7rem">${fmtDate(r.created_at)}</td>
+        <td><div style="display:flex;gap:4px">
+          ${r.status==='pending'?`<button class="btn btn-success btn-xs" onclick="approveEnroll(${r.id})">Approve</button><button class="btn btn-danger btn-xs" onclick="rejectEnroll(${r.id})">Reject</button>`:'<span style="font-size:.72rem;color:var(--gray)">Processed</span>'}
+        </div></td></tr>`).join(''):`<tr class="empty-row"><td colspan="5">No enrollment requests.</td></tr>`}
+      </tbody></table></div></div>`;
+}
+async function approveEnroll(id){if(!confirm('Approve and grant 365-day membership?'))return;const{ok,data}=await api('PUT',`/admin/enrollment-requests/${id}/approve`,{});if(ok){showToast('Enrollment approved.');loadEnrollments();}else showToast(data.error,'error');}
+async function rejectEnroll(id){if(!confirm('Reject this enrollment request?'))return;await api('PUT',`/admin/enrollment-requests/${id}/reject`,{});showToast('Enrollment rejected.');loadEnrollments();}
+
+/* ══════════════════════════════════════════════
+   NOTIFICATIONS
+══════════════════════════════════════════════ */
+async function loadNotifications(){
+  const{ok,data}=await api('GET','/admin/notifications');const notifs=ok?data:[];
+  document.getElementById('view-notifications').innerHTML=`
+    <div class="sec-head"><h2 class="sec-title">Notifications</h2><button class="btn btn-primary" onclick="openNotifModal()">+ Create</button></div>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>Title</th><th>Type</th><th>Target</th><th>Status</th><th>Scheduled</th><th>Expires</th><th>Actions</th></tr></thead>
+      <tbody>${notifs.length?notifs.map(n=>`<tr>
+        <td class="strong td-max">${esc(n.title)}</td>
+        <td><span class="badge b-${n.type||'info'}">${n.type||'info'}</span></td>
+        <td style="font-size:.72rem">${esc(n.target_type)}</td>
+        <td><span class="badge ${n.is_active?'b-active':'b-inactive'}">${n.is_active?'Active':'Inactive'}</span></td>
+        <td style="font-family:'DM Mono',monospace;font-size:.68rem">${n.scheduled_at?fmtDateTime(n.scheduled_at):'Now'}</td>
+        <td style="font-family:'DM Mono',monospace;font-size:.68rem">${n.expires_at?fmtDate(n.expires_at):'Never'}</td>
+        <td><div style="display:flex;gap:4px">
+          <button class="btn btn-ghost btn-xs" onclick="openNotifModal(${n.id})">Edit</button>
+          <button class="btn btn-danger btn-xs" onclick="deleteNotif(${n.id})">Del</button>
+        </div></td></tr>`).join(''):`<tr class="empty-row"><td colspan="7">No notifications yet.</td></tr>`}
+      </tbody></table></div></div>`;
+}
+let _notifData=[];
+async function openNotifModal(id){
+  if(!_notifData.length){const{ok,data}=await api('GET','/admin/notifications');_notifData=ok?data:[];}
+  const n=id?_notifData.find(x=>x.id===id):null;
+  openModal(n?'Edit Notification':'New Notification',`
+    <div class="m-alert" id="_alert"></div>
+    <input type="hidden" id="_id" value="${n?.id||''}">
+    <div class="fg"><label class="fl">Title *</label><input class="fi" id="_title" value="${esc(n?.title||'')}" placeholder="Notification title"></div>
+    <div class="fg"><label class="fl">Message</label><textarea class="fta" id="_msg">${esc(n?.message||'')}</textarea></div>
+    <div class="form-row">
+      <div class="fg"><label class="fl">Type</label>
+        <select class="fs" id="_type">
+          ${['info','warning','success','important'].map(t=>`<option value="${t}" ${n?.type===t?'selected':''}>${t.charAt(0).toUpperCase()+t.slice(1)}</option>`).join('')}
+        </select>
+      </div>
+      <div class="fg"><label class="fl">Target</label>
+        <select class="fs" id="_target">
+          <option value="all" ${(!n||n.target_type==='all')?'selected':''}>All Users</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="fg"><label class="fl">Action URL (optional)</label><input class="fi" id="_url" value="${esc(n?.action_url||'')}" placeholder="https://..."></div>
+      <div class="fg"><label class="fl">Expires At (optional)</label><input class="fi" type="datetime-local" id="_expires" value="${n?.expires_at?n.expires_at.substring(0,16):''}"></div>
+    </div>
+    <div class="fg"><label class="toggle-row"><input type="checkbox" id="_active" ${!n||n.is_active?'checked':''}><span>Active</span></label></div>
+  `,`<button class="btn btn-primary" onclick="saveNotif()">Save</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);
+}
+async function saveNotif(){
+  const id=document.getElementById('_id').value;
+  const payload={title:document.getElementById('_title').value.trim(),message:document.getElementById('_msg').value.trim(),type:document.getElementById('_type').value,target_type:document.getElementById('_target').value,action_url:document.getElementById('_url').value.trim()||null,expires_at:document.getElementById('_expires').value||null,is_active:document.getElementById('_active').checked?1:0};
+  if(!payload.title){showAlert('Title required.');return;}
+  const{ok,data}=await api(id?'PUT':'POST',id?`/admin/notifications/${id}`:'/admin/notifications',payload);
+  if(!ok){showAlert(data.error);return;}
+  _notifData=[];closeModal();loadNotifications();showToast('Notification saved.');
+}
+async function deleteNotif(id){if(!confirm('Delete this notification?'))return;await api('DELETE',`/admin/notifications/${id}`);_notifData=[];loadNotifications();}
+
+/* ══════════════════════════════════════════════
+   SUPPORT TICKETS
+══════════════════════════════════════════════ */
+async function loadTickets(){
+  const{ok,data}=await api('GET','/admin/support-tickets');const tickets=ok?data:[];
+  document.getElementById('view-tickets').innerHTML=`
+    <div class="sec-head"><h2 class="sec-title">Support Tickets</h2></div>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+      <tbody>${tickets.length?tickets.map(t=>`<tr onclick="viewTicket(${t.id})" style="cursor:pointer">
+        <td class="strong">${esc(t.name)}</td>
+        <td style="font-family:'DM Mono',monospace;font-size:.7rem">${esc(t.email)}</td>
+        <td class="td-max">${esc(t.subject||'—')}</td>
+        <td><span class="badge ${t.status==='open'?'b-open':'b-resolved'}">${t.status}</span></td>
+        <td style="font-family:'DM Mono',monospace;font-size:.68rem">${fmtDate(t.created_at)}</td>
+        <td onclick="event.stopPropagation()"><div style="display:flex;gap:4px">
+          <button class="btn btn-ghost btn-xs" onclick="viewTicket(${t.id})">View</button>
+          ${t.status==='open'?`<button class="btn btn-success btn-xs" onclick="resolveTicket(${t.id})">Resolve</button>`:''}
+        </div></td></tr>`).join(''):`<tr class="empty-row"><td colspan="6">No support tickets yet.</td></tr>`}
+      </tbody></table></div></div>`;
+  // Store tickets for view
+  window._tickets=tickets;
+}
+function viewTicket(id){
+  const t=window._tickets?.find(x=>x.id===id);if(!t)return;
+  openModal(`Ticket — ${t.subject||'No subject'}`,`
+    <div style="margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <span style="font-weight:600">${esc(t.name)}</span>
+      <span style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--gray)">${esc(t.email)}</span>
+      <span class="badge ${t.status==='open'?'b-open':'b-resolved'}">${t.status}</span>
+      <span style="font-family:'DM Mono',monospace;font-size:.66rem;color:var(--gray)">${fmtDateTime(t.created_at)}</span>
+    </div>
+    <div class="ticket-detail">${esc(t.message)}</div>
+  `,t.status==='open'?`<button class="btn btn-success" onclick="resolveTicket(${t.id})">Mark as Resolved</button><button class="btn btn-ghost" onclick="closeModal()">Close</button>`:`<button class="btn btn-ghost" onclick="closeModal()">Close</button>`);
+}
+async function resolveTicket(id){
+  const{ok}=await api('PUT',`/admin/support-tickets/${id}/resolve`,{});
+  if(ok){showToast('Ticket resolved.');closeModal();loadTickets();}
 }
 
-async function deleteSubject(id) {
-  if (!confirm('Delete this subject and all its content?')) {
-    return;
-  }
-
-  await api('DELETE', '/admin/subjects/' + id);
-  loadContent();
+/* ══════════════════════════════════════════════
+   UPDATES / CHANGELOG
+══════════════════════════════════════════════ */
+async function loadUpdates(){
+  const{ok,data}=await api('GET','/admin/updates');const updates=ok?data:[];
+  document.getElementById('view-updates').innerHTML=`
+    <div class="sec-head"><h2 class="sec-title">Changelog / Updates</h2><button class="btn btn-primary" onclick="openUpdateModal()">+ Post Update</button></div>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>Version</th><th>Title</th><th>Type</th><th>Status</th><th>Popup</th><th>Release Date</th><th>Actions</th></tr></thead>
+      <tbody>${updates.length?updates.map(u=>`<tr>
+        <td style="font-family:'DM Mono',monospace;font-size:.74rem">${esc(u.version||'—')}</td>
+        <td class="strong td-max">${esc(u.title)}</td>
+        <td style="font-size:.74rem">${esc(u.type||'feature')}</td>
+        <td><span class="badge ${u.status==='published'?'b-published':'b-draft'}">${u.status}</span></td>
+        <td>${u.show_popup?'<span class="badge b-active">Yes</span>':'<span class="badge b-inactive">No</span>'}</td>
+        <td style="font-family:'DM Mono',monospace;font-size:.68rem">${u.release_date?fmtDate(u.release_date):'—'}</td>
+        <td><div style="display:flex;gap:4px">
+          <button class="btn btn-ghost btn-xs" onclick="openUpdateModal(${u.id})">Edit</button>
+          <button class="btn btn-danger btn-xs" onclick="deleteUpdate(${u.id})">Del</button>
+        </div></td></tr>`).join(''):`<tr class="empty-row"><td colspan="7">No updates yet.</td></tr>`}
+      </tbody></table></div></div>`;
+  window._updates=updates;
 }
-
-function openPaperModal(sid, sname) {
-  openModal(
-    'New Paper — ' + sname,
-    '<div class="alert" id="_alert"></div>' +
-    '<input type="hidden" id="_sid" value="' + sid + '">' +
-    '<div class="fg"><label class="fl">Paper Name *</label><input class="fi" id="_name" placeholder="e.g. Paper 1"></div>',
-    '<button class="btn btn-primary" onclick="savePaper()">Add Paper</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>'
-  );
+function openUpdateModal(id){
+  const u=id?window._updates?.find(x=>x.id===id):null;
+  openModal(u?'Edit Update':'Post New Update',`
+    <div class="m-alert" id="_alert"></div>
+    <input type="hidden" id="_id" value="${u?.id||''}">
+    <div class="form-row">
+      <div class="fg"><label class="fl">Version</label><input class="fi" id="_ver" value="${esc(u?.version||'')}" placeholder="e.g. v2.1.0"></div>
+      <div class="fg"><label class="fl">Release Date</label><input class="fi" type="datetime-local" id="_rdate" value="${u?.release_date?u.release_date.substring(0,16):''}"></div>
+    </div>
+    <div class="fg"><label class="fl">Title *</label><input class="fi" id="_title" value="${esc(u?.title||'')}" placeholder="Update title"></div>
+    <div class="form-row">
+      <div class="fg"><label class="fl">Type</label>
+        <select class="fs" id="_type">
+          ${['feature','bugfix','maintenance','announcement'].map(t=>`<option value="${t}" ${u?.type===t?'selected':''}>${t.charAt(0).toUpperCase()+t.slice(1)}</option>`).join('')}
+        </select>
+      </div>
+      <div class="fg"><label class="fl">Status</label>
+        <select class="fs" id="_status">
+          <option value="draft" ${(!u||u.status==='draft')?'selected':''}>Draft</option>
+          <option value="published" ${u?.status==='published'?'selected':''}>Published</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg"><label class="fl">Changelog (one item per line)</label><textarea class="fta code" id="_log" style="min-height:120px" placeholder="- Fixed login issue&#10;- Added browse page&#10;- Improved performance">${esc(u?.changelog||'')}</textarea></div>
+    <div style="display:flex;gap:18px;margin-top:4px">
+      <label class="toggle-row"><input type="checkbox" id="_popup" ${!u||u.show_popup?'checked':''}><span>Show popup to users</span></label>
+      <label class="toggle-row"><input type="checkbox" id="_dismiss" ${!u||u.dismissible?'checked':''}><span>Dismissible</span></label>
+    </div>
+  `,`<button class="btn btn-primary" onclick="saveUpdate()">Save Update</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>`);
 }
-
-async function savePaper() {
-  const subject_id = parseInt(document.getElementById('_sid').value);
-  const name = document.getElementById('_name').value.trim();
-
-  if (!name) {
-    showAlert('Name required.');
-    return;
-  }
-
-  const result = await api('POST', '/admin/papers', { subject_id: subject_id, name: name });
-
-  if (!result.ok) {
-    showAlert(result.data.error);
-    return;
-  }
-
-  closeModal();
-  loadContent();
-  showToast('Paper added.');
+async function saveUpdate(){
+  const id=document.getElementById('_id').value;
+  const payload={version:document.getElementById('_ver').value.trim()||null,title:document.getElementById('_title').value.trim(),type:document.getElementById('_type').value,status:document.getElementById('_status').value,changelog:document.getElementById('_log').value.trim(),show_popup:document.getElementById('_popup').checked?1:0,dismissible:document.getElementById('_dismiss').checked?1:0,release_date:document.getElementById('_rdate').value||null};
+  if(!payload.title){showAlert('Title required.');return;}
+  const{ok,data}=await api(id?'PUT':'POST',id?`/admin/updates/${id}`:'/admin/updates',payload);
+  if(!ok){showAlert(data.error);return;}
+  closeModal();loadUpdates();showToast('Update saved.');
 }
+async function deleteUpdate(id){if(!confirm('Delete this update?'))return;await api('DELETE',`/admin/updates/${id}`);loadUpdates();}
 
-async function deletePaper(id) {
-  if (!confirm('Delete this paper and all chapters/lectures?')) {
-    return;
-  }
-
-  await api('DELETE', '/admin/papers/' + id);
-  loadContent();
-}
-
-function openChapterModal(pid, pname) {
-  openModal(
-    'New Chapter — ' + pname,
-    '<div class="alert" id="_alert"></div>' +
-    '<input type="hidden" id="_pid" value="' + pid + '">' +
-    '<div class="fg"><label class="fl">Chapter Title *</label><input class="fi" id="_title" placeholder="e.g. Introduction"></div>' +
-    '<div class="fg"><label class="fl">Sort Order</label><input class="fi" type="number" id="_order" value="0" min="0"></div>',
-    '<button class="btn btn-primary" onclick="saveChapter()">Add Chapter</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>'
-  );
-}
-
-async function saveChapter() {
-  const paper_id = parseInt(document.getElementById('_pid').value);
-  const title = document.getElementById('_title').value.trim();
-  const sort_order = parseInt(document.getElementById('_order').value) || 0;
-
-  if (!title) {
-    showAlert('Title required.');
-    return;
-  }
-
-  const result = await api('POST', '/admin/chapters', { paper_id: paper_id, title: title, sort_order: sort_order });
-
-  if (!result.ok) {
-    showAlert(result.data.error);
-    return;
-  }
-
-  closeModal();
-  loadContent();
-  showToast('Chapter added.');
-}
-
-async function deleteChapter(id) {
-  if (!confirm('Delete this chapter and all its lectures?')) {
-    return;
-  }
-
-  await api('DELETE', '/admin/chapters/' + id);
-  loadContent();
-}
-
-// ═══════════════ LECTURES ═══════════════
-async function loadLectures() {
-  const lecturesResult = await api('GET', '/admin/all-lectures');
-  allLectures = lecturesResult.ok ? lecturesResult.data : [];
-
-  const chaptersResult = await api('GET', '/admin/all-chapters');
-  allChapters = chaptersResult.ok ? chaptersResult.data : [];
-
-  let html = '<div class="sec-head"><h2 class="sec-title">All Lectures</h2><button class="btn btn-primary" onclick="openLectureModal()">+ Add Lecture</button></div>';
-  html += '<div class="card"><div class="table-wrap"><table>';
-  html += '<thead><tr><th>Title</th><th>Subject</th><th>Chapter</th><th>YouTube ID</th><th>Actions</th></tr></thead>';
-  html += '<tbody>';
-
-  if (allLectures.length > 0) {
-    allLectures.forEach(function(l) {
-      html += '<tr>';
-      html += '<td class="strong td-max">' + esc(l.title) + '</td>';
-      html += '<td style="font-size:.72rem">' + esc(l.subject_name || '—') + '</td>';
-      html += '<td style="font-size:.72rem">' + esc(l.chapter_title || '—') + '</td>';
-      html += '<td><a href="https://youtu.be/' + esc(l.yt_video_id) + '" target="_blank" style="font-family:\'DM Mono\',monospace;font-size:.7rem;color:var(--teal)">' + esc(l.yt_video_id) + '</a></td>';
-      html += '<td><div style="display:flex;gap:4px">';
-      html += '<button class="btn btn-ghost btn-xs" onclick="openLectureModal(' + l.id + ')">Edit</button> ';
-      html += '<button class="btn btn-orange btn-xs" onclick="openPdfModal(' + l.id + ',\'' + esc(l.title) + '\')">PDFs</button> ';
-      html += '<button class="btn btn-danger btn-xs" onclick="deleteLecture(' + l.id + ')">Del</button>';
-      html += '</div></td>';
-      html += '</tr>';
-    });
-  } else {
-    html += '<tr class="empty-row"><td colspan="5">No lectures yet.</td></tr>';
-  }
-
-  html += '</tbody></table></div></div>';
-  document.getElementById('view-lectures').innerHTML = html;
-}
-
-async function openLectureModal(id, preChId, preChName) {
-  if (allChapters.length === 0) {
-    const chaptersResult = await api('GET', '/admin/all-chapters');
-    allChapters = chaptersResult.ok ? chaptersResult.data : [];
-  }
-
-  const l = id ? allLectures.find(function(x) { return x.id === id; }) : null;
-
-  let opts = '';
-  allChapters.forEach(function(c) {
-    const selected = (l && l.chapter_id === c.id) || preChId === c.id ? ' selected' : '';
-    opts += '<option value="' + c.id + '"' + selected + '>' + esc(c.title) + '</option>';
-  });
-
-  let html = '<div class="alert" id="_alert"></div>';
-  html += '<input type="hidden" id="_id" value="' + (l ? l.id : '') + '">';
-
-  html += '<div class="fg"><label class="fl">Chapter *</label><select class="fs" id="_chap"><option value="">— Select Chapter —</option>' + opts + '</select></div>';
-
-  html += '<div class="form-row">';
-  html += '<div class="fg"><label class="fl">Title *</label><input class="fi" id="_title" value="' + esc(l ? l.title : '') + '" placeholder="Lecture title"></div>';
-  html += '<div class="fg"><label class="fl">YouTube Video ID *</label><input class="fi" id="_ytid" value="' + esc(l ? l.yt_video_id : '') + '" placeholder="e.g. dQw4w9WgXcQ"><div class="hint">From youtube.com/watch?v=<strong>ID</strong></div></div>';
-  html += '</div>';
-
-  html += '<div class="form-row">';
-  html += '<div class="fg"><label class="fl">Sort Order</label><input class="fi" type="number" id="_order" value="' + (l ? l.sort_order : 0) + '" min="0"></div>';
-  html += '</div>';
-
-  html += '<div class="fg"><label class="fl">Description (optional)</label><textarea class="fta" id="_desc">' + esc(l ? l.description : '') + '</textarea></div>';
-
-  openModal(
-    l ? 'Edit Lecture' : 'New Lecture',
-    html,
-    '<button class="btn btn-primary" onclick="saveLecture()">Save Lecture</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>'
-  );
-}
-
-async function saveLecture() {
-  const id = document.getElementById('_id').value;
-  const chapter_id = parseInt(document.getElementById('_chap').value);
-  const title = document.getElementById('_title').value.trim();
-  const yt_video_id = document.getElementById('_ytid').value.trim();
-  const sort_order = parseInt(document.getElementById('_order').value) || 0;
-  const description = document.getElementById('_desc').value.trim();
-
-  if (!chapter_id || !title || !yt_video_id) {
-    showAlert('Chapter, title, and YouTube ID are required.');
-    return;
-  }
-
-  const result = await api(id ? 'PUT' : 'POST', id ? '/admin/lectures/' + id : '/admin/lectures', {
-    chapter_id: chapter_id,
-    title: title,
-    yt_video_id: yt_video_id,
-    sort_order: sort_order,
-    description: description
-  });
-
-  if (!result.ok) {
-    showAlert(result.data.error || 'Error.');
-    return;
-  }
-
-  closeModal();
-  loadLectures();
-  showToast(id ? 'Lecture updated.' : 'Lecture added.');
-}
-
-async function deleteLecture(id) {
-  if (!confirm('Delete this lecture and all its PDFs?')) {
-    return;
-  }
-
-  await api('DELETE', '/admin/lectures/' + id);
-  loadLectures();
-}
-
-async function openPdfModal(lecId, lecTitle) {
-  const res = await fetch('/api/user/lecture/' + lecId, {
-    headers: { Authorization: 'Bearer ' + token }
-  });
-
-  let pdfs = [];
-
-  if (res.ok) {
-    const d = await res.json();
-    pdfs = d.pdfs || [];
-  }
-
-  let listHtml = '';
-
-  if (pdfs.length > 0) {
-    pdfs.forEach(function(p) {
-      listHtml += '<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">';
-      listHtml += '<span style="flex:1;font-size:.78rem">' + esc(p.title) + '</span>';
-      listHtml += '<a href="' + esc(p.pdf_url) + '" target="_blank" class="btn btn-ghost btn-xs">View</a>';
-      listHtml += '<button class="btn btn-danger btn-xs" onclick="removePdf(' + p.id + ')">Remove</button>';
-      listHtml += '</div>';
-    });
-  } else {
-    listHtml = '<p style="color:var(--gray);font-style:italic;font-size:.76rem">No PDFs yet.</p>';
-  }
-
-  let html = '<div class="alert" id="_alert"></div>';
-  html += '<input type="hidden" id="_lid" value="' + lecId + '">';
-  html += '<div style="margin-bottom:16px">';
-  html += '<label class="fl" style="margin-bottom:10px">Existing PDFs</label>';
-  html += '<div id="_pdfList">' + listHtml + '</div>';
-  html += '</div>';
-  html += '<hr style="border-color:var(--border);margin-bottom:16px">';
-  html += '<label class="fl" style="margin-bottom:10px">Add New PDF</label>';
-  html += '<div class="form-row">';
-  html += '<div class="fg"><label class="fl">Title *</label><input class="fi" id="_pTitle" placeholder="e.g. Chapter Notes"></div>';
-  html += '<div class="fg"><label class="fl">PDF URL *</label><input class="fi" id="_pUrl" placeholder="https://..."></div>';
-  html += '</div>';
-
-  openModal(
-    'PDFs — ' + lecTitle,
-    html,
-    '<button class="btn btn-primary" onclick="addPdf()">Add PDF</button><button class="btn btn-ghost" onclick="closeModal()">Done</button>'
-  );
-}
-
-async function addPdf() {
-  const lecture_id = parseInt(document.getElementById('_lid').value);
-  const title = document.getElementById('_pTitle').value.trim();
-  const pdf_url = document.getElementById('_pUrl').value.trim();
-
-  if (!title || !pdf_url) {
-    showAlert('Title and URL required.');
-    return;
-  }
-
-  const result = await api('POST', '/admin/lecture-pdfs', {
-    lecture_id: lecture_id,
-    title: title,
-    pdf_url: pdf_url
-  });
-
-  if (!result.ok) {
-    showAlert(result.data.error);
-    return;
-  }
-
-  showToast('PDF added.');
-  document.getElementById('_pTitle').value = '';
-  document.getElementById('_pUrl').value = '';
-
-  const res = await fetch('/api/user/lecture/' + lecture_id, {
-    headers: { Authorization: 'Bearer ' + token }
-  });
-
-  if (res.ok) {
-    const d = await res.json();
-    const pl = document.getElementById('_pdfList');
-
-    if (pl && d.pdfs) {
-      if (d.pdfs.length > 0) {
-        let listHtml = '';
-        d.pdfs.forEach(function(p) {
-          listHtml += '<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">';
-          listHtml += '<span style="flex:1;font-size:.78rem">' + esc(p.title) + '</span>';
-          listHtml += '<a href="' + esc(p.pdf_url) + '" target="_blank" class="btn btn-ghost btn-xs">View</a>';
-          listHtml += '<button class="btn btn-danger btn-xs" onclick="removePdf(' + p.id + ')">Remove</button>';
-          listHtml += '</div>';
-        });
-        pl.innerHTML = listHtml;
-      } else {
-        pl.innerHTML = '<p style="color:var(--gray);font-style:italic;font-size:.76rem">No PDFs yet.</p>';
-      }
-    }
-  }
-}
-
-async function removePdf(id) {
-  await api('DELETE', '/admin/lecture-pdfs/' + id);
-  showToast('PDF removed.');
-}
-
-// ═══════════════ RESOURCES ═══════════════
-async function loadResources() {
-  if (allCourses.length === 0) {
-    const result = await api('GET', '/admin/courses');
-    allCourses = result.ok ? result.data : [];
-  }
-
-  let html = '<div class="sec-head"><h2 class="sec-title">Course Resources</h2></div>';
-
-  for (let i = 0; i < allCourses.length; i++) {
-    const c = allCourses[i];
-    const result = await api('GET', '/admin/resources/course/' + c.id);
-    const res = result.ok ? result.data : [];
-
-    html += '<div class="card" style="margin-bottom:20px">';
-    html += '<div style="padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">';
-    html += '<span style="font-family:\'Cormorant Garamond\',serif;font-size:1rem;font-weight:700">' + esc(c.title) + '</span>';
-    html += '<button class="btn btn-ghost btn-sm" onclick="openResourceModal(' + c.id + ',\'' + esc(c.title) + '\')">+ Add Resource</button>';
-    html += '</div>';
-    html += '<div class="table-wrap"><table><thead><tr><th>Title</th><th>URL</th><th>Actions</th></tr></thead><tbody>';
-
-    if (res.length > 0) {
-      res.forEach(function(r) {
-        html += '<tr>';
-        html += '<td class="strong">' + esc(r.title) + '</td>';
-        html += '<td><a href="' + esc(r.pdf_url) + '" target="_blank" style="color:var(--teal);font-size:.72rem;font-family:\'DM Mono\',monospace">View →</a></td>';
-        html += '<td><button class="btn btn-danger btn-xs" onclick="deleteResource(' + r.id + ')">Delete</button></td>';
-        html += '</tr>';
-      });
-    } else {
-      html += '<tr class="empty-row"><td colspan="3">No resources yet.</td></tr>';
-    }
-
-    html += '</tbody></table></div></div>';
-  }
-
-  document.getElementById('view-resources').innerHTML = html;
-}
-
-function openResourceModal(cid, ctitle) {
-  openModal(
-    'Add Resource — ' + ctitle,
-    '<div class="alert" id="_alert"></div>' +
-    '<input type="hidden" id="_cid" value="' + cid + '">' +
-    '<div class="form-row">' +
-    '<div class="fg"><label class="fl">Title *</label><input class="fi" id="_title" placeholder="e.g. Formula Sheet"></div>' +
-    '<div class="fg"><label class="fl">PDF URL *</label><input class="fi" id="_url" placeholder="https://..."></div>' +
-    '</div>',
-    '<button class="btn btn-primary" onclick="saveResource()">Add Resource</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>'
-  );
-}
-
-async function saveResource() {
-  const course_id = parseInt(document.getElementById('_cid').value);
-  const title = document.getElementById('_title').value.trim();
-  const pdf_url = document.getElementById('_url').value.trim();
-
-  if (!title || !pdf_url) {
-    showAlert('Title and URL required.');
-    return;
-  }
-
-  const result = await api('POST', '/admin/resources', {
-    course_id: course_id,
-    title: title,
-    pdf_url: pdf_url
-  });
-
-  if (!result.ok) {
-    showAlert(result.data.error);
-    return;
-  }
-
-  closeModal();
-  loadResources();
-  showToast('Resource added.');
-}
-
-async function deleteResource(id) {
-  if (!confirm('Delete this resource?')) {
-    return;
-  }
-
-  await api('DELETE', '/admin/resources/' + id);
-  loadResources();
-}
-
-// ═══════════════ USERS ═══════════════
-async function loadUsers() {
-  const result = await api('GET', '/admin/users');
-  allUsers = result.ok ? result.data : [];
-
-  let html = '<div class="sec-head"><h2 class="sec-title">Users</h2></div>';
-  html += '<div class="card"><div class="table-wrap"><table>';
-  html += '<thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Override</th><th>Joined</th><th>Actions</th></tr></thead>';
-  html += '<tbody>';
-
-  if (allUsers.length > 0) {
-    allUsers.forEach(function(u) {
-      let statusHtml = '';
-
-      if (u.is_blocked) {
-        statusHtml = '<span class="badge b-blocked">Blocked</span>';
-      } else if (u.is_approved) {
-        statusHtml = '<span class="badge b-active">Active</span>';
-      } else {
-        statusHtml = '<span class="badge b-pending">Pending</span>';
-      }
-
-      html += '<tr>';
-      html += '<td class="strong">' + esc(u.name) + '</td>';
-      html += '<td style="font-family:\'DM Mono\',monospace;font-size:.7rem">' + esc(u.email) + '</td>';
-      html += '<td><span class="badge ' + (u.role === 'admin' ? 'b-admin' : 'b-inactive') + '">' + u.role + '</span></td>';
-      html += '<td>' + statusHtml + '</td>';
-      html += '<td>' + (u.restriction_override ? '<span class="badge b-active">On</span>' : '<span class="badge b-inactive">Off</span>') + '</td>';
-      html += '<td style="font-family:\'DM Mono\',monospace;font-size:.68rem">' + fmtDate(u.created_at) + '</td>';
-      html += '<td><div style="display:flex;gap:4px;flex-wrap:wrap">';
-
-      if (!u.is_approved && u.role !== 'admin') {
-        html += '<button class="btn btn-success btn-xs" onclick="approveUser(' + u.id + ')">Approve</button>';
-      }
-
-      if (u.role !== 'admin') {
-        html += '<button class="btn ' + (u.is_blocked ? 'btn-success' : 'btn-danger') + ' btn-xs" onclick="toggleBlock(' + u.id + ',' + u.is_blocked + ')">' + (u.is_blocked ? 'Unblock' : 'Block') + '</button>';
-      }
-
-      html += '<button class="btn btn-orange btn-xs" onclick="toggleOverride(' + u.id + ',' + u.restriction_override + ')">' + (u.restriction_override ? 'Lock 90d' : 'Unlock 90d') + '</button>';
-
-      if (u.role !== 'admin') {
-        html += '<button class="btn btn-danger btn-xs" onclick="deleteUser(' + u.id + ')">Del</button>';
-      }
-
-      html += '</div></td>';
-      html += '</tr>';
-    });
-  } else {
-    html += '<tr class="empty-row"><td colspan="7">No users.</td></tr>';
-  }
-
-  html += '</tbody></table></div></div>';
-  document.getElementById('view-users').innerHTML = html;
-}
-
-async function approveUser(id) {
-  await api('PUT', '/admin/users/' + id + '/approve', {});
-  loadUsers();
-  loadDashboard();
-  showToast('User approved.');
-}
-
-async function toggleBlock(id, cur) {
-  await api('PUT', '/admin/users/' + id + '/block', { is_blocked: cur ? 0 : 1 });
-  loadUsers();
-  showToast(cur ? 'User unblocked.' : 'User blocked.');
-}
-
-async function toggleOverride(id, cur) {
-  await api('PUT', '/admin/users/' + id + '/override-restriction', { override: cur ? 0 : 1 });
-  loadUsers();
-  showToast(cur ? '90-day lock restored.' : '90-day restriction lifted.');
-}
-
-async function deleteUser(id) {
-  if (!confirm('Permanently delete this user?')) {
-    return;
-  }
-
-  await api('DELETE', '/admin/users/' + id);
-  loadUsers();
-  loadDashboard();
-  showToast('User deleted.');
-}
-
-// ═══════════════ MEMBERSHIPS ═══════════════
-async function loadMemberships() {
-  const results = await Promise.all([
-    api('GET', '/admin/memberships'),
-    api('GET', '/admin/courses'),
-    api('GET', '/admin/users')
-  ]);
-
-  const mems = results[0].ok ? results[0].data : [];
-  allCourses = results[1].ok ? results[1].data : [];
-  allUsers = results[2].ok ? results[2].data : [];
-
-  let html = '<div class="sec-head"><h2 class="sec-title">Memberships</h2><button class="btn btn-primary" onclick="openMembershipModal()">+ Grant</button></div>';
-  html += '<div class="card"><div class="table-wrap"><table>';
-  html += '<thead><tr><th>User</th><th>Course</th><th>Status</th><th>Expires</th><th>Actions</th></tr></thead>';
-  html += '<tbody>';
-
-  if (mems.length > 0) {
-    mems.forEach(function(m) {
-      const exp = new Date(m.expires_at);
-      const active = m.is_active && exp > new Date();
-      const days = Math.ceil((exp - new Date()) / 86400000);
-
-      html += '<tr>';
-      html += '<td><div class="strong">' + esc(m.user_name) + '</div><div style="font-family:\'DM Mono\',monospace;font-size:.66rem;color:var(--gray)">' + esc(m.user_email) + '</div></td>';
-      html += '<td class="td-max">' + esc(m.course_title) + '</td>';
-      html += '<td><span class="badge ' + (active ? 'b-active' : 'b-inactive') + '">' + (active ? 'Active' : 'Expired') + '</span></td>';
-      html += '<td style="font-family:\'DM Mono\',monospace;font-size:.7rem">' + fmtDate(m.expires_at) + '<div style="font-size:.62rem;color:' + (days > 0 && active ? 'var(--teal)' : 'var(--red)') + '">' + (days > 0 ? days + 'd left' : 'Expired') + '</div></td>';
-      html += '<td><div style="display:flex;gap:4px">';
-      html += '<button class="btn btn-ghost btn-xs" onclick="openExtendModal(' + m.id + ')">Extend</button>';
-
-      if (active) {
-        html += '<button class="btn btn-danger btn-xs" onclick="cancelMembership(' + m.id + ')">Cancel</button>';
-      }
-
-      html += '</div></td>';
-      html += '</tr>';
-    });
-  } else {
-    html += '<tr class="empty-row"><td colspan="5">No memberships yet.</td></tr>';
-  }
-
-  html += '</tbody></table></div></div>';
-  document.getElementById('view-memberships').innerHTML = html;
-}
-
-function openMembershipModal() {
-  let uOpts = '';
-
-  allUsers.forEach(function(u) {
-    if (u.role !== 'admin' && u.is_approved) {
-      uOpts += '<option value="' + u.id + '">' + esc(u.name) + ' (' + esc(u.email) + ')</option>';
-    }
-  });
-
-  let cOpts = '';
-
-  allCourses.forEach(function(c) {
-    cOpts += '<option value="' + c.id + '">' + esc(c.title) + '</option>';
-  });
-
-  openModal(
-    'Grant Membership',
-    '<div class="alert" id="_alert"></div>' +
-    '<div class="fg"><label class="fl">User *</label><select class="fs" id="_uid"><option value="">— Select User —</option>' + uOpts + '</select></div>' +
-    '<div class="fg"><label class="fl">Course *</label><select class="fs" id="_cid"><option value="">— Select Course —</option>' + cOpts + '</select></div>' +
-    '<div class="fg"><label class="fl">Duration (days) *</label><input class="fi" type="number" id="_days" value="30" min="1" max="3650"></div>' +
-    '<div id="_expPrev" style="font-family:\'DM Mono\',monospace;font-size:.7rem;color:var(--teal);margin-top:-4px"></div>',
-    '<button class="btn btn-primary" onclick="grantMembership()">Grant</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>'
-  );
-
-  document.getElementById('_days').addEventListener('input', function() {
-    const d = parseInt(document.getElementById('_days').value) || 0;
-
-    if (d > 0) {
-      document.getElementById('_expPrev').textContent = 'Expires: ' + new Date(Date.now() + d * 86400000).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      });
-    }
-  });
-}
-
-async function grantMembership() {
-  const user_id = parseInt(document.getElementById('_uid').value);
-  const course_id = parseInt(document.getElementById('_cid').value);
-  const days = parseInt(document.getElementById('_days').value) || 0;
-
-  if (!user_id || !course_id || !days) {
-    showAlert('All fields required.');
-    return;
-  }
-
-  const result = await api('POST', '/admin/memberships', {
-    user_id: user_id,
-    course_id: course_id,
-    days: days
-  });
-
-  if (!result.ok) {
-    showAlert(result.data.error);
-    return;
-  }
-
-  closeModal();
-  loadMemberships();
-  loadDashboard();
-  showToast('Membership granted.');
-}
-
-function openExtendModal(id) {
-  openModal(
-    'Extend Membership',
-    '<div class="alert" id="_alert"></div>' +
-    '<input type="hidden" id="_mid" value="' + id + '">' +
-    '<div class="fg"><label class="fl">Extend by (days) *</label><input class="fi" type="number" id="_days" value="30" min="1"></div>',
-    '<button class="btn btn-primary" onclick="extendMembership()">Extend</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>'
-  );
-}
-
-async function extendMembership() {
-  const id = document.getElementById('_mid').value;
-  const days = parseInt(document.getElementById('_days').value) || 0;
-
-  if (!days) {
-    showAlert('Days required.');
-    return;
-  }
-
-  const result = await api('PUT', '/admin/memberships/' + id + '/extend', { days: days });
-
-  if (!result.ok) {
-    showAlert(result.data.error);
-    return;
-  }
-
-  closeModal();
-  loadMemberships();
-  loadDashboard();
-  showToast('Membership extended.');
-}
-
-async function cancelMembership(id) {
-  if (!confirm('Cancel this membership?')) {
-    return;
-  }
-
-  await api('PUT', '/admin/memberships/' + id + '/cancel', {});
-  loadMemberships();
-  loadDashboard();
-  showToast('Membership cancelled.');
-}
-
-// ═══════════════ ENROLLMENT REQUESTS ═══════════════
-async function loadEnrollments() {
-  const result = await api('GET', '/admin/enrollment-requests');
-  const reqs = result.ok ? result.data : [];
-
-  let html = '<div class="sec-head"><h2 class="sec-title">Enrollment Requests</h2></div>';
-  html += '<div class="card"><div class="table-wrap"><table>';
-  html += '<thead><tr><th>User</th><th>Course</th><th>Status</th><th>Requested</th><th>Actions</th></tr></thead>';
-  html += '<tbody>';
-
-  if (reqs.length > 0) {
-    reqs.forEach(function(r) {
-      html += '<tr>';
-      html += '<td><div class="strong">' + esc(r.user_name) + '</div><div style="font-family:\'DM Mono\',monospace;font-size:.66rem;color:var(--gray)">' + esc(r.user_email) + '</div></td>';
-      html += '<td class="td-max">' + esc(r.course_title) + '</td>';
-      html += '<td><span class="badge ' + (r.status === 'pending' ? 'b-pending' : r.status === 'approved' ? 'b-active' : 'b-blocked') + '">' + r.status + '</span></td>';
-      html += '<td style="font-family:\'DM Mono\',monospace;font-size:.7rem">' + fmtDate(r.created_at) + '</td>';
-      html += '<td><div style="display:flex;gap:4px">';
-
-      if (r.status === 'pending') {
-        html += '<button class="btn btn-success btn-xs" onclick="approveEnroll(' + r.id + ')">Approve</button>';
-        html += '<button class="btn btn-danger btn-xs" onclick="rejectEnroll(' + r.id + ')">Reject</button>';
-      } else {
-        html += '<span style="font-size:.72rem;color:var(--gray)">Processed</span>';
-      }
-
-      html += '</div></td>';
-      html += '</tr>';
-    });
-  } else {
-    html += '<tr class="empty-row"><td colspan="5">No enrollment requests.</td></tr>';
-  }
-
-  html += '</tbody></table></div></div>';
-  document.getElementById('view-enrollments').innerHTML = html;
-}
-
-async function approveEnroll(id) {
-  if (!confirm('Approve and grant 365-day membership?')) {
-    return;
-  }
-
-  const result = await api('PUT', '/admin/enrollment-requests/' + id + '/approve', {});
-
-  if (result.ok) {
-    showToast('Enrollment approved.');
-    loadEnrollments();
-    loadDashboard();
-  } else {
-    showToast(result.data.error, 'error');
-  }
-}
-
-async function rejectEnroll(id) {
-  if (!confirm('Reject this enrollment request?')) {
-    return;
-  }
-
-  await api('PUT', '/admin/enrollment-requests/' + id + '/reject', {});
-  showToast('Enrollment rejected.');
-  loadEnrollments();
-}
-
-// ═══════════════ NOTIFICATIONS ═══════════════
-let notificationCache = [];
-
-async function loadNotifications() {
-  const result = await api('GET', '/admin/notifications');
-  const notifs = result.ok ? result.data : [];
-
-  let html = '<div class="sec-head"><h2 class="sec-title">Notifications</h2><button class="btn btn-primary" onclick="openNotifModal()">+ Create</button></div>';
-  html += '<div class="card"><div class="table-wrap"><table>';
-  html += '<thead><tr><th>Title</th><th>Type</th><th>Target</th><th>Status</th><th>Scheduled</th><th>Expires</th><th>Actions</th></tr></thead>';
-  html += '<tbody>';
-
-  if (notifs.length > 0) {
-    notifs.forEach(function(n) {
-      html += '<tr>';
-      html += '<td class="strong td-max">' + esc(n.title) + '</td>';
-      html += '<td><span class="badge b-' + (n.type || 'info') + '">' + (n.type || 'info') + '</span></td>';
-      html += '<td style="font-size:.72rem">' + esc(n.target_type) + '</td>';
-      html += '<td><span class="badge ' + (n.is_active ? 'b-active' : 'b-inactive') + '">' + (n.is_active ? 'Active' : 'Inactive') + '</span></td>';
-      html += '<td style="font-family:\'DM Mono\',monospace;font-size:.68rem">' + (n.scheduled_at ? fmtDateTime(n.scheduled_at) : 'Now') + '</td>';
-      html += '<td style="font-family:\'DM Mono\',monospace;font-size:.68rem">' + (n.expires_at ? fmtDate(n.expires_at) : 'Never') + '</td>';
-      html += '<td><div style="display:flex;gap:4px">';
-      html += '<button class="btn btn-ghost btn-xs" onclick="openNotifModal(' + n.id + ')">Edit</button> ';
-      html += '<button class="btn btn-danger btn-xs" onclick="deleteNotif(' + n.id + ')">Del</button>';
-      html += '</div></td>';
-      html += '</tr>';
-    });
-  } else {
-    html += '<tr class="empty-row"><td colspan="7">No notifications yet.</td></tr>';
-  }
-
-  html += '</tbody></table></div></div>';
-  document.getElementById('view-notifications').innerHTML = html;
-}
-
-async function openNotifModal(id) {
-  if (notificationCache.length === 0) {
-    const result = await api('GET', '/admin/notifications');
-    notificationCache = result.ok ? result.data : [];
-  }
-
-  const n = id ? notificationCache.find(function(x) { return x.id === id; }) : null;
-
-  let html = '<div class="alert" id="_alert"></div>';
-  html += '<input type="hidden" id="_id" value="' + (n ? n.id : '') + '">';
-
-  html += '<div class="fg"><label class="fl">Title *</label><input class="fi" id="_title" value="' + esc(n ? n.title : '') + '" placeholder="Notification title"></div>';
-  html += '<div class="fg"><label class="fl">Message</label><textarea class="fta" id="_msg">' + esc(n ? n.message : '') + '</textarea></div>';
-
-  html += '<div class="form-row">';
-  html += '<div class="fg"><label class="fl">Type</label><select class="fs" id="_type">';
-  html += '<option value="info"' + (!n || n.type === 'info' ? ' selected' : '') + '>Info</option>';
-  html += '<option value="warning"' + (n && n.type === 'warning' ? ' selected' : '') + '>Warning</option>';
-  html += '<option value="success"' + (n && n.type === 'success' ? ' selected' : '') + '>Success</option>';
-  html += '<option value="important"' + (n && n.type === 'important' ? ' selected' : '') + '>Important</option>';
-  html += '</select></div>';
-  html += '<div class="fg"><label class="fl">Target</label><select class="fs" id="_target">';
-  html += '<option value="all"' + (!n || n.target_type === 'all' ? ' selected' : '') + '>All Users</option>';
-  html += '</select></div>';
-  html += '</div>';
-
-  html += '<div class="form-row">';
-  html += '<div class="fg"><label class="fl">Action URL (optional)</label><input class="fi" id="_url" value="' + esc(n ? n.action_url : '') + '" placeholder="https://..."></div>';
-  html += '<div class="fg"><label class="fl">Expires At (optional)</label><input class="fi" type="datetime-local" id="_expires" value="' + (n && n.expires_at ? n.expires_at.substring(0, 16) : '') + '"></div>';
-  html += '</div>';
-
-  html += '<div class="fg"><label class="toggle-row"><input type="checkbox" id="_active"' + (!n || n.is_active ? ' checked' : '') + '><span>Active</span></label></div>';
-
-  openModal(
-    n ? 'Edit Notification' : 'New Notification',
-    html,
-    '<button class="btn btn-primary" onclick="saveNotif()">Save</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>'
-  );
-}
-
-async function saveNotif() {
-  const id = document.getElementById('_id').value;
-  const payload = {
-    title: document.getElementById('_title').value.trim(),
-    message: document.getElementById('_msg').value.trim(),
-    type: document.getElementById('_type').value,
-    target_type: document.getElementById('_target').value,
-    action_url: document.getElementById('_url').value.trim() || null,
-    expires_at: document.getElementById('_expires').value || null,
-    is_active: document.getElementById('_active').checked ? 1 : 0
-  };
-
-  if (!payload.title) {
-    showAlert('Title required.');
-    return;
-  }
-
-  const result = await api(id ? 'PUT' : 'POST', id ? '/admin/notifications/' + id : '/admin/notifications', payload);
-
-  if (!result.ok) {
-    showAlert(result.data.error);
-    return;
-  }
-
-  notificationCache = [];
-  closeModal();
-  loadNotifications();
-  showToast('Notification saved.');
-}
-
-async function deleteNotif(id) {
-  if (!confirm('Delete this notification?')) {
-    return;
-  }
-
-  await api('DELETE', '/admin/notifications/' + id);
-  notificationCache = [];
-  loadNotifications();
-}
-
-// ═══════════════ SUPPORT TICKETS ═══════════════
-let ticketsCache = [];
-
-async function loadTickets() {
-  const result = await api('GET', '/admin/support-tickets');
-  const tickets = result.ok ? result.data : [];
-  ticketsCache = tickets;
-
-  let html = '<div class="sec-head"><h2 class="sec-title">Support Tickets</h2></div>';
-  html += '<div class="card"><div class="table-wrap"><table>';
-  html += '<thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>';
-  html += '<tbody>';
-
-  if (tickets.length > 0) {
-    tickets.forEach(function(t) {
-      html += '<tr onclick="viewTicket(' + t.id + ')" style="cursor:pointer">';
-      html += '<td class="strong">' + esc(t.name) + '</td>';
-      html += '<td style="font-family:\'DM Mono\',monospace;font-size:.7rem">' + esc(t.email) + '</td>';
-      html += '<td class="td-max">' + esc(t.subject || '—') + '</td>';
-      html += '<td><span class="badge ' + (t.status === 'open' ? 'b-open' : 'b-resolved') + '">' + t.status + '</span></td>';
-      html += '<td style="font-family:\'DM Mono\',monospace;font-size:.68rem">' + fmtDate(t.created_at) + '</td>';
-      html += '<td onclick="event.stopPropagation()"><div style="display:flex;gap:4px">';
-      html += '<button class="btn btn-ghost btn-xs" onclick="viewTicket(' + t.id + ')">View</button>';
-
-      if (t.status === 'open') {
-        html += '<button class="btn btn-success btn-xs" onclick="resolveTicket(' + t.id + ')">Resolve</button>';
-      }
-
-      html += '</div></td>';
-      html += '</tr>';
-    });
-  } else {
-    html += '<tr class="empty-row"><td colspan="6">No support tickets yet.</td></tr>';
-  }
-
-  html += '</tbody></table></div></div>';
-  document.getElementById('view-tickets').innerHTML = html;
-}
-
-function viewTicket(id) {
-  const t = ticketsCache.find(function(x) { return x.id === id; });
-
-  if (!t) {
-    return;
-  }
-
-  openModal(
-    'Ticket — ' + (t.subject || 'No subject'),
-    '<div style="margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">' +
-    '<span style="font-weight:600">' + esc(t.name) + '</span>' +
-    '<span style="font-family:\'DM Mono\',monospace;font-size:.7rem;color:var(--gray)">' + esc(t.email) + '</span>' +
-    '<span class="badge ' + (t.status === 'open' ? 'b-open' : 'b-resolved') + '">' + t.status + '</span>' +
-    '<span style="font-family:\'DM Mono\',monospace;font-size:.66rem;color:var(--gray)">' + fmtDateTime(t.created_at) + '</span>' +
-    '</div>' +
-    '<div class="ticket-detail">' + esc(t.message) + '</div>',
-    t.status === 'open' ?
-    '<button class="btn btn-success" onclick="resolveTicket(' + t.id + ')">Mark as Resolved</button><button class="btn btn-ghost" onclick="closeModal()">Close</button>' :
-    '<button class="btn btn-ghost" onclick="closeModal()">Close</button>'
-  );
-}
-
-async function resolveTicket(id) {
-  const result = await api('PUT', '/admin/support-tickets/' + id + '/resolve', {});
-
-  if (result.ok) {
-    showToast('Ticket resolved.');
-    closeModal();
-    loadTickets();
-    loadDashboard();
-  }
-}
-
-// ═══════════════ UPDATES / CHANGELOG ═══════════════
-let updatesCache = [];
-
-async function loadUpdates() {
-  const result = await api('GET', '/admin/updates');
-  const updates = result.ok ? result.data : [];
-  updatesCache = updates;
-
-  let html = '<div class="sec-head"><h2 class="sec-title">Changelog / Updates</h2><button class="btn btn-primary" onclick="openUpdateModal()">+ Post Update</button></div>';
-  html += '<div class="card"><div class="table-wrap"><table>';
-  html += '<thead><tr><th>Version</th><th>Title</th><th>Type</th><th>Status</th><th>Popup</th><th>Release Date</th><th>Actions</th></tr></thead>';
-  html += '<tbody>';
-
-  if (updates.length > 0) {
-    updates.forEach(function(u) {
-      html += '<tr>';
-      html += '<td style="font-family:\'DM Mono\',monospace;font-size:.74rem">' + esc(u.version || '—') + '</td>';
-      html += '<td class="strong td-max">' + esc(u.title) + '</td>';
-      html += '<td style="font-size:.74rem">' + esc(u.type || 'feature') + '</td>';
-      html += '<td><span class="badge ' + (u.status === 'published' ? 'b-published' : 'b-draft') + '">' + u.status + '</span></td>';
-      html += '<td>' + (u.show_popup ? '<span class="badge b-active">Yes</span>' : '<span class="badge b-inactive">No</span>') + '</td>';
-      html += '<td style="font-family:\'DM Mono\',monospace;font-size:.68rem">' + (u.release_date ? fmtDate(u.release_date) : '—') + '</td>';
-      html += '<td><div style="display:flex;gap:4px">';
-      html += '<button class="btn btn-ghost btn-xs" onclick="openUpdateModal(' + u.id + ')">Edit</button> ';
-      html += '<button class="btn btn-danger btn-xs" onclick="deleteUpdate(' + u.id + ')">Del</button>';
-      html += '</div></td>';
-      html += '</tr>';
-    });
-  } else {
-    html += '<tr class="empty-row"><td colspan="7">No updates yet.</td></tr>';
-  }
-
-  html += '</tbody></table></div></div>';
-  document.getElementById('view-updates').innerHTML = html;
-}
-
-function openUpdateModal(id) {
-  const u = id ? updatesCache.find(function(x) { return x.id === id; }) : null;
-
-  let html = '<div class="alert" id="_alert"></div>';
-  html += '<input type="hidden" id="_id" value="' + (u ? u.id : '') + '">';
-
-  html += '<div class="form-row">';
-  html += '<div class="fg"><label class="fl">Version</label><input class="fi" id="_ver" value="' + esc(u ? u.version : '') + '" placeholder="e.g. v2.1.0"></div>';
-  html += '<div class="fg"><label class="fl">Release Date</label><input class="fi" type="datetime-local" id="_rdate" value="' + (u && u.release_date ? u.release_date.substring(0, 16) : '') + '"></div>';
-  html += '</div>';
-
-  html += '<div class="fg"><label class="fl">Title *</label><input class="fi" id="_title" value="' + esc(u ? u.title : '') + '" placeholder="Update title"></div>';
-
-  html += '<div class="form-row">';
-  html += '<div class="fg"><label class="fl">Type</label><select class="fs" id="_type">';
-  html += '<option value="feature"' + (!u || u.type === 'feature' ? ' selected' : '') + '>Feature</option>';
-  html += '<option value="bugfix"' + (u && u.type === 'bugfix' ? ' selected' : '') + '>Bug Fix</option>';
-  html += '<option value="maintenance"' + (u && u.type === 'maintenance' ? ' selected' : '') + '>Maintenance</option>';
-  html += '<option value="announcement"' + (u && u.type === 'announcement' ? ' selected' : '') + '>Announcement</option>';
-  html += '</select></div>';
-  html += '<div class="fg"><label class="fl">Status</label><select class="fs" id="_status">';
-  html += '<option value="draft"' + (!u || u.status === 'draft' ? ' selected' : '') + '>Draft</option>';
-  html += '<option value="published"' + (u && u.status === 'published' ? ' selected' : '') + '>Published</option>';
-  html += '</select></div>';
-  html += '</div>';
-
-  html += '<div class="fg"><label class="fl">Changelog (one item per line)</label><textarea class="fta code" id="_log" style="min-height:120px" placeholder="- Fixed login issue&#10;- Added browse page&#10;- Improved performance">' + esc(u ? u.changelog : '') + '</textarea></div>';
-
-  html += '<div style="display:flex;gap:18px;margin-top:4px">';
-  html += '<label class="toggle-row"><input type="checkbox" id="_popup"' + (!u || u.show_popup ? ' checked' : '') + '><span>Show popup to users</span></label>';
-  html += '<label class="toggle-row"><input type="checkbox" id="_dismiss"' + (!u || u.dismissible ? ' checked' : '') + '><span>Dismissible</span></label>';
-  html += '</div>';
-
-  openModal(
-    u ? 'Edit Update' : 'Post New Update',
-    html,
-    '<button class="btn btn-primary" onclick="saveUpdate()">Save Update</button><button class="btn btn-ghost" onclick="closeModal()">Cancel</button>'
-  );
-}
-
-async function saveUpdate() {
-  const id = document.getElementById('_id').value;
-  const payload = {
-    version: document.getElementById('_ver').value.trim() || null,
-    title: document.getElementById('_title').value.trim(),
-    type: document.getElementById('_type').value,
-    status: document.getElementById('_status').value,
-    changelog: document.getElementById('_log').value.trim(),
-    show_popup: document.getElementById('_popup').checked ? 1 : 0,
-    dismissible: document.getElementById('_dismiss').checked ? 1 : 0,
-    release_date: document.getElementById('_rdate').value || null
-  };
-
-  if (!payload.title) {
-    showAlert('Title required.');
-    return;
-  }
-
-  const result = await api(id ? 'PUT' : 'POST', id ? '/admin/updates/' + id : '/admin/updates', payload);
-
-  if (!result.ok) {
-    showAlert(result.data.error);
-    return;
-  }
-
-  closeModal();
-  loadUpdates();
-  showToast('Update saved.');
-}
-
-async function deleteUpdate(id) {
-  if (!confirm('Delete this update?')) {
-    return;
-  }
-
-  await api('DELETE', '/admin/updates/' + id);
-  loadUpdates();
-}
-
-// ═══════════════ INIT ═══════════════
+// Init
 loadDashboard();
 </script>
 </body>
